@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日語擬聲詞／擬態詞 Flashcards</title>
+<style>
+:root {
+  --blue:#2563eb; --bg:#f8fafc; --text:#1f2937;
+  --red:#ef4444; --green:#16a34a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Noto Sans JP",sans-serif;background:var(--bg);color:var(--text)}
+.app{min-height:100vh;padding:28px 16px 40px;max-width:850px;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+h1{font-size:25px;margin:0;color:#374151}
+.mode{display:flex;background:white;padding:4px;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 1px 4px #00000010}
+.mode button{border:0;background:transparent;padding:10px 15px;border-radius:7px;font-weight:700;color:#4b5563;cursor:pointer}
+.mode button.active{background:var(--blue);color:white}
+.card{min-height:480px;border-radius:28px;box-shadow:0 10px 28px #00000018;cursor:pointer;position:relative;overflow:hidden;transition:.2s}
+.card.front{background:#333;color:white}
+.card.back{background:white;border:1px solid #e5e7eb}
+.card-inner{min-height:480px;padding:28px 38px;display:flex;flex-direction:column}
+.meta{display:flex;justify-content:space-between;color:#9ca3af;font-weight:600}
+.badge{font-size:12px;border:1px solid #6b7280;border-radius:6px;padding:4px 8px}
+.answer-badge{background:#eff6ff;color:var(--blue);border-color:#bfdbfe;border-radius:999px}
+.center{flex:1;display:flex;align-items:center;justify-content:center;text-align:center}
+.question{font-size:clamp(26px,4vw,42px);line-height:1.45;font-weight:700}
+.hint{text-align:center;color:#9ca3af;letter-spacing:.18em;font-size:14px}
+.answer{width:100%;max-width:610px;text-align:left}
+.label{display:block;color:#6b7280;font-size:17px;margin-bottom:7px}
+.meaning{font-size:clamp(24px,3.2vw,34px);font-weight:750;line-height:1.35;margin-bottom:25px}
+.word{font-size:clamp(44px,7vw,68px);font-weight:800;color:var(--blue);text-align:center;letter-spacing:.08em;margin-bottom:28px}
+.example{background:#eff6ff;border:1px solid #dbeafe;border-radius:15px;padding:20px}
+.example-title{color:#3b82f6;font-size:13px;font-weight:800;letter-spacing:.18em;margin-bottom:10px}
+.jp{font-size:20px;line-height:1.55;margin-bottom:7px}
+.zh{font-size:17px;color:#4b5563;line-height:1.5}
+.controls{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px}
+.btn{border:0;background:white;cursor:pointer;box-shadow:0 2px 8px #00000010;font-weight:800}
+.circle{width:56px;height:56px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:25px}
+.score{height:56px;min-width:88px;border-radius:999px;font-size:19px;display:flex;align-items:center;justify-content:center;gap:8px}
+.bad{border:1px solid #fecaca;color:var(--red)}
+.good{border:1px solid #bbf7d0;color:var(--green)}
+.reset{display:block;margin:25px auto 0;border:0;background:transparent;color:#6b7280;cursor:pointer;font-size:14px}
+.progress{margin-top:18px;text-align:center;color:#6b7280;font-size:14px}
+@media(max-width:600px){
+  .app{padding:18px 12px 30px}
+  .card,.card-inner{min-height:430px}
+  .card-inner{padding:23px 21px}
+  .controls{gap:10px}
+  .score{min-width:75px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <h1>擬聲詞／擬態詞（16字）</h1>
+    <div class="mode">
+      <button id="forwardBtn" class="active">正向測試</button>
+      <button id="reverseBtn">反向測試</button>
+    </div>
+  </div>
+
+  <div id="card" class="card front" role="button" tabindex="0" aria-label="點擊翻面">
+    <div class="card-inner">
+      <div class="meta">
+        <span id="counter"></span>
+        <span id="sideBadge" class="badge">點擊翻面</span>
+      </div>
+      <div id="content" class="center"></div>
+      <div id="hint" class="hint">查看答案</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn circle" id="prevBtn" title="上一題">←</button>
+    <button class="btn score bad" id="wrongBtn">✕ <span id="wrongCount">0</span></button>
+    <button class="btn score good" id="correctBtn"><span id="correctCount">0</span> ✓</button>
+    <button class="btn circle" id="nextBtn" title="下一題">→</button>
+  </div>
+  <div class="progress" id="progressText"></div>
+  <button class="reset" id="resetBtn">↻ 重新開始計算</button>
+</div>
+
+<script>
+const vocabList = [{"word": "さっさと", "meaning": "趕快、乾脆地（不拖泥帶水）", "jp": "佐藤さんは毎日5時になると、さっさと帰る。", "zh": "佐藤先生每天一到五點，就趕快回家。"}, {"word": "さっと", "meaning": "一下子（動作的瞬間之快）", "jp": "猫がさっと逃げた。", "zh": "貓一下子就逃跑了。"}, {"word": "こつこつ", "meaning": "持續努力、孜孜不倦", "jp": "彼女は毎日こつこつ勉強している。", "zh": "她每天孜孜不倦地學習。"}, {"word": "てきぱき", "meaning": "俐落乾脆（有條理且有效）", "jp": "てきぱきやったので、仕事が早く終わった。", "zh": "因為俐落乾脆地做，工作很快就結束了。"}, {"word": "ざっと", "meaning": "粗略地、大概／隨便掃一下", "jp": "朝、新聞をざっと読んだ。", "zh": "早上，粗略地看了一下報紙。"}, {"word": "こっそり", "meaning": "偷偷地、秘密地", "jp": "テストのとき、となりの子の答えをこっそり見た。", "zh": "考試時，偷偷看了旁邊同學的答案。"}, {"word": "そっと", "meaning": "輕輕地、靜靜地、悄悄地", "jp": "子どもが寝ているので、そっと部屋を出た。", "zh": "因為孩子在睡覺，所以靜靜地離開了房間。"}, {"word": "うっかり", "meaning": "一時大意、不小心", "jp": "うっかり宿題を忘れてしまった。", "zh": "不小心忘記了作業。"}, {"word": "どんどん", "meaning": "不停地／一個接一個／快速持續變化", "jp": "お酒はたくさんありますから、どんどん飲んでください。", "zh": "酒還有很多，請不停地喝。"}, {"word": "ぐんぐん", "meaning": "有力地快速成長（身高／植物／能力）", "jp": "この2、3年で、孫の背がぐんぐん伸びた。", "zh": "這兩三年，孫子的身高快速長高了。"}, {"word": "めきめき", "meaning": "顯著地／明顯地進步（技術、病情）", "jp": "林さんのピアノの腕はめきめき上がった。", "zh": "林先生的鋼琴技巧明顯進步了。"}, {"word": "だんだん", "meaning": "漸漸／慢慢地（天氣、感覺、理解）", "jp": "9月になって、だんだん涼しくなってきた。", "zh": "到了九月，天氣漸漸變涼了。"}, {"word": "ばらばら", "meaning": "散亂的、分散的、不一致的", "jp": "卒業のあと、クラスメートはばらばらになった。", "zh": "畢業之後，同學們就分散了。"}, {"word": "めちゃくちゃ", "meaning": "亂七八糟、不堪、毫無道理", "jp": "彼の話はめちゃくちゃで、よくわからない。", "zh": "他的話毫無道理，完全聽不懂。"}, {"word": "ごちゃごちゃ", "meaning": "雜亂無章、堆滿雜物", "jp": "机の上に、いろいろなものがごちゃごちゃ置いてある。", "zh": "桌子上雜亂地放著各種東西。"}, {"word": "くしゃくしゃ", "meaning": "皺巴巴的、揉成的", "jp": "ポケットからくしゃくしゃな千円札が出てきた。", "zh": "從口袋裡掏出了皺巴巴的一千日圓鈔票。"}];
+let currentIndex = 0;
+let isFlipped = false;
+let mode = "forward";
+let correctCount = 0;
+let incorrectCount = 0;
+
+const el = id => document.getElementById(id);
+
+function render() {
+  const item = vocabList[currentIndex];
+  el("counter").textContent = `${currentIndex + 1} / ${vocabList.length}`;
+  el("correctCount").textContent = correctCount;
+  el("wrongCount").textContent = incorrectCount;
+  el("progressText").textContent = `已作答 ${correctCount + incorrectCount} 題｜正確率 ${correctCount + incorrectCount ? Math.round(correctCount/(correctCount+incorrectCount)*100) : 0}%`;
+
+  const card = el("card");
+  const content = el("content");
+  const badge = el("sideBadge");
+  const hint = el("hint");
+
+  card.className = "card " + (isFlipped ? "back" : "front");
+  badge.textContent = isFlipped ? "解答" : "點擊翻面";
+  badge.className = "badge" + (isFlipped ? " answer-badge" : "");
+  hint.style.display = isFlipped ? "none" : "block";
+
+  if (!isFlipped) {
+    const q = mode === "forward"
+      ? `日語擬聲／擬態詞「${item.word}」的中文含義與例句？`
+      : `中文含義為「${item.meaning.split("（")[0].trim()}」的日語擬聲／擬態詞與例句？`;
+    content.innerHTML = `<p class="question">${escapeHtml(q)}</p>`;
+  } else {
+    if (mode === "forward") {
+      content.innerHTML = `
+        <div class="answer">
+          <span class="label">意思</span>
+          <div class="meaning">${escapeHtml(item.meaning)}</div>
+          <div class="example">
+            <div class="example-title">例文</div>
+            <div class="jp">${escapeHtml(item.jp)}</div>
+            <div class="zh">${escapeHtml(item.zh)}</div>
+          </div>
+        </div>`;
+    } else {
+      content.innerHTML = `
+        <div class="answer">
+          <span class="label" style="text-align:center">擬聲／擬態詞</span>
+          <div class="word">${escapeHtml(item.word)}</div>
+          <div class="example">
+            <div class="example-title">例文</div>
+            <div class="jp">${escapeHtml(item.jp)}</div>
+            <div class="zh">${escapeHtml(item.zh)}</div>
+          </div>
+        </div>`;
+    }
+  }
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function next() { isFlipped=false; currentIndex=(currentIndex+1)%vocabList.length; render(); }
+function prev() { isFlipped=false; currentIndex=(currentIndex-1+vocabList.length)%vocabList.length; render(); }
+
+el("card").addEventListener("click", () => {isFlipped=!isFlipped; render();});
+el("card").addEventListener("keydown", e => {if(e.key==="Enter"||e.key===" "){e.preventDefault();isFlipped=!isFlipped;render();}});
+el("nextBtn").onclick = next;
+el("prevBtn").onclick = prev;
+el("correctBtn").onclick = () => {correctCount++; next();};
+el("wrongBtn").onclick = () => {incorrectCount++; next();};
+el("resetBtn").onclick = () => {correctCount=0;incorrectCount=0;currentIndex=0;isFlipped=false;render();};
+el("forwardBtn").onclick = () => {mode="forward";isFlipped=false;el("forwardBtn").classList.add("active");el("reverseBtn").classList.remove("active");render();};
+el("reverseBtn").onclick = () => {mode="reverse";isFlipped=false;el("reverseBtn").classList.add("active");el("forwardBtn").classList.remove("active");render();};
+document.addEventListener("keydown", e => {
+  if(e.key==="ArrowRight") next();
+  if(e.key==="ArrowLeft") prev();
+  if(e.key==="f"||e.key==="F") {isFlipped=!isFlipped;render();}
+});
+render();
+</script>
+</body>
+</html>
