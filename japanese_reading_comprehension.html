@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="zh-HK"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#17324d"><title>期終考試閱讀理解</title>
+<style>
+*{box-sizing:border-box}:root{--navy:#17324d;--blue:#2563eb;--ink:#1f2937;--muted:#64748b;--line:#dce5ef;--green:#167353;--red:#b83242}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Noto Sans JP",sans-serif;background:linear-gradient(180deg,#eef4fa,#f8fafc 270px);color:var(--ink)}
+.home{position:fixed;top:16px;left:16px;z-index:50;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:#fffffff2;color:var(--navy);border:1px solid #dbe4ee;text-decoration:none;font-weight:800;box-shadow:0 8px 24px #0f172a24}
+.app{max-width:1080px;margin:auto;padding:48px 18px 60px}.hero{padding:30px;border-radius:26px;background:linear-gradient(135deg,#17324d,#24547e);color:#fff;box-shadow:0 18px 44px #17324d2e}.hero h1{font-size:clamp(28px,5vw,42px);margin:0 0 8px}.hero p{margin:0;color:#dce8f3;line-height:1.6}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:8px;margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;position:sticky;top:10px;z-index:20;box-shadow:0 8px 24px #0f172a0c}.tab{white-space:nowrap;border:0;background:transparent;color:#64748b;padding:11px 14px;border-radius:12px;font-weight:800;cursor:pointer}.tab.active{background:var(--navy);color:#fff}
+.toolbar,.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:16px;box-shadow:0 8px 22px #0f172a0b}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#fff;padding:8px 12px;border-radius:999px;font-weight:800;color:#475569;cursor:pointer}.chip.active{background:#e7f0f8;color:var(--navy);border-color:#94b6d2}
+.titlebar{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:18px}.titlebar h2{margin:0;color:var(--navy)}.badge{display:inline-flex;padding:5px 9px;border-radius:999px;background:#e8f1fa;color:var(--navy);font-size:12px;font-weight:850}
+.essay{font-size:18px;line-height:2;text-align:justify}.para{margin:0 0 20px}.speaker{font-weight:850;color:var(--navy)}
+.control{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:13px;padding:11px 17px;font-weight:850;cursor:pointer}.primary{background:var(--blue);color:#fff}.secondary{background:#eef2f7;color:#475569}.good{background:#e6f7ef;color:var(--green)}.bad{background:#fff0f2;color:var(--red)}
+.qa{max-width:780px;margin:auto;min-height:470px;display:flex;flex-direction:column}.progress{display:flex;justify-content:space-between;color:#64748b;font-weight:800}.question{flex:1;display:flex;flex-direction:column;justify-content:center}.question h3{font-size:clamp(21px,4vw,29px);line-height:1.55;color:var(--navy)}.choice{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;padding:14px;border-radius:13px;margin:9px 0;font-size:17px;cursor:pointer}.choice:hover{background:#f8fafc}.choice.correct{background:#e8f8f0;border-color:#8bcbae}.choice.wrong{background:#fff0f2;border-color:#e6a1aa}.feedback{padding:13px 15px;border-radius:13px;margin-top:13px;line-height:1.6}.ok{background:#e8f8f0;color:#126447}.no{background:#fff0f2;color:#982534}
+.summary-table{width:100%;border-collapse:collapse;margin-top:18px}.summary-table th,.summary-table td{border:1px solid #cad5e1;padding:11px;vertical-align:top;line-height:1.55}.summary-table th{background:#eef4fa;color:var(--navy)}.note{background:#f8fafc;border-radius:13px;padding:13px;color:#64748b;line-height:1.6}
+.result{text-align:center;padding:30px}.result strong{font-size:50px;color:var(--navy)}.hidden{display:none!important}
+
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.72);display:flex;align-items:center;justify-content:center;padding:18px;z-index:100}
+.modal-card{width:min(900px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:-22px;background:#fff;padding:4px 0 14px;border-bottom:1px solid var(--line);z-index:2}
+.modal-head h2{margin:0;color:var(--navy)}
+.exam-nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px}
+.exam-nav .btn{min-width:132px}
+
+
+.tabs-wrap{position:relative;margin-top:18px}
+.tabs-wrap::after{
+  content:"";
+  position:absolute;
+  top:0;right:0;
+  width:56px;height:100%;
+  pointer-events:none;
+  border-radius:0 18px 18px 0;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.98));
+}
+.tabs-hint{
+  display:none;
+  align-items:center;
+  justify-content:flex-end;
+  gap:6px;
+  margin:7px 10px 0;
+  color:#64748b;
+  font-size:13px;
+  font-weight:800;
+}
+.tabs-hint .arrow{font-size:18px;animation:tabNudge 1.3s ease-in-out infinite}
+@keyframes tabNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+.tabs{scrollbar-width:none;-ms-overflow-style:none}
+.tabs::-webkit-scrollbar{display:none}
+@media(max-width:650px){
+  .tabs-wrap::after{width:48px}
+  .tabs-hint{display:flex}
+  .tabs{padding-right:48px}
+}
+
+@media(max-width:650px){.app{padding:68px 10px 35px}.hero{padding:22px 18px}.essay{font-size:17px;line-height:1.9}.titlebar{align-items:flex-start;flex-direction:column}.tabs{top:5px}.summary-table{font-size:14px}}
+
+.evidence-question{font-size:clamp(20px,4vw,28px);font-weight:900;color:var(--navy);line-height:1.5;margin-bottom:16px}
+.sentence-list{display:flex;flex-direction:column;gap:10px}
+.sentence-item{border:1px solid var(--line);background:#fff;padding:14px 16px;border-radius:14px;line-height:1.75;cursor:pointer;text-align:left;font-size:17px}
+.sentence-item.selected{background:#e8f1fa;border-color:#7aa7cc;box-shadow:0 0 0 3px #dbeafe}
+.sentence-item.correct{background:#e8f8f0;border-color:#8bcbae}
+.sentence-item.wrong{background:#fff0f2;border-color:#e6a1aa}
+.word-bank{display:flex;gap:10px;flex-wrap:wrap;padding:14px;border:1px dashed #b8c8d8;border-radius:15px;background:#f8fafc}
+.word-chip{border:1px solid #b8cada;background:#edf5fb;color:var(--navy);border-radius:12px;padding:9px 12px;font-size:17px;font-weight:850;cursor:grab;user-select:none}
+.word-chip.selected{outline:3px solid #93c5fd}
+.vocab-list{display:flex;flex-direction:column;gap:14px;margin-top:18px}
+.vocab-row{border:1px solid var(--line);border-radius:15px;padding:14px;background:#fff;line-height:1.8;font-size:17px}
+.drop-slot{display:inline-flex;min-width:120px;min-height:42px;align-items:center;justify-content:center;padding:6px 10px;margin:0 5px;border:2px dashed #9fb4c7;border-radius:10px;background:#f8fafc;color:var(--navy);font-weight:850;vertical-align:middle;cursor:pointer}
+.drop-slot.filled{border-style:solid;background:#eaf3fb}
+.drop-slot.correct{background:#e8f8f0;border-color:#7bc79e}
+.drop-slot.wrong{background:#fff0f2;border-color:#e6a1aa}
+.vocab-score{text-align:center;font-size:22px;font-weight:900;color:var(--navy);margin-top:14px}
+
+
+@media(max-width:650px){
+  .exam-nav{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+    width:100%;
+  }
+  .exam-nav .btn{
+    min-width:0!important;
+    width:100%!important;
+    padding:11px 5px!important;
+    font-size:13px!important;
+    white-space:nowrap!important;
+  }
+}
+
+</style></head><body>
+<a class="home" href="index.html">⌂ <span>首頁</span></a><main class="app">
+<section class="hero"><h1>📖 期終考試閱讀理解</h1><p>第9–12課課文原文、繁體中文翻譯、閱讀理解、原文找答案、完整課本單字拖放練習、模擬考試及錯題重溫。</p></section>
+<nav class="tabs" id="tabs"></nav><section class="toolbar"><div class="chips" id="lessonChips"></div><span id="saveText">進度已自動保存</span></section><section id="content"></section>
+</main>
+<div id="essayModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="essayModalTitle">原文</h2>
+      <button class="btn secondary" onclick="closeEssayModal()">關閉</button>
+    </div>
+    <article id="essayModalBody" class="essay"></article>
+  </div>
+</div>
+<script>
+const DATA=[{"lesson": 9, "title": "カラオケ", "jp": ["“KARAOKE”は、今では“JUDO”や“TSUNAMI”と並ぶ世界共通語になっている。1999年、アメリカの雑誌『タイム』が「20世紀にいちばん影響を与えたアジアの20人」を選んだ。その中に、ガンジー、毛沢東、黒澤明などの有名人といっしょに、井上大佑という日本人がいた。カラオケを作った人である。", "井上さんは神戸で客が歌うのに合わせて演奏をする仕事をしていた。ある日、店の客の一人が、社員旅行に行くので、演奏をテープに録音してほしいと言ってきた。音の高さや速さをその人に合わせて録音してあげたら、とても喜んでくれた。それをヒントに井上さんは演奏だけが入っている「8ジューク」という機械を作り、1971年にレストランや喫茶店に貸し出す会社を始めた。カラオケの誕生である。", "ところが、井上さんは特許を取っておかなかった。また、ほかの会社との技術競争にも負けてしまったために、会社は倒産した。もし特許を取っていれば、大金持ちになっていたかもしれない。", "カラオケほど年齢、性別、地域に関係なく楽しめる娯楽はない。世界中の町で、子どもからお年寄りまで、家族や仲間と、カラオケに合わせて楽しそうに歌っている。ダイエットのためにカラオケをする人もいる。アメリカでは心の病気を治すのにも使われている。今、カラオケは単なる機械ではなく、日本が世界に誇る文化なのである。"], "zh": ["「KARAOKE」如今已經和「JUDO（柔道）」及「TSUNAMI（海嘯）」一樣，成為世界通用語。1999年，美國雜誌《時代》選出了「對20世紀最有影響力的20位亞洲人」。當中除了甘地、毛澤東、黑澤明等名人外，還有一位名叫井上大佑的日本人。他就是發明卡拉OK的人。", "井上先生當時在神戶從事為客人的歌聲現場伴奏的工作。有一天，店內一位客人因為要參加員工旅行，請他把伴奏錄在錄音帶上。井上先生按照那位客人的音高和速度錄製，對方非常高興。井上先生由此得到靈感，製造了一部只收錄伴奏、名為「8 Juke」的機器，並於1971年開設公司，把機器出租給餐廳和咖啡店。卡拉OK就此誕生。", "可是，井上先生沒有事先申請專利，加上在與其他公司的技術競爭中落敗，結果公司倒閉。假如當初申請了專利，他或許已經成為大富翁。", "沒有一種娛樂像卡拉OK一樣，不受年齡、性別和地區限制，任何人都能享受。世界各地的城市中，從小孩到老人，都會與家人或朋友一起隨着卡拉OK愉快地唱歌。有人為了減肥而唱卡拉OK；在美國，它甚至被用來治療心理疾病。今天，卡拉OK已不只是一部機器，而是日本引以為傲、向世界展示的文化。"], "questions": [{"q": "「JUDO」や「TSUNAMI」ということばは世界中の人に知られている。", "choices": ["○ 正確", "× 錯誤"], "a": 0, "why": "第一段指出它們與 KARAOKE 並列為「世界共通語」。"}, {"q": "井上さんは黒澤明といっしょにカラオケを作った。", "choices": ["○ 正確", "× 錯誤"], "a": 1, "why": "黑澤明只是同樣獲《時代》選出的名人，並沒有與井上先生共同發明卡拉OK。"}, {"q": "井上さんが機械を貸し出す会社を始めたのは1971年である。", "choices": ["○ 正確", "× 錯誤"], "a": 0, "why": "第二段明確寫着「1971年に…貸し出す会社を始めた」。"}, {"q": "井上さんの会社が倒産した原因の一つは、特許を取らなかったことである。", "choices": ["○ 正確", "× 錯誤"], "a": 0, "why": "第三段指出他沒有申請專利，而且在技術競爭中落敗。"}, {"q": "カラオケは世界中で心の病気を治すために使われている。", "choices": ["○ 正確", "× 錯誤"], "a": 1, "why": "課文只說在美國也用來治療心理疾病，並非世界各地。"}, {"q": "井上さんがカラオケを作ることになったきっかけは何ですか。", "choices": ["『タイム』に載ったこと", "客に合わせた演奏を録音してあげたこと", "会社が倒産したこと", "ダイエットを始めたこと"], "a": 1, "why": "客人請他錄製合適的伴奏，成為他製作「8ジューク」的靈感。"}, {"q": "筆者はカラオケについてどう考えていますか。", "choices": ["日本だけで使われる機械である", "健康のためだけに使われる", "日本が世界に誇る文化である", "特許がないので価値がない"], "a": 2, "why": "文章最後一句直接表明卡拉OK是「日本が世界に誇る文化」。"}], "vocab": [["新しい発明をした場合、（　）を取っておかないと、すぐにそのアイディアを使われてしまう。", ["世界共通語", "演奏", "特許", "倒産", "大金持ち", "文化", "誇って"], 2], ["景気が悪くなり、会社が（　）してしまった。", ["世界共通語", "演奏", "特許", "倒産", "大金持ち", "文化", "誇って"], 3], ["日本の歴史や（　）を知るために、京都と奈良を旅行して来ました。", ["世界共通語", "演奏", "特許", "倒産", "大金持ち", "文化", "誇って"], 5], ["科学の世界では英語が（　）になっている。", ["世界共通語", "演奏", "特許", "倒産", "大金持ち", "文化", "誇って"], 0], ["友達のピアノの（　）を聞きに行った。", ["世界共通語", "演奏", "特許", "倒産", "大金持ち", "文化", "誇って"], 1], ["富士山は日本で一番の高さと美しさを（　）いる。", ["世界共通語", "演奏", "特許", "倒産", "大金持ち", "文化", "誇って"], 6], ["（　）になっても、幸せだとは言えない。", ["世界共通語", "演奏", "特許", "倒産", "大金持ち", "文化", "誇って"], 4]]}, {"lesson": 10, "title": "記憶型と注意型", "jp": ["わたしたちは、毎日多くの失敗をしながら生きている。財布を忘れたり、間違い電話をかけたり、酒を飲んで帰る家を間違えたり。失敗で命をなくしてしまうこともある。日本では交通事故で毎年1万人くらい死んでいるが、その原因のほとんどは運転手のミスである。飛行機事故、仕事中の事故、家庭での事故、これらの原因もほとんどがヒューマンエラーである。病院で手術をする患者を間違えるという事故もあった。人はなぜ失敗をするのだろう。どうすれば失敗しないようにできるのだろうか。", "心理学者のリーズンは、学生たちが日常生活でおかすうっかりミスを研究した結果、「記憶型」と「注意型」の2つの型があることを発見した。「記憶型」の人は「やり忘れる」失敗が多く、「注意型」の人は「やってしまう」失敗が多い。", "ここで前のページで行ったテスト結果について考えてみよう。奇数番号は記憶型かどうか調べるもので、丸が4つ以上ある人は「ぼんやり」、6つ以上あったら「かなりぼんやり」である。こういう人はいつもメモを取るとか、チェックリストを見ながら仕事をするとか、思い出す手がかりになるものを準備するなどが役に立つだろう。", "一方、偶数番号に丸が3つ以上あったら「あわて者」、5つ以上なら、「かなりあわて者」である。仕事を始める前に一度深く呼吸するとか、指を指して確認してから操作するなどを習慣にするといい。", "偶数番号にも奇数番号にも丸が多い場合は「ぼんやりしたあわて者」ということになる。では、どちらにも丸が少ない人は？ 聖人君子か大うそつきか、または自分がエラーをしていることに気がついていないか、忘れてしまっているいちばん困った人かもしれない。"], "zh": ["我們每天都在一邊犯下許多錯誤，一邊生活。例如忘記帶錢包、打錯電話，或喝酒後回錯家。有時錯誤甚至會令人失去生命。在日本，每年約有一萬人死於交通事故，而其中大部分原因都是駕駛者的失誤。飛機事故、工作事故及家庭事故，大部分原因也都是人為錯誤。甚至曾經發生醫院做手術時弄錯病人的事故。人為甚麼會失敗？怎樣才能避免失敗呢？", "心理學家里森研究學生在日常生活中犯下的粗心錯誤後，發現人可分成「記憶型」和「注意型」兩種類型。「記憶型」的人較常犯「忘記做」的錯誤；「注意型」的人則較常犯「不小心做了」的錯誤。", "現在看看上一頁測驗的結果。奇數題用來檢查是否屬於記憶型：有四個或以上圓圈的人屬於「有點迷糊」，有六個或以上則是「相當迷糊」。這類人可養成經常記事、看着檢查清單工作，或準備能提醒自己的線索等習慣。", "另一方面，偶數題有三個或以上圓圈的人屬於「急性子」，有五個或以上則是「相當急躁的人」。他們適合養成在開始工作前先深呼吸一次，或指着目標確認後才操作的習慣。", "如果偶數題和奇數題都有很多圓圈，就是「迷糊的急性子」。那麼兩邊圓圈都很少的人呢？他可能是聖人君子、大騙子，也可能沒有察覺自己正在犯錯，或者早已忘記自己犯過錯，是最令人擔心的一類人。"], "questions": [{"q": "記憶型の人には、どんな失敗が多いですか。", "choices": ["やり忘れる失敗", "やってしまう失敗", "交通事故だけ", "間違い電話だけ"], "a": 0, "why": "第二段直接說記憶型的人較常「やり忘れる」。"}, {"q": "注意型の人には、どんな失敗が多いですか。", "choices": ["やり忘れる失敗", "やってしまう失敗", "忘れ物だけ", "事故を起こさない"], "a": 1, "why": "第二段直接說注意型的人較常「やってしまう」。"}, {"q": "記憶型かどうかを調べるのは、どの番号ですか。", "choices": ["偶数番号", "奇数番号", "3の倍数", "5の倍数"], "a": 1, "why": "第三段指出奇數題用來檢查記憶型。"}, {"q": "奇数番号に丸が4つ以上ある人は何と呼ばれますか。", "choices": ["かなりぼんやり", "ぼんやり", "あわて者", "かなりあわて者"], "a": 1, "why": "4個以上為「ぼんやり」，6個以上才是「かなりぼんやり」。"}, {"q": "奇数番号に丸が6つ以上ある人は何と呼ばれますか。", "choices": ["かなりぼんやり", "ぼんやり", "あわて者", "聖人君子"], "a": 0, "why": "第三段明確列出6個以上是「かなりぼんやり」。"}, {"q": "偶数番号に丸が3つ以上ある人は何と呼ばれますか。", "choices": ["ぼんやり", "あわて者", "かなりあわて者", "大うそつき"], "a": 1, "why": "第四段指出3個以上為「あわて者」。"}, {"q": "偶数番号に丸が5つ以上ある人は何と呼ばれますか。", "choices": ["かなりあわて者", "かなりぼんやり", "あわて者", "聖人君子"], "a": 0, "why": "第四段指出5個以上為「かなりあわて者」。"}, {"q": "記憶型の人に役立つ方法はどれですか。", "choices": ["メモやチェックリストを使う", "何も確認しない", "急いで操作する", "毎回仕事を変える"], "a": 0, "why": "第三段建議記事、使用檢查清單和準備提醒線索。"}, {"q": "注意型の人に役立つ方法はどれですか。", "choices": ["仕事前に深呼吸し、指差し確認する", "メモだけを取る", "急いで始める", "何も考えず操作する"], "a": 0, "why": "第四段建議深呼吸及指差確認。"}, {"q": "偶数番号にも奇数番号にも丸が少ない人について、筆者はどう述べていますか。", "choices": ["必ず失敗が少ない人", "聖人君子、大うそつき、または自分のエラーに気づかない人かもしれない", "必ず記憶型", "必ず注意型"], "a": 1, "why": "最後一段列出這幾種可能，並沒有說一定是少犯錯的人。"}], "vocab": [["この辺りは車が多くて危険ですから、（　）ください。", ["失敗", "記憶", "注意して", "奇数", "偶数", "～型", "ぼんやりして", "あわて者"], 2], ["（　）いて、リーさんがそばにいたことに気がつかなかった。", ["失敗", "記憶", "注意して", "奇数", "偶数", "～型", "ぼんやりして", "あわて者"], 6], ["1・3・5・7・9は（　）で、2・4・6・8は（　）だ。", ["失敗", "記憶", "注意して", "奇数", "偶数", "～型", "ぼんやりして", "あわて者"], [3, 4]], ["わたしの息子は本当に（　）で困ります。けさも遅れそうになって、娘のお弁当を持って出かけたんですよ。", ["失敗", "記憶", "注意して", "奇数", "偶数", "～型", "ぼんやりして", "あわて者"], 7], ["「（　）は成功の母」と言われます。何度でもやってみることが大切です。", ["失敗", "記憶", "注意して", "奇数", "偶数", "～型", "ぼんやりして", "あわて者"], 0], ["人には2つの型がある。朝元気な朝（　）の人と、夜になると元気になる夜（　）の人である。作家は夜（　）の人が多いそうだ。", ["失敗", "記憶", "注意して", "奇数", "偶数", "～型", "ぼんやりして", "あわて者"], [5, 5, 5]], ["わたしは3歳のとき家族といっしょにベトナムに住んでいたのですが、そのころの（　）はありません。", ["失敗", "記憶", "注意して", "奇数", "偶数", "～型", "ぼんやりして", "あわて者"], 1]]}, {"lesson": 11, "title": "白川郷の黄金伝説", "jp": ["白川郷は合掌造りの村として知られ、世界遺産にも登録されている。合掌造りというのは、掌を合わせたような形の屋根を持つ住まいのことである。この形が完成したのは江戸時代後半（18世紀）で、重い雪でも壊れないように、屋根が下の写真のように造られている。", "合掌造りにはくぎが使われていない。屋根の組み立てや修理は、村人が協力し合って行う。現金収入が少ないため、費用をかけずに行わなければならないからである。また、建物の向きは、風や太陽の向きを考えて決められている。風の抵抗を少なくし、夏は涼しく、冬は暖かく過ごすためである。", "中は広く、2層、3層になっており、上の階では蚕を飼い、下では火薬の原料を製造しながら日常生活も送っていた。この辺りは農作物ができないため、江戸時代にこうした家内産業が発展した。合掌造りは白川郷の厳しい自然条件から生まれたものだったのだ。", "米がとれず、年貢が期待できないため、この地を治めようとする者は15世紀前半まではいなかった。しかし、15世紀後半に、ここにやってきて、住み着いた者がいる。内ヶ嶋為氏とその一族で、白川郷に帰雲城という城を造った。彼らは近くの山で金銀を掘り当て、かなり豊かであったらしい。織田信長などの権力者に金銀を贈ったり、飢饉のときには村人に米を与えたりして、120年のあいだ白川郷を治め続けた。", "ところが、1585年11月29日、大地震が起きた。「三百軒以上の家と数百人の人が一人残らず消えた。内ヶ嶋の時代が終わった」と歴史の本に書かれている。", "帰雲城がどこにあったのか、これまで何度も発掘が行われているが、まだ見つかっていない。城には金銀が保管してあったはずだ。その価値は今のお金で1兆円とも言われている。白川郷は黄金伝説の地でもあるのだ。"], "zh": ["白川鄉以合掌造村落聞名，亦已登錄為世界遺產。所謂合掌造，是指屋頂形狀像雙手合掌的住宅。這種形式於江戶時代後期（18世紀）完成，屋頂建成照片所示的斜面形狀，以免被沉重積雪壓壞。", "合掌造沒有使用釘子。屋頂的組裝和維修由村民互相合作完成。由於現金收入少，他們必須以不花費太多金錢的方式進行。此外，建築物的方向亦會考慮風向和日照方向，以減少風阻，令夏天涼爽、冬天溫暖。", "屋內寬敞，分為兩層或三層。上層養蠶，下層一邊製造火藥原料，一邊維持日常生活。由於這一帶難以種植農作物，江戶時代因而發展出這些家庭工業。合掌造正是從白川鄉嚴酷的自然環境中誕生。", "由於不能收成稻米，亦無法期待年貢，直至15世紀前半都沒有人想統治此地。可是到了15世紀後半，內ヶ嶋為氏及其家族來到這裏定居，並在白川鄉建造名為歸雲城的城堡。他們在附近山中挖掘到金銀，據說相當富有。他們向織田信長等有權勢者贈送金銀，在饑荒時又向村民派米，持續統治白川鄉120年。", "然而，1585年11月29日發生大地震。歷史書記載：「三百多間房屋和數百人一個不剩地消失了。內ヶ嶋的時代終結了。」", "歸雲城究竟位於何處，至今已進行過多次發掘，仍未被發現。城內理應存放着金銀，據說按今天價值計算可達一萬億日圓。白川鄉亦因此成為黃金傳說之地。"], "questions": [{"q": "合掌造りの家の中はいくつかに分けられ、いろいろな目的に使われていた。", "choices": ["○ 正確", "× 錯誤"], "a": 0, "why": "屋內有兩至三層，上層養蠶，下層製造火藥原料並生活。"}, {"q": "合掌造りの家は、雪で屋根が壊れるため、くぎを使って建てられている。", "choices": ["○ 正確", "× 錯誤"], "a": 1, "why": "課文明確指出合掌造沒有使用釘子，而且屋頂設計是為了承受積雪。"}, {"q": "屋根の組み立てや修理は家族だけで行った。", "choices": ["○ 正確", "× 錯誤"], "a": 1, "why": "由村民互相合作進行，而非只由家人處理。"}, {"q": "合掌造りの家は、その土地の気候に合わせて建てられた。", "choices": ["○ 正確", "× 錯誤"], "a": 0, "why": "建築方向和屋頂均配合當地風、日照及積雪環境。"}, {"q": "内ヶ嶋為氏とその一族が豊かだったのはなぜですか。", "choices": ["米をたくさん作ったから", "近くの山で金銀を掘り当てたから", "外国と貿易したから", "家を貸したから"], "a": 1, "why": "第四段寫明他們在附近山中挖掘到金銀。"}, {"q": "内ヶ嶋為氏とその一族は、どのように白川郷を長く治めましたか。", "choices": ["村人から高い税金だけを取った", "権力者に金銀を贈り、飢饉のとき村人に米を与えた", "城を外国に売った", "農作物を輸入した"], "a": 1, "why": "課文列出向權勢者贈金銀，以及饑荒時給村民米。"}, {"q": "内ヶ嶋の時代が終わったのはなぜですか。", "choices": ["大地震が起きたから", "会社が倒産したから", "雪で城が壊れたから", "米が取れなかったから"], "a": 0, "why": "1585年發生大地震，房屋及居民消失。"}, {"q": "白川郷が黄金伝説の地だと言われるのはなぜですか。", "choices": ["毎年金が採れるから", "帰雲城に巨額の金銀があったはずだが、城がまだ見つかっていないから", "金色の屋根があるから", "織田信長が住んでいたから"], "a": 1, "why": "傳說城中存有現值一萬億日圓的金銀，但城址至今未找到。"}], "vocab": [["（　）とは世界の子どもたちや孫たちに残していかなければならない自然や建物のことである。", ["伝説", "世界遺産", "屋根", "農作物", "金銀", "治める", "大地震", "発掘"], 1], ["日本は野菜や果物など多くの（　）を外国から輸入している。", ["伝説", "世界遺産", "屋根", "農作物", "金銀", "治める", "大地震", "発掘"], 3], ["先週の台風で（　）が壊れたので、修理してもらった。", ["伝説", "世界遺産", "屋根", "農作物", "金銀", "治める", "大地震", "発掘"], 2], ["エジプトでは今もピラミッドの近くで（　）が行われている。", ["伝説", "世界遺産", "屋根", "農作物", "金銀", "治める", "大地震", "発掘"], 7], ["1995年に神戸で起きた（　）で約6,500人の人が亡くなった。", ["伝説", "世界遺産", "屋根", "農作物", "金銀", "治める", "大地震", "発掘"], 6], ["昔から川を（　）者が国をよく（　）と言われてきた。", ["伝説", "世界遺産", "屋根", "農作物", "金銀", "治める", "大地震", "発掘"], [5, 5]], ["あの森には怖い鬼が住んでいたという（　）がある。", ["伝説", "世界遺産", "屋根", "農作物", "金銀", "治める", "大地震", "発掘"], 0], ["昔の人は「子どもは（　）より大切なものだ」と言った。", ["伝説", "世界遺産", "屋根", "農作物", "金銀", "治める", "大地震", "発掘"], 4]]}, {"lesson": 12, "title": "【座談会】日本で暮らす", "jp": ["司会：湯沢雅彦　出席者：ベルタ（ハンガリー）、シェラ（アメリカ）、苑（中国）、スジンダ（タイ）", "湯沢：今日は、日本で長くお暮らしの4人の外国の奥様においでいただきました。いちばん長い方は15年、短い方でも6年はいらっしゃるそうです。その間のご苦労やうれしかったことなどを伺いたいと思います。（中略）", "湯沢：では、次に騒音については？", "ベルタ：うるさいと思います。街全体がとても騒々しいですね。おかしなことですが、実は、日本へ来て受けたカルチャーショックの一つは、子どものサンダルややかんのピーピー鳴る音だったんです。マンションのドアを開けたり閉めたりする音や鳴りっぱなしの踏切、しゃべる自動販売機、つけっぱなしのテレビ、駅のアナウンスなどが、初めは本当にうるさくてたまらなかった。ブダペストも都会ですが、住宅地はとても静かです。本当に虫の音も聞こえるぐらい静かです。", "スジンダ：じゃ、きっとバンコクには住めないと思います。バンコクはこのごろすごくうるさくなってしまいました。車の騒音がすごいんです。だから宇都宮は本当に静かだなと思います。", "シェラ：わたしも浦安はどちらかと言えば静かなほうだと思います。でもちょっと暖かい季節になって窓を開けていると、子どもに、「車の音がうるさくてよく聞こえないから、テレビの音を大きくして」と言われます。", "湯沢：駅のアナウンスはどうですか。", "ベルタ：次の駅がどこだとか、どちらのドアが開くという車内アナウンスは、とても便利だと思いますが、ホームのアナウンスはうるさいですね。", "湯沢：テープレコーダーを使った放送に加えて、駅員が同じことを言ったりして、同じことを3回ぐらいアナウンスする。", "シェラ：でも、ロンドンやニューヨークの地下鉄に比べたら、とてもいいと思います。特にニューヨークのなどは、さっぱり聞き取れない。何か音はしているんだけれども、意味が全くわからない。でも、日本のアナウンスははっきりわかるので役に立つし、「お忘れ物のございませんように」と丁寧な話し方だから、日本語のいい勉強にもなります。", "苑：アナウンスには乗客の安全性に配慮する意味も含まれていると思います。", "ベルタ：でも、なくてもうまくいくと思いますよ。あ、それから最近音楽に変えた駅も多いですけど、あのチャイムもうるさいですね。", "湯沢：チャイム？ あっ、発車ベルのことですね。少しうるさいところもあるかもしれませんが、日本の乗り物には安全性があると思いませんか。", "ベルタ：ええ。ありますね。必ずしもうるさいチャイムやアナウンスのおかげだとは思いませんけど。"], "zh": ["主持：湯澤雅彥　出席者：貝爾塔（匈牙利）、謝拉（美國）、苑（中國）、斯金達（泰國）", "湯澤：今天邀請了四位長期居住在日本的外國女士。居住時間最長的有15年，即使最短的也有6年。我想請她們談談期間遇到的困難和開心的事情。（中略）", "湯澤：那麼，接下來談談噪音吧？", "貝爾塔：我覺得很吵，整個城市都非常嘈雜。說來奇怪，我來到日本後受到的文化衝擊之一，竟然是小孩涼鞋和水壺發出的嗶嗶聲。公寓門開關的聲音、一直鳴響的鐵路平交道、會說話的自動售賣機、一直開着的電視和車站廣播等，起初真的吵得令人受不了。布達佩斯也是城市，但住宅區非常寧靜，靜得甚至能聽到蟲鳴。", "斯金達：那你一定不能住在曼谷。曼谷近來變得非常嘈吵，汽車噪音很嚴重。所以我覺得宇都宮真的很安靜。", "謝拉：我也覺得浦安比較偏向安靜。不過到了較暖的季節，開窗時孩子會說：「汽車聲太吵，聽不清楚，請把電視聲音調大。」", "湯澤：車站廣播又怎樣呢？", "貝爾塔：告訴乘客下一站和哪一邊車門會打開的車內廣播非常方便，但月台廣播很吵。", "湯澤：除了錄音播放外，站務員又會重複相同內容，同一件事大約會廣播三次。", "謝拉：不過，和倫敦或紐約地鐵相比，我覺得日本很好。尤其紐約的廣播完全聽不懂；雖然有聲音，卻完全不知道意思。日本的廣播則清楚易懂，很有用，而且使用「請不要遺留物品」等禮貌說法，亦能成為很好的日語學習。", "苑：我認為廣播亦包含照顧乘客安全的意義。", "貝爾塔：可是沒有廣播也應該能順利運作。還有，最近很多車站把聲音改成音樂，那些提示音也很吵。", "湯澤：提示音？啊，是開車鈴聲吧。雖然有些地方可能較吵，但你不覺得日本的交通工具很安全嗎？", "貝爾塔：是的，的確安全。不過我不認為這一定是吵鬧的提示音和廣播帶來的功勞。"], "questions": [{"q": "騒音について、ベルタはどう考えていますか。", "choices": ["日本の街全体がとても騒々しい", "日本はどこでも静か", "宇都宮だけがうるさい", "車の音は全く聞こえない"], "a": 0, "why": "她直接說「うるさいと思います。街全体がとても騒々しい」。"}, {"q": "騒音について、スジンダはどう考えていますか。", "choices": ["宇都宮は本当に静かだ", "宇都宮はバンコクよりうるさい", "バンコクは静かだ", "日本には車がない"], "a": 0, "why": "她拿曼谷作比較，認為宇都宮真的很安靜。"}, {"q": "騒音について、シェラはどう考えていますか。", "choices": ["浦安はどちらかと言えば静かだ", "浦安は日本で一番うるさい", "テレビの音は聞こえすぎる", "窓を絶対に開けない"], "a": 0, "why": "她說浦安偏向安靜，但開窗時會受車聲影響。"}, {"q": "ベルタは車内アナウンスについてどう考えていますか。", "choices": ["次の駅や開くドアがわかるので便利", "全く役に立たない", "聞き取れない", "日本語の勉強にはならない"], "a": 0, "why": "她認為車內廣播方便，但嫌月台廣播嘈吵。"}, {"q": "シェラは日本のアナウンスについてどう考えていますか。", "choices": ["はっきりわかるので役に立ち、日本語の勉強にもなる", "意味が全くわからない", "ニューヨークより悪い", "安全には関係がない"], "a": 0, "why": "她認為日本廣播清楚、有用，而且能學習日語。"}, {"q": "苑はアナウンスについてどう考えていますか。", "choices": ["乗客の安全性に配慮する意味がある", "音楽として楽しむもの", "全部なくすべきだ", "外国語だけで放送すべきだ"], "a": 0, "why": "苑認為廣播也包含顧及乘客安全的意義。"}, {"q": "ベルタが初めにカルチャーショックを受けた音に含まれないものはどれですか。", "choices": ["子どものサンダル", "やかんの音", "しゃべる自動販売機", "海の波の音"], "a": 3, "why": "課文列出前三項，沒有提到海浪聲。"}], "vocab": [["ビルの工事の（　）で、電話がよく聞こえません。", ["騒音", "騒々しく", "カルチャーショック", "アナウンス", "安全"], 0], ["旅行中の（　）を祈っています。行ってらっしゃい。", ["騒音", "騒々しく", "カルチャーショック", "アナウンス", "安全"], 4], ["ここは静かなところだったが、最近若者が車でやって来て、週末は特に（　）なった。", ["騒音", "騒々しく", "カルチャーショック", "アナウンス", "安全"], 1], ["駅で「雪のために10分ほど遅れています」という（　）があった。", ["騒音", "騒々しく", "カルチャーショック", "アナウンス", "安全"], 3], ["わたしの国では会議の時間に遅れる人が多いが、日本ではみんなよく時間を守るので、（　）を受けた。", ["騒音", "騒々しく", "カルチャーショック", "アナウンス", "安全"], 2]]}],KEY="jp_reading_exam_v1";
+let s={tab:"original",lesson:9,qIndex:0,vIndex:0,exam:[],examLesson:null,examIndex:0,examAnswers:{},score:0,answered:false,wrong:[],font:18,evidenceIndex:0,evidenceSelected:[],vocabSlots:{}};
+try{s={...s,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){}
+const $=id=>document.getElementById(id),lesson=()=>DATA.find(x=>x.lesson===Number(s.lesson));
+
+const EVIDENCE={
+  9:[
+    {q:"井上さんがカラオケを作ることになったきっかけは何ですか。",keys:["音の高さや速さをその人に合わせて録音してあげたら","それをヒントに井上さんは演奏だけが入っている「8ジューク」という機械を作り"]},
+    {q:"筆者はカラオケについてどう考えていますか。",keys:["今、カラオケは単なる機械ではなく、日本が世界に誇る文化なのである"]},
+    {q:"井上さんの会社が倒産した原因は何ですか。",keys:["井上さんは特許を取っておかなかった","ほかの会社との技術競争にも負けてしまったために、会社は倒産した"]}
+  ],
+  10:[
+    {q:"記憶型の人にはどんな失敗が多いですか。",keys:["「記憶型」の人は「やり忘れる」失敗が多く"]},
+    {q:"注意型の人にはどんな失敗が多いですか。",keys:["「注意型」の人は「やってしまう」失敗が多い"]},
+    {q:"注意型の人は失敗を減らすために何をするといいですか。",keys:["仕事を始める前に一度深く呼吸するとか、指を指して確認してから操作するなどを習慣にするといい"]}
+  ],
+  11:[
+    {q:"合掌造りの建物の向きは、なぜ風や太陽の向きを考えて決められていますか。",keys:["風の抵抗を少なくし、夏は涼しく、冬は暖かく過ごすためである"]},
+    {q:"内ヶ嶋為氏とその一族が豊かだったのはなぜですか。",keys:["彼らは近くの山で金銀を掘り当て、かなり豊かであったらしい"]},
+    {q:"白川郷が黄金伝説の地だと言われるのはなぜですか。",keys:["城には金銀が保管してあったはずだ","その価値は今のお金で1兆円とも言われている"]}
+  ],
+  12:[
+    {q:"ベルタは日本の街についてどう感じていますか。",keys:["うるさいと思います。街全体がとても騒々しいですね"]},
+    {q:"シェラは日本のアナウンスをどう評価していますか。",keys:["日本のアナウンスははっきりわかるので役に立つし","日本語のいい勉強にもなります"]},
+    {q:"苑はアナウンスについてどう考えていますか。",keys:["アナウンスには乗客の安全性に配慮する意味も含まれていると思います"]}
+  ]
+};
+function splitSentences(paras){
+  let arr=[];
+  paras.forEach((p,pi)=>{
+    const parts=p.split(/(?<=[。！？])/).map(x=>x.trim()).filter(Boolean);
+    parts.forEach((t,si)=>arr.push({id:`${pi}-${si}`,text:t}));
+  });
+  return arr;
+}
+
+const tabs=[["original","原文"],["translation","中文翻譯"],["questions","閱讀問題"],["evidence","原文找答案"],["vocab","單字練習"],["exam","模擬考試"],["wrong","錯題重溫"]];
+function save(){localStorage.setItem(KEY,JSON.stringify(s))}
+function nav(){ $("tabs").innerHTML=tabs.map(([k,t])=>`<button class="tab ${s.tab===k?"active":""}" onclick="setTab('${k}')">${t}</button>`).join(""); $("lessonChips").innerHTML=DATA.map(x=>`<button class="chip ${s.lesson===x.lesson?"active":""}" onclick="setLesson(${x.lesson})">第${x.lesson}課</button>`).join("")}
+function setTab(t){
+  s.tab=t;
+  s.qIndex=0;
+  s.vIndex=0;
+  s.answered=false;
+  if(t==="exam" && (!s.exam.length || s.examLesson!==s.lesson)) startExam();
+  render();
+}
+function setLesson(n){
+  s.lesson=n;
+  s.qIndex=0;
+  s.vIndex=0;
+  s.answered=false;
+  if(s.tab==="exam" && s.examLesson!==n) startExam();
+  render();
+}
+function render(){nav();const c=$("content");if(s.tab==="original")c.innerHTML=essayHTML(false);if(s.tab==="translation")c.innerHTML=essayHTML(true);if(s.tab==="questions")c.innerHTML=questionHTML(lesson().questions,"q");if(s.tab==="evidence")c.innerHTML=evidenceHTML();if(s.tab==="vocab")c.innerHTML=vocabHTML();if(s.tab==="exam")c.innerHTML=examHTML();if(s.tab==="wrong")c.innerHTML=wrongHTML();save()}
+function essayHTML(zh){const x=lesson(),arr=zh?x.zh:x.jp;return `<section class="panel"><div class="titlebar"><div><span class="badge">第${x.lesson}課</span><h2>${x.title}</h2></div><div class="control"><button class="btn secondary" onclick="changeFont(-1)">A−</button><button class="btn secondary" onclick="changeFont(1)">A＋</button></div></div><article class="essay" style="font-size:${s.font}px">${arr.map(p=>`<p class="para">${p.replace(/^([^：]{1,8})：/,'<span class="speaker">$1：</span>')}</p>`).join("")}</article></section>`}
+function changeFont(n){s.font=Math.max(15,Math.min(24,s.font+n));render()}
+function questionHTML(list,type){let i=s.qIndex%list.length,q=list[i];return `<section class="panel qa"><div class="progress"><span>第${s.lesson}課 · 閱讀理解</span><span>${i+1} / ${list.length}</span></div><div class="question"><h3>${q.q}</h3><div>${q.choices.map((x,j)=>`<button class="choice" onclick="answer(this,${j},${q.a},'${type}',${i})">${x}</button>`).join("")}</div><div id="fb"></div></div><div class="control"><button class="btn secondary" onclick="moveQ(-1)">← 上一題</button><button class="btn primary" onclick="moveQ(1)">下一題 →</button></div></section>`}
+function answer(btn,pick,ans,type,idx){if(s.answered)return;s.answered=true;document.querySelectorAll(".choice").forEach((b,j)=>{if(j===ans)b.classList.add("correct")});let ok=pick===ans;if(!ok)btn.classList.add("wrong");let q=type==="v"?lesson().vocab[idx]:lesson().questions[idx];let why=type==="v"?"完整句子中的正確詞語如綠色選項所示。":q.why;$("fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}">${ok?"✓ 正確":"✕ 答錯"}<br>${why}</div>`;let key=`${s.lesson}-${type}-${idx}`;if(ok)s.wrong=s.wrong.filter(x=>x!==key);else if(!s.wrong.includes(key))s.wrong.push(key);save()}
+function moveQ(n){s.qIndex=(s.qIndex+n+lesson().questions.length)%lesson().questions.length;s.answered=false;render()}
+function vocabHTML(){
+  const d=lesson();
+  const key=String(d.lesson);
+  if(!s.vocabSlots[key]) s.vocabSlots[key]={};
+  const vocab=d.vocab;
+  const words=[...new Set(vocab.flatMap(v=>v[1]))];
+  let rows=vocab.map((v,i)=>{
+    const answerIndexes=Array.isArray(v[2])?v[2]:[v[2]];
+    let blankNo=0;
+    const sentence=v[0].replace(/（　）/g,()=>{
+      const slotKey=`${i}-${blankNo}`;
+      const val=s.vocabSlots[key][slotKey]||"";
+      const html=`<span class="drop-slot ${val?"filled":""}" data-slot="${slotKey}" onclick="placeSelectedWord('${slotKey}')" ondragover="event.preventDefault()" ondrop="dropWord(event,'${slotKey}')">${val||"放入答案"}</span>`;
+      blankNo++;
+      return html;
+    });
+    return `<div class="vocab-row">${i+1}. ${sentence}</div>`;
+  }).join("");
+  return `<section class="panel">
+    <div class="titlebar"><div><span class="badge">第${d.lesson}課</span><h2>單字拖放練習</h2></div><span class="badge">拖放或點擊填入</span></div>
+    <div class="note">電腦可直接拖動；iPhone 可先點選字詞，再點空格。同一個詞可以重複使用。</div>
+    <div class="word-bank">${words.map(w=>`<button class="word-chip" draggable="true" ondragstart="dragWord(event,'${encodeURIComponent(w)}')" onclick="selectWord(this,'${encodeURIComponent(w)}')">${w}</button>`).join("")}</div>
+    <div class="vocab-list">${rows}</div>
+    <div id="vocabResult"></div>
+    <div class="control" style="margin-top:16px">
+      <button class="btn secondary" onclick="resetVocab()">重新練習</button>
+      <button class="btn primary" onclick="checkAllVocab()">檢查全部答案</button>
+    </div>
+  </section>`;
+}
+let selectedWord=null;
+function selectWord(btn,enc){
+  selectedWord=decodeURIComponent(enc);
+  document.querySelectorAll(".word-chip").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
+}
+function dragWord(e,enc){e.dataTransfer.setData("text/plain",decodeURIComponent(enc))}
+function dropWord(e,slotKey){e.preventDefault();const w=e.dataTransfer.getData("text/plain");setVocabSlot(slotKey,w)}
+function placeSelectedWord(slotKey){if(selectedWord)setVocabSlot(slotKey,selectedWord)}
+function setVocabSlot(slotKey,w){
+  const key=String(s.lesson);
+  if(!s.vocabSlots[key])s.vocabSlots[key]={};
+  s.vocabSlots[key][slotKey]=w;
+  save();
+  render();
+}
+function resetVocab(){
+  s.vocabSlots[String(s.lesson)]={};
+  selectedWord=null;
+  save();
+  render();
+}
+function checkAllVocab(){
+  const d=lesson(),key=String(d.lesson);
+  let score=0,total=0;
+  document.querySelectorAll(".drop-slot").forEach(slot=>{
+    const [rowStr,blankStr]=slot.dataset.slot.split("-");
+    const row=Number(rowStr),blank=Number(blankStr);
+    const answerIndexes=Array.isArray(d.vocab[row][2])?d.vocab[row][2]:[d.vocab[row][2]];
+    const expected=d.vocab[row][1][answerIndexes[blank]];
+    const got=(s.vocabSlots[key]||{})[slot.dataset.slot]||"";
+    total++;
+    slot.classList.remove("correct","wrong");
+    if(got===expected){slot.classList.add("correct");score++}
+    else slot.classList.add("wrong");
+    const wrongKey=`${d.lesson}-v-${row}-${blank}`;
+    if(got===expected)s.wrong=s.wrong.filter(x=>x!==wrongKey);
+    else if(!s.wrong.includes(wrongKey))s.wrong.push(wrongKey);
+  });
+  $("vocabResult").innerHTML=`<div class="vocab-score">${score} / ${total}</div>`;
+  save();
+}
+
+function evidenceHTML(){
+  const d=lesson(), list=EVIDENCE[d.lesson]||[], q=list[s.evidenceIndex%list.length];
+  const sentences=splitSentences(d.jp);
+  const selected=new Set(s.evidenceSelected||[]);
+  return `<section class="panel">
+    <div class="titlebar"><div><span class="badge">第${d.lesson}課</span><h2>原文找答案</h2></div><span class="badge">${s.evidenceIndex+1} / ${list.length}</span></div>
+    <div class="evidence-question">${q.q}</div>
+    <div class="note">點擊一至三句作為答案證據，再按「提交證據」。</div>
+    <div class="sentence-list">${sentences.map(x=>`<button class="sentence-item ${selected.has(x.id)?"selected":""}" onclick="toggleEvidence('${x.id}')">${x.text}</button>`).join("")}</div>
+    <div id="evidenceFeedback"></div>
+    <div class="control" style="margin-top:16px">
+      <button class="btn secondary" onclick="moveEvidence(-1)">← 上一題</button>
+      <button class="btn secondary" onclick="s.evidenceSelected=[];render()">清除選取</button>
+      <button class="btn primary" onclick="checkEvidence()">提交證據</button>
+      <button class="btn primary" onclick="moveEvidence(1)">下一題 →</button>
+    </div>
+  </section>`;
+}
+function toggleEvidence(id){
+  const arr=s.evidenceSelected||[];
+  const i=arr.indexOf(id);
+  if(i>=0)arr.splice(i,1);
+  else if(arr.length<3)arr.push(id);
+  s.evidenceSelected=arr;
+  save();
+  render();
+}
+function moveEvidence(n){
+  const list=EVIDENCE[s.lesson]||[];
+  s.evidenceIndex=(s.evidenceIndex+n+list.length)%list.length;
+  s.evidenceSelected=[];
+  render();
+}
+function checkEvidence(){
+  const d=lesson(), q=(EVIDENCE[d.lesson]||[])[s.evidenceIndex];
+  const sentences=splitSentences(d.jp);
+  const chosen=sentences.filter(x=>(s.evidenceSelected||[]).includes(x.id)).map(x=>x.text).join(" ");
+  const matched=q.keys.filter(k=>chosen.includes(k)).length;
+  const ok=matched===q.keys.length;
+  const partial=!ok&&matched>0;
+  document.querySelectorAll(".sentence-item").forEach((el,i)=>{
+    const txt=sentences[i].text;
+    if(q.keys.some(k=>txt.includes(k)||k.includes(txt))) el.classList.add("correct");
+    else if(el.classList.contains("selected")) el.classList.add("wrong");
+  });
+  $("evidenceFeedback").innerHTML=`<div class="feedback ${ok?"ok":"no"}">${ok?"✓ 證據正確":partial?"△ 接近正確，請選取更完整的關鍵句":"✕ 未選中關鍵證據句"}</div>`;
+}
+
+function startExam(){
+  const d=lesson();
+  let all=[];
+  d.questions.forEach((q,i)=>all.push({lesson:d.lesson,type:"q",idx:i,...q}));
+  d.vocab.forEach((v,i)=>{
+    if(Array.isArray(v[2])) return;
+    all.push({lesson:d.lesson,type:"v",idx:i,q:v[0],choices:v[1],a:v[2],why:"單字填空題"});
+  });
+  const seen=new Set();
+  all=all.filter(item=>{
+    const key=item.q.replace(/[、。，．！？!?…\s]/g,"");
+    if(seen.has(key))return false;
+    seen.add(key);
+    return true;
+  });
+  s.exam=all.sort(()=>Math.random()-.5);
+  s.examLesson=d.lesson;
+  s.examIndex=0;
+  s.examAnswers={};
+  s.score=0;
+  s.answered=false;
+  save();
+}
+function examHTML(){
+  if(!s.exam.length || s.examLesson!==s.lesson) startExam();
+  if(s.examIndex>=s.exam.length) s.examIndex=s.exam.length-1;
+  if(s.examIndex<0) s.examIndex=0;
+  if(!s.exam.length) return `<section class="panel"><div class="note">本課暫時沒有模擬試題。</div></section>`;
+  let q=s.exam[s.examIndex];
+  let saved=s.examAnswers[s.examIndex];
+  let answered=saved!==undefined;
+  let choices=q.choices.map((x,j)=>{
+    let cls="choice";
+    if(answered){
+      if(j===q.a) cls+=" correct";
+      else if(j===saved) cls+=" wrong";
+    }
+    return `<button class="${cls}" ${answered?"disabled":""} onclick="answerExam(this,${j})">${x}</button>`;
+  }).join("");
+  let feedback=answered
+    ? `<div class="feedback ${saved===q.a?"ok":"no"}">${saved===q.a?"✓ 正確":"✕ 答錯"}<br>${q.why||"請重新查看課文內容。"}</div>`
+    : "";
+  return `<section class="panel qa">
+    <div class="progress"><span>模擬考試 · 第${q.lesson}課</span><span>${s.examIndex+1} / ${s.exam.length}</span></div>
+    <div class="question">
+      <h3>${q.q}</h3>
+      ${choices}
+      <div id="fb">${feedback}</div>
+    </div>
+    <div class="exam-nav">
+      <button class="btn secondary" onclick="moveExam(-1)" ${s.examIndex===0?"disabled":""}>← 上一題</button>
+      <button class="btn secondary" onclick="showEssayModal()">📖 查看原文</button>
+      <button class="btn primary" onclick="moveExam(1)">${s.examIndex===s.exam.length-1?"查看結果":"下一題 →"}</button>
+    </div>
+  </section>`;
+}
+function answerExam(btn,pick){
+  if(s.examAnswers[s.examIndex]!==undefined) return;
+  let q=s.exam[s.examIndex],ok=pick===q.a;
+  s.examAnswers[s.examIndex]=pick;
+  if(ok) s.score++;
+  let key=`${q.lesson}-${q.type}-${q.idx}`;
+  if(ok) s.wrong=s.wrong.filter(x=>x!==key);
+  else if(!s.wrong.includes(key)) s.wrong.push(key);
+  save();
+  render();
+}
+function moveExam(n){
+  const next=s.examIndex+n;
+  if(next>=s.exam.length){
+    const answeredCount=Object.keys(s.examAnswers).length;
+    const total=s.exam.length;
+    $("content").innerHTML=`<section class="panel result"><h2>模擬考試結果</h2><strong>${s.score} / ${total}</strong><p>已回答 ${answeredCount} / ${total} 題</p><div class="control" style="justify-content:center;margin-top:20px"><button class="btn secondary" onclick="s.examIndex=${Math.max(0, 0)};render()">返回試題</button><button class="btn primary" onclick="startExam();render()">重新出題</button></div></section>`;
+    return;
+  }
+  if(next<0) return;
+  s.examIndex=next;
+  s.answered=false;
+  render();
+}
+function showEssayModal(){
+  const d=lesson();
+  $("essayModalTitle").textContent=`第${d.lesson}課　${d.title}`;
+  $("essayModalBody").innerHTML=d.jp.map(p=>`<p class="para">${p.replace(/^([^：]{1,8})：/,'<span class="speaker">$1：</span>')}</p>`).join("");
+  $("essayModal").classList.remove("hidden");
+}
+function closeEssayModal(){$("essayModal").classList.add("hidden")}
+function wrongHTML(){let qs=[];s.wrong.forEach(key=>{let parts=key.split("-");if(parts.length>3)return;let [l,t,i]=parts,d=DATA.find(x=>x.lesson===Number(l));if(!d)return;if(t==="q"){let q=d.questions[Number(i)];qs.push({lesson:l,key,q:q.q,choices:q.choices,a:q.a,why:q.why})}else{let v=d.vocab[Number(i)];qs.push({lesson:l,key,q:v[0],choices:v[1],a:v[2],why:"請留意正確詞語和整句搭配。"})}});if(!qs.length)return `<section class="panel"><div class="note">目前沒有錯題。閱讀問題、單字練習或模擬考試中答錯的題目會自動加入這裡。</div></section>`;let q=qs[s.qIndex%qs.length];return `<section class="panel qa"><div class="progress"><span>錯題重溫 · 第${q.lesson}課</span><span>${s.qIndex%qs.length+1} / ${qs.length}</span></div><div class="question"><h3>${q.q}</h3>${q.choices.map((x,j)=>`<button class="choice" onclick="answerWrong(this,${j},${q.a},'${q.key}')">${x}</button>`).join("")}<div id="fb"></div></div><div class="control"><button class="btn primary" onclick="s.qIndex++;s.answered=false;render()">下一題 →</button></div></section>`}
+function answerWrong(btn,pick,ans,key){if(s.answered)return;s.answered=true;document.querySelectorAll(".choice").forEach((b,j)=>{if(j===ans)b.classList.add("correct")});let ok=pick===ans;if(!ok)btn.classList.add("wrong");if(ok)s.wrong=s.wrong.filter(x=>x!==key);$("fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}">${ok?"✓ 已從錯題移除":"✕ 再看一次正確選項"}</div>`;save()}
+render();
+</script></body></html>
