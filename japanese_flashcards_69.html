@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17324d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="JP Study">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="manifest.webmanifest">
+<title>期終考試生字 Flashcards（69字）</title>
+<style>
+:root {
+  --blue:#2563eb; --purple:#7c3aed; --bg:#f8fafc; --text:#1f2937;
+  --red:#ef4444; --green:#16a34a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Noto Sans JP",sans-serif;background:var(--bg);color:var(--text)}
+.app{min-height:100vh;padding:28px 16px 42px;max-width:820px;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+h1{font-size:25px;margin:0;color:#374151}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.segment{display:flex;background:white;padding:4px;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 1px 4px #00000010}
+.segment button,.small-btn{border:0;background:transparent;padding:10px 14px;border-radius:7px;font-weight:700;color:#4b5563;cursor:pointer}
+.segment button.active{background:var(--blue);color:white}
+.small-btn{background:white;border:1px solid #e5e7eb;box-shadow:0 1px 4px #00000010}
+.small-btn.active{background:#ede9fe;color:var(--purple);border-color:#c4b5fd}
+.status{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#6b7280;font-size:14px;margin:10px 2px 16px}
+.card{min-height:440px;border-radius:28px;box-shadow:0 10px 28px #00000018;cursor:pointer;position:relative;overflow:hidden;transition:.2s}
+.card.front{background:#333;color:white}
+.card.back{background:white;border:1px solid #e5e7eb}
+.card-inner{min-height:440px;padding:28px 38px;display:flex;flex-direction:column}
+
+.jump-box{display:flex;align-items:center;gap:6px;color:#6b7280;font-weight:700}
+.jump-input{width:64px;padding:5px 7px;border:1px solid #cbd5e1;border-radius:8px;text-align:center;font:inherit;background:white;color:#111827}
+.jump-input:focus{outline:2px solid #93c5fd;border-color:#2563eb}
+.jump-go{border:0;background:#2563eb;color:white;border-radius:8px;padding:6px 10px;font-weight:800;cursor:pointer}
+.jump-go:hover{background:#1d4ed8}
+
+.meta{display:flex;justify-content:space-between;color:#9ca3af;font-weight:600}
+.badge{font-size:12px;border:1px solid #6b7280;border-radius:6px;padding:4px 8px}
+.answer-badge{background:#eff6ff;color:var(--blue);border-color:#bfdbfe;border-radius:999px}
+.center{flex:1;display:flex;align-items:center;justify-content:center;text-align:center}
+.question{font-size:clamp(26px,4vw,40px);line-height:1.45;font-weight:700}
+.hint{text-align:center;color:#9ca3af;letter-spacing:.18em;font-size:14px}
+.answer{font-size:clamp(22px,3vw,34px);line-height:1.75}
+.blue{color:var(--blue);font-weight:800}
+.purple{color:var(--purple);font-weight:800}
+.tip{display:block;margin-top:18px;font-size:18px;color:#e11d48;background:#fff1f2;border:1px solid #fecdd3;padding:13px;border-radius:12px}
+.controls{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px}
+.btn{border:0;background:white;cursor:pointer;box-shadow:0 2px 8px #00000010;font-weight:800}
+.circle{width:56px;height:56px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:25px}
+.score{height:56px;min-width:88px;border-radius:999px;font-size:19px;display:flex;align-items:center;justify-content:center;gap:8px}
+.bad{border:1px solid #fecaca;color:var(--red)}
+.good{border:1px solid #bbf7d0;color:var(--green)}
+
+.review-panel{margin-top:22px;background:white;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 2px 10px #0000000d}
+.review-title{font-weight:800;color:#374151;margin-bottom:12px;text-align:center}
+.review-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.review-btn{border:1px solid #d1d5db;background:white;color:#4b5563;padding:9px 13px;border-radius:999px;font-weight:700;cursor:pointer}
+.review-btn.active{background:#eff6ff;color:#2563eb;border-color:#93c5fd}
+.review-btn.correct.active{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.review-btn.incorrect.active{background:#fef2f2;color:#dc2626;border-color:#fca5a5}
+.review-note{text-align:center;color:#6b7280;font-size:13px;margin-top:10px}
+
+.reset{display:block;margin:24px auto 0;border:0;background:transparent;color:#6b7280;cursor:pointer;font-size:14px}
+@media(max-width:600px){
+  .app{padding:18px 12px 30px}
+  .card,.card-inner{min-height:410px}
+  .card-inner{padding:22px 20px}
+  .controls{gap:10px}
+  .score{min-width:75px}
+}
+
+.home-fab{position:fixed;top:16px;left:16px;z-index:999;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.94);color:#17324d;border:1px solid #dbe4ee;text-decoration:none;font-weight:800;box-shadow:0 8px 24px rgba(15,23,42,.14);backdrop-filter:blur(10px);transition:.18s}
+.home-fab:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,23,42,.2)}
+@media(max-width:600px){.home-fab{top:10px;left:10px;padding:9px 12px;font-size:14px}.app{padding-top:64px!important}}
+
+</style>
+</head>
+<body>
+<a class="home-fab" href="index.html" aria-label="返回首頁">⌂ <span>首頁</span></a>
+<div class="app">
+  <div class="top">
+    <h1>期終考試生字（69字）</h1>
+    <div class="toolbar">
+      <div class="segment">
+        <button id="forwardBtn">正向測試</button>
+        <button id="reverseBtn">反向測試</button>
+      </div>
+      <button id="shuffleBtn" class="small-btn">隨機模式</button>
+    </div>
+  </div>
+
+  <div class="status">
+    <span id="progressText"></span>
+    <span id="saveText">進度會自動保存於此瀏覽器｜Space 翻面</span>
+  </div>
+
+  <div id="card" class="card front" role="button" tabindex="0" aria-label="點擊翻面">
+    <div class="card-inner">
+      <div class="meta">
+        <div class="jump-box">
+          <input id="jumpInput" class="jump-input" type="number" min="1" inputmode="numeric" aria-label="跳到指定生字">
+          <span>/ <span id="totalCount"></span></span>
+          <button id="jumpGoBtn" class="jump-go" type="button">前往</button>
+        </div>
+        <span id="sideBadge" class="badge">點擊翻面</span>
+      </div>
+      <div id="content" class="center"></div>
+      <div id="hint" class="hint">查看答案</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn circle" id="prevBtn" title="上一題">←</button>
+    <button class="btn score bad" id="wrongBtn">✕ <span id="wrongCount">0</span></button>
+    <button class="btn score good" id="correctBtn"><span id="correctCount">0</span> ✓</button>
+    <button class="btn circle" id="nextBtn" title="下一題">→</button>
+  </div>
+  <div class="review-panel">
+    <div class="review-title">重溫已標記題目</div>
+    <div class="review-actions">
+      <button id="reviewAllBtn" class="review-btn active">全部題目</button>
+      <button id="reviewCorrectBtn" class="review-btn correct">✓ 答對</button>
+      <button id="reviewIncorrectBtn" class="review-btn incorrect">✕ 答錯</button>
+    </div>
+    <div id="reviewNote" class="review-note"></div>
+  </div>
+  <button class="reset" id="resetBtn">↻ 清除進度並重新開始</button>
+</div>
+
+<script>
+const originalList = [{"type": "kanji", "word": "平日", "read_src": "へいじつ", "meaning": "平日"}, {"type": "kanji", "word": "平均点", "read_src": "へいきんてん", "meaning": "平均分"}, {"type": "kata", "word": "ギター", "read_src": "guitar", "meaning": "結他"}, {"type": "kanji", "word": "演奏", "read_src": "えんそう", "meaning": "演奏"}, {"type": "kanji", "word": "留守番", "read_src": "るすばん", "meaning": "看家、留守"}, {"type": "kata", "word": "インターネット", "read_src": "internet", "meaning": "互聯網"}, {"type": "kanji", "word": "検索", "read_src": "けんさく", "meaning": "搜尋"}, {"type": "kanji", "word": "道路", "read_src": "どうろ", "meaning": "道路"}, {"type": "kanji", "word": "最後", "read_src": "さいご", "meaning": "最後"}, {"type": "kanji", "word": "機能", "read_src": "きのう", "meaning": "功能"}, {"type": "kanji", "word": "資源", "read_src": "しげん", "meaning": "資源"}, {"type": "kata", "word": "コンピューター", "read_src": "computer", "meaning": "電腦", "tip": "注意長音「ー」"}, {"type": "kata", "word": "アメリカ", "read_src": "America", "meaning": "美國"}, {"type": "kanji", "word": "誕生", "read_src": "たんじょう", "meaning": "誕生、出現"}, {"type": "kata", "word": "シンプル", "read_src": "simple", "meaning": "簡單、簡約"}, {"type": "kata", "word": "ジャンプ", "read_src": "jump", "meaning": "跳、跳轉"}, {"type": "kata", "word": "メダル", "read_src": "medal", "meaning": "獎牌"}, {"type": "kata", "word": "シルバー", "read_src": "silver", "meaning": "銀色、銀"}, {"type": "kanji", "word": "誤解", "read_src": "ごかい", "meaning": "誤會"}, {"type": "kanji", "word": "手術", "read_src": "しゅじゅつ", "meaning": "手術"}, {"type": "kanji", "word": "出来事", "read_src": "できごと", "meaning": "事件、事情"}, {"type": "kanji", "word": "奇数", "read_src": "きすう", "meaning": "奇數"}, {"type": "kanji", "word": "記憶", "read_src": "きおく", "meaning": "記憶"}, {"type": "kanji", "word": "驚く", "read_src": "おどろく", "meaning": "吃驚、驚訝"}, {"type": "kanji", "word": "沖縄", "read_src": "おきなわ", "meaning": "沖繩"}, {"type": "kanji", "word": "通じる", "read_src": "つうじる", "meaning": "溝通得到、通曉"}, {"type": "kanji", "word": "お互い", "read_src": "おたがい", "meaning": "互相、彼此"}, {"type": "kanji", "word": "親しい", "read_src": "したしい", "meaning": "親近、親密"}, {"type": "kanji", "word": "指", "read_src": "ゆび", "meaning": "手指"}, {"type": "kata", "word": "タイムマシン", "read_src": "time machine", "meaning": "時光機"}, {"type": "kata", "word": "プリンター", "read_src": "printer", "meaning": "打印機"}, {"type": "kata", "word": "マニュアル", "read_src": "manual", "meaning": "說明書、手冊"}, {"type": "kata", "word": "アンケート", "read_src": "questionnaire / survey", "meaning": "問卷調查"}, {"type": "kata", "word": "チェックリスト", "read_src": "checklist", "meaning": "檢查清單", "tip": "注意小字「ッ」"}, {"type": "kanji", "word": "価値", "read_src": "かち", "meaning": "價值"}, {"type": "kanji", "word": "伝説", "read_src": "でんせつ", "meaning": "傳說"}, {"type": "kanji", "word": "普及", "read_src": "ふきゅう", "meaning": "普及"}, {"type": "kanji", "word": "城", "read_src": "しろ", "meaning": "城堡"}, {"type": "kanji", "word": "金銀", "read_src": "きんぎん", "meaning": "金銀"}, {"type": "kanji", "word": "保管", "read_src": "ほかん", "meaning": "保管"}, {"type": "kanji", "word": "地味", "read_src": "じみ", "meaning": "樸素、不起眼"}, {"type": "kanji", "word": "自由行動", "read_src": "じゆうこうどう", "meaning": "自由活動"}, {"type": "kanji", "word": "屋根", "read_src": "やね", "meaning": "屋頂"}, {"type": "kanji", "word": "酔う", "read_src": "よう", "meaning": "醉"}, {"type": "kanji", "word": "落ち着く", "read_src": "おちつく", "meaning": "冷靜、鎮定"}, {"type": "kanji", "word": "方言", "read_src": "ほうげん", "meaning": "方言"}, {"type": "kanji", "word": "期待", "read_src": "きたい", "meaning": "期待"}, {"type": "kata", "word": "シューズ", "read_src": "shoes", "meaning": "鞋"}, {"type": "kata", "word": "パンフレット", "read_src": "pamphlet", "meaning": "小冊子", "tip": "注意小字「ッ」"}, {"type": "kata", "word": "グレー", "read_src": "gray/grey", "meaning": "灰色"}, {"type": "kata", "word": "パックツアー", "read_src": "package tour", "meaning": "套票旅行、旅行團套裝", "tip": "注意長音「ー」同小字「ッ」"}, {"type": "kata", "word": "コメント", "read_src": "comment", "meaning": "評語、留言"}, {"type": "kanji", "word": "苦情", "read_src": "くじょう", "meaning": "投訴、抱怨"}, {"type": "kanji", "word": "家事", "read_src": "かじ", "meaning": "家務"}, {"type": "kanji", "word": "都会", "read_src": "とかい", "meaning": "都市、大城市"}, {"type": "kanji", "word": "騒々しい", "read_src": "そうぞうしい", "meaning": "吵鬧、嘈雜"}, {"type": "kanji", "word": "苦労", "read_src": "くろう", "meaning": "辛苦、勞苦"}, {"type": "kanji", "word": "犯人", "read_src": "はんにん", "meaning": "犯人"}, {"type": "kanji", "word": "追いかける", "read_src": "おいかける", "meaning": "追趕、追逐"}, {"type": "kanji", "word": "夜中", "read_src": "よなか", "meaning": "半夜、深夜"}, {"type": "kanji", "word": "含む", "read_src": "ふくむ", "meaning": "包含、包括"}, {"type": "kanji", "word": "住宅地", "read_src": "じゅうたくち", "meaning": "住宅區"}, {"type": "kanji", "word": "穏やか", "read_src": "おだやか", "meaning": "平穩、溫和"}, {"type": "kanji", "word": "暮らしやすい", "read_src": "くらしやすい", "meaning": "容易生活、宜居"}, {"type": "kata", "word": "カルチャーショック", "read_src": "culture shock", "meaning": "文化衝擊", "tip": "注意小字「ッ」同長音「ー」"}, {"type": "kata", "word": "アナウンス", "read_src": "announcement", "meaning": "廣播、通知"}, {"type": "kata", "word": "コマーシャル", "read_src": "commercial", "meaning": "廣告"}, {"type": "kata", "word": "メニュー", "read_src": "menu", "meaning": "菜單、餐牌"}, {"type": "kata", "word": "サンダル", "read_src": "sandal", "meaning": "涼鞋"}];
+const STORAGE_KEY = "jp_flashcards_69_v1";
+
+let state = {
+  order: originalList.map((_, i) => i),
+  currentPosition: 0,
+  isFlipped: false,
+  mode: "forward",
+  shuffle: false,
+  correctCount: 0,
+  incorrectCount: 0,
+  statuses: {},
+  reviewFilter: "all"
+};
+
+try {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  if (saved && Array.isArray(saved.order) && saved.order.length === originalList.length) {
+    state = {...state, ...saved, isFlipped:false};
+  }
+} catch (_) {}
+
+const el = id => document.getElementById(id);
+function filteredIndices() {
+  if (state.reviewFilter === "correct") return state.order.filter(i => state.statuses[i] === "correct");
+  if (state.reviewFilter === "incorrect") return state.order.filter(i => state.statuses[i] === "incorrect");
+  return state.order;
+}
+const currentItem = () => {
+  const list = filteredIndices();
+  return originalList[list.length ? list[state.currentPosition] : 0];
+};
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    order: state.order,
+    currentPosition: state.currentPosition,
+    mode: state.mode,
+    shuffle: state.shuffle,
+    correctCount: state.correctCount,
+    incorrectCount: state.incorrectCount,
+    statuses: state.statuses,
+    reviewFilter: state.reviewFilter
+  }));
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function render() {
+  const item = currentItem();
+  const answered = state.correctCount + state.incorrectCount;
+  const accuracy = answered ? Math.round(state.correctCount / answered * 100) : 0;
+
+  const visible = filteredIndices();
+  if (state.currentPosition >= visible.length && visible.length) state.currentPosition = 0;
+  el("jumpInput").value = visible.length ? state.currentPosition + 1 : "";
+  el("jumpInput").max = Math.max(1, visible.length);
+  el("totalCount").textContent = visible.length;
+  el("correctCount").textContent = state.correctCount;
+  el("wrongCount").textContent = state.incorrectCount;
+  el("progressText").textContent = `已作答 ${answered} 題｜正確率 ${accuracy}%`;
+  el("forwardBtn").classList.toggle("active", state.mode === "forward");
+  el("reverseBtn").classList.toggle("active", state.mode === "reverse");
+  el("shuffleBtn").classList.toggle("active", state.shuffle);
+  el("shuffleBtn").textContent = state.shuffle ? "隨機模式：開" : "隨機模式";
+  el("reviewAllBtn").classList.toggle("active", state.reviewFilter === "all");
+  el("reviewCorrectBtn").classList.toggle("active", state.reviewFilter === "correct");
+  el("reviewIncorrectBtn").classList.toggle("active", state.reviewFilter === "incorrect");
+  const correctMarked = Object.values(state.statuses).filter(v => v === "correct").length;
+  const incorrectMarked = Object.values(state.statuses).filter(v => v === "incorrect").length;
+  el("reviewCorrectBtn").textContent = `✓ 答對（${correctMarked}）`;
+  el("reviewIncorrectBtn").textContent = `✕ 答錯（${incorrectMarked}）`;
+  el("reviewNote").textContent = visible.length ? "" : "這個分類暫時沒有已標記題目。";
+
+  const card = el("card");
+  const content = el("content");
+  const badge = el("sideBadge");
+  const hint = el("hint");
+
+  card.className = "card " + (state.isFlipped ? "back" : "front");
+  badge.textContent = state.isFlipped ? "解答" : "點擊翻面";
+  badge.className = "badge" + (state.isFlipped ? " answer-badge" : "");
+  hint.style.display = state.isFlipped ? "none" : "block";
+
+  if (!state.isFlipped) {
+    let q;
+    if (state.mode === "forward") {
+      q = item.type === "kanji"
+        ? `日語詞彙「${item.word}」對應的讀音與中文含義？`
+        : `中文含義為「${item.meaning}」的日語片假名詞彙與其外來語來源？`;
+    } else {
+      q = item.type === "kanji"
+        ? `日語讀音為「${item.read_src}」的漢字詞彙與其中文含義？`
+        : `日語片假名「${item.word}」對應的來源與中文含義？`;
+    }
+    content.innerHTML = `<p class="question">${escapeHtml(q)}</p>`;
+  } else {
+    let html;
+    if (state.mode === "forward") {
+      html = item.type === "kanji"
+        ? `讀音：<span class="blue">${escapeHtml(item.read_src)}</span><br>意思：${escapeHtml(item.meaning)}`
+        : `片假名：<span class="purple">${escapeHtml(item.word)}</span><br>來源：${escapeHtml(item.read_src)}<br>意思：${escapeHtml(item.meaning)}`;
+    } else {
+      html = item.type === "kanji"
+        ? `漢字：<span class="blue">${escapeHtml(item.word)}</span><br>意思：${escapeHtml(item.meaning)}`
+        : `來源：<span class="purple">${escapeHtml(item.read_src)}</span><br>意思：${escapeHtml(item.meaning)}`;
+    }
+    if (item.tip) html += `<span class="tip">💡 ${escapeHtml(item.tip)}</span>`;
+    content.innerHTML = `<div class="answer">${html}</div>`;
+  }
+  save();
+}
+
+function next() {
+  const list = filteredIndices();
+  state.isFlipped = false;
+  if (list.length) state.currentPosition = (state.currentPosition + 1) % list.length;
+  render();
+}
+function prev() {
+  const list = filteredIndices();
+  state.isFlipped = false;
+  if (list.length) state.currentPosition = (state.currentPosition - 1 + list.length) % list.length;
+  render();
+}
+function reshuffle() {
+  const a = originalList.map((_, i) => i);
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  state.order = a;
+  state.currentPosition = 0;
+}
+
+el("card").onclick = () => { state.isFlipped = !state.isFlipped; render(); };
+el("card").onkeydown = e => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault(); state.isFlipped = !state.isFlipped; render();
+  }
+};
+el("nextBtn").onclick = next;
+el("prevBtn").onclick = prev;
+el("correctBtn").onclick = () => {
+  const list = filteredIndices();
+  if (!list.length) return;
+  const idx = list[state.currentPosition];
+  const previous = state.statuses[idx];
+  if (previous !== "correct") {
+    if (previous === "incorrect") state.incorrectCount = Math.max(0, state.incorrectCount - 1);
+    state.correctCount++;
+  }
+  state.statuses[idx] = "correct";
+  save();
+  next();
+};
+el("wrongBtn").onclick = () => {
+  const list = filteredIndices();
+  if (!list.length) return;
+  const idx = list[state.currentPosition];
+  const previous = state.statuses[idx];
+  if (previous !== "incorrect") {
+    if (previous === "correct") state.correctCount = Math.max(0, state.correctCount - 1);
+    state.incorrectCount++;
+  }
+  state.statuses[idx] = "incorrect";
+  save();
+  next();
+};
+el("forwardBtn").onclick = () => { state.mode = "forward"; state.isFlipped = false; render(); };
+el("reverseBtn").onclick = () => { state.mode = "reverse"; state.isFlipped = false; render(); };
+el("shuffleBtn").onclick = () => {
+  state.shuffle = !state.shuffle;
+  state.order = originalList.map((_, i) => i);
+  if (state.shuffle) reshuffle();
+  state.currentPosition = 0;
+  state.isFlipped = false;
+  render();
+};
+el("resetBtn").onclick = () => {
+  if (!confirm("確定要清除所有答題進度嗎？")) return;
+  state.correctCount = 0;
+  state.incorrectCount = 0;
+  state.statuses = {};
+  state.reviewFilter = "all";
+  state.currentPosition = 0;
+  state.isFlipped = false;
+  state.order = originalList.map((_, i) => i);
+  if (state.shuffle) reshuffle();
+  render();
+};
+function jumpToVocabulary() {
+  const list = filteredIndices();
+  if (!list.length) return;
+  const requested = Number.parseInt(el("jumpInput").value, 10);
+  if (!Number.isFinite(requested) || requested < 1 || requested > list.length) {
+    alert(`請輸入 1 至 ${list.length} 之間的數字。`);
+    el("jumpInput").value = state.currentPosition + 1;
+    return;
+  }
+  state.currentPosition = requested - 1;
+  state.isFlipped = false;
+  render();
+}
+el("jumpGoBtn").onclick = jumpToVocabulary;
+el("jumpInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); jumpToVocabulary(); }
+});
+
+el("reviewAllBtn").onclick = () => { state.reviewFilter="all"; state.currentPosition=0; state.isFlipped=false; render(); };
+el("reviewCorrectBtn").onclick = () => { state.reviewFilter="correct"; state.currentPosition=0; state.isFlipped=false; render(); };
+el("reviewIncorrectBtn").onclick = () => { state.reviewFilter="incorrect"; state.currentPosition=0; state.isFlipped=false; render(); };
+
+document.addEventListener("keydown", e => {
+  const tag = document.activeElement?.tagName;
+  const isControl = ["BUTTON","INPUT","TEXTAREA","SELECT"].includes(tag);
+  if (e.key === "ArrowRight") next();
+  else if (e.key === "ArrowLeft") prev();
+  else if ((e.key === " " || e.code === "Space") && !isControl) {
+    e.preventDefault();
+    state.isFlipped = !state.isFlipped;
+    render();
+  } else if (e.key.toLowerCase() === "f") {
+    state.isFlipped = !state.isFlipped;
+    render();
+  }
+});
+render();
+</script>
+</body>
+</html>
