@@ -278,6 +278,7 @@ el("card").onkeydown = e => {
 };
 el("nextBtn").onclick = next;
 el("prevBtn").onclick = prev;
+setupFlashcardSwipe({element:el("card"),onSwipeLeft:next,onSwipeRight:prev});
 el("correctBtn").onclick = () => {
   const list = filteredIndices();
   if (!list.length) return;

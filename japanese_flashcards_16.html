@@ -275,6 +275,7 @@ el("card").addEventListener("click", () => {isFlipped=!isFlipped; render();});
 el("card").addEventListener("keydown", e => {if(e.key==="Enter"||e.key===" "){e.preventDefault();isFlipped=!isFlipped;render();}});
 el("nextBtn").onclick = next;
 el("prevBtn").onclick = prev;
+setupFlashcardSwipe({element:el("card"),onSwipeLeft:next,onSwipeRight:prev});
 el("correctBtn").onclick = () => {
   const list = filteredIndices();
   if (!list.length) return;
