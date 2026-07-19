@@ -49,6 +49,14 @@
     html[data-theme="dark"] .highlight{background:#4a3914!important;color:#fde68a!important;border-color:#d6a72f!important}
     html[data-theme="dark"] .token{background:#20354d!important;color:#dbeafe!important;border-color:#52769b!important}
     html[data-theme="dark"] .modal-close{background:#1e2b3f!important;color:#eef4fb!important;border-color:#64748b!important}
+    html[data-theme="dark"] .example{background:#182b45!important;color:#eef4fb!important;border-color:#476686!important}
+    html[data-theme="dark"] .example-title{color:#93c5fd!important}html[data-theme="dark"] .example .jp{color:#f8fafc!important}html[data-theme="dark"] .example .zh{color:#cbd5e1!important}
+    html[data-theme="dark"] .evidence-question{color:#f1f5f9!important}
+    html[data-theme="dark"] .modal-backdrop,html[data-theme="dark"] .modal{background:rgba(2,6,23,.78)!important}
+    html[data-theme="dark"] .grammar-modal,html[data-theme="dark"] .modal-card{background:#15243a!important;border:1px solid #4b6380!important;box-shadow:0 28px 80px rgba(0,0,0,.62)!important}
+    html[data-theme="dark"] .modal-head{background:#15243a!important;color:#eef4fb!important}
+    html[data-theme="dark"] .grammar-section strong,html[data-theme="dark"] .label{color:#a9bdd3!important}
+    html[data-theme="dark"] .grammar-section p,html[data-theme="dark"] .modal-card .essay{color:#eef4fb!important}
     html[data-theme="dark"] .home-fab,html[data-theme="dark"] .theme-control{background:rgba(17,28,46,.95)!important;color:#e5edf7!important;border-color:#475569!important}
     html[data-theme="dark"] .exercise h2,html[data-theme="dark"] .titlebar{background:#182438!important;color:#eef4fb!important}
     html[data-theme="dark"] .line,html[data-theme="dark"] .dialog-title,html[data-theme="dark"] .modal-head{border-color:#334155!important}
