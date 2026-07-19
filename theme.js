@@ -35,7 +35,8 @@
     html[data-theme="dark"] .segment button,html[data-theme="dark"] .mode button{background:transparent!important;color:#cbd5e1!important}
     html[data-theme="dark"] .segment button.active,html[data-theme="dark"] .mode button.active,html[data-theme="dark"] .lesson-btn.active{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}
     html[data-theme="dark"] .small-btn.active{background:#34255f!important;color:#ddd6fe!important;border-color:#7c5cc4!important}
-    html[data-theme="dark"] .btn.circle{background:#17243a!important;color:#60a5fa!important;border-color:#3b82f6!important;box-shadow:none!important}
+    html[data-theme="dark"] .btn.circle,html[data-theme="dark"] .btn.mark-btn,html[data-theme="dark"] .flashcard-controls .nav,html[data-theme="dark"] .flashcard-controls .star{background:#17243a!important;color:#60a5fa!important;border-color:#3b82f6!important;box-shadow:none!important}
+    html[data-theme="dark"] .btn.mark-btn.active,html[data-theme="dark"] .flashcard-controls .star.active{background:#4a3914!important;color:#fde68a!important;border-color:#d6a72f!important}
     html[data-theme="dark"] .review-btn{background:#1e2b3f!important;color:#cbd5e1!important;border-color:#475569!important}
     html[data-theme="dark"] .review-btn.active{background:#172d50!important;color:#93c5fd!important;border-color:#3b82f6!important}
     html[data-theme="dark"] .review-btn.correct.active{background:#12382d!important;color:#a7f3d0!important;border-color:#237a5c!important}
