@@ -52,12 +52,13 @@ h1{font-size:25px;margin:0;color:#374151}
 .example-title{color:#3b82f6;font-size:13px;font-weight:800;letter-spacing:.18em;margin-bottom:10px}
 .jp{font-size:20px;line-height:1.55;margin-bottom:7px}
 .zh{font-size:17px;color:#4b5563;line-height:1.5}
-.controls{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px}
+.controls{display:grid;grid-template-columns:56px minmax(64px,88px) 52px minmax(64px,88px) 56px;justify-content:center;align-items:center;gap:14px;margin-top:28px}
 .btn{border:0;background:white;cursor:pointer;box-shadow:0 2px 8px #00000010;font-weight:800}
 .circle{width:56px;height:56px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:25px}
 .score{height:56px;min-width:88px;border-radius:999px;font-size:19px;display:flex;align-items:center;justify-content:center;gap:8px}
 .bad{border:1px solid #fecaca;color:var(--red)}
 .good{border:1px solid #bbf7d0;color:var(--green)}
+.mark-btn{width:52px;height:52px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:26px;line-height:1;background:white}.mark-btn.active{background:#fff7d6;border-color:#e5b84b;color:#b7791f}.mark-btn:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
 
 .review-panel{margin-top:22px;background:white;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 2px 10px #0000000d}
 .review-title{font-weight:800;color:#374151;margin-bottom:12px;text-align:center}
@@ -66,6 +67,7 @@ h1{font-size:25px;margin:0;color:#374151}
 .review-btn.active{background:#eff6ff;color:#2563eb;border-color:#93c5fd}
 .review-btn.correct.active{background:#f0fdf4;color:#15803d;border-color:#86efac}
 .review-btn.incorrect.active{background:#fef2f2;color:#dc2626;border-color:#fca5a5}
+.review-btn.marked.active{background:#fff7d6;color:#9a6700;border-color:#e5b84b}
 .review-note{text-align:center;color:#6b7280;font-size:13px;margin-top:10px}
 
 .reset{display:block;margin:25px auto 0;border:0;background:transparent;color:#6b7280;cursor:pointer;font-size:14px}
@@ -74,8 +76,8 @@ h1{font-size:25px;margin:0;color:#374151}
   .app{padding:18px 12px 30px}
   .card,.card-inner{min-height:430px}
   .card-inner{padding:23px 21px}
-  .controls{gap:10px}
-  .score{min-width:75px}
+  .controls{gap:6px;grid-template-columns:52px minmax(58px,1fr) 48px minmax(58px,1fr) 52px}
+  .controls button{min-width:0}.score{width:100%;font-size:17px}.mark-btn{width:48px;height:48px}
 }
 
 .home-fab{position:fixed;top:16px;left:16px;z-index:999;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.94);color:#17324d;border:1px solid #dbe4ee;text-decoration:none;font-weight:800;box-shadow:0 8px 24px rgba(15,23,42,.14);backdrop-filter:blur(10px);transition:.18s}
@@ -116,6 +118,7 @@ h1{font-size:25px;margin:0;color:#374151}
   <div class="controls">
     <button class="btn circle" id="prevBtn" title="上一題">←</button>
     <button class="btn score bad" id="wrongBtn">✕ <span id="wrongCount">0</span></button>
+    <button class="btn mark-btn" id="markBtn" type="button" data-no-swipe aria-label="標記題目" aria-pressed="false">☆</button>
     <button class="btn score good" id="correctBtn"><span id="correctCount">0</span> ✓</button>
     <button class="btn circle" id="nextBtn" title="下一題">→</button>
   </div>
@@ -127,6 +130,7 @@ h1{font-size:25px;margin:0;color:#374151}
       <button id="reviewAllBtn" class="review-btn active">全部題目</button>
       <button id="reviewCorrectBtn" class="review-btn correct">✓ 答對</button>
       <button id="reviewIncorrectBtn" class="review-btn incorrect">✕ 答錯</button>
+      <button id="reviewMarkedBtn" class="review-btn marked">★ 已標記</button>
     </div>
     <div id="reviewNote" class="review-note"></div>
   </div>
@@ -143,6 +147,8 @@ let shuffle = false;
 let correctCount = 0;
 let incorrectCount = 0;
 let statuses = {};
+let marked = {};
+let retainedMarkedIndex = null;
 let reviewFilter = "all";
 const STORAGE_KEY = "jp_flashcards_16_v2";
 
@@ -150,6 +156,7 @@ try {
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
   if (saved) {
     if (saved.statuses) statuses = saved.statuses;
+    if (saved.marked) marked = saved.marked;
     if (saved.correctCount != null) correctCount = saved.correctCount;
     if (saved.incorrectCount != null) incorrectCount = saved.incorrectCount;
     if (saved.shuffle != null) shuffle = saved.shuffle;
@@ -163,13 +170,18 @@ const el = id => document.getElementById(id);
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
-    order, currentPosition, mode, shuffle, correctCount, incorrectCount, statuses
+    order, currentPosition, mode, shuffle, correctCount, incorrectCount, statuses, marked
   }));
 }
 
 function filteredIndices() {
   if (reviewFilter === "correct") return order.filter(i => statuses[i] === "correct");
   if (reviewFilter === "incorrect") return order.filter(i => statuses[i] === "incorrect");
+  if (reviewFilter === "marked") {
+    const list = order.filter(i => marked[i]);
+    if (retainedMarkedIndex != null && !list.includes(retainedMarkedIndex)) list.splice(Math.min(currentPosition, list.length), 0, retainedMarkedIndex);
+    return list;
+  }
   return order;
 }
 
@@ -179,7 +191,7 @@ function ensureValidPosition() {
     currentPosition = 0;
     return;
   }
-  if (currentPosition >= list.length) currentPosition = 0;
+  if (!Number.isInteger(currentPosition) || currentPosition < 0 || currentPosition >= list.length) currentPosition = 0;
 }
 
 function render() {
@@ -195,11 +207,16 @@ function render() {
   el("reviewAllBtn").classList.toggle("active", reviewFilter === "all");
   el("reviewCorrectBtn").classList.toggle("active", reviewFilter === "correct");
   el("reviewIncorrectBtn").classList.toggle("active", reviewFilter === "incorrect");
+  el("reviewMarkedBtn").classList.toggle("active", reviewFilter === "marked");
   const correctMarked = Object.values(statuses).filter(v => v === "correct").length;
   const incorrectMarked = Object.values(statuses).filter(v => v === "incorrect").length;
+  const manuallyMarked = Object.values(marked).filter(Boolean).length;
   el("reviewCorrectBtn").textContent = `✓ 答對（${correctMarked}）`;
   el("reviewIncorrectBtn").textContent = `✕ 答錯（${incorrectMarked}）`;
-  el("reviewNote").textContent = visible.length ? "" : "這個分類暫時沒有已標記題目。";
+  el("reviewMarkedBtn").textContent = `★ 已標記（${manuallyMarked}）`;
+  el("reviewNote").textContent = visible.length ? "" : reviewFilter === "marked" ? "暫時沒有已標記題目。" : "這個分類暫時沒有題目。";
+  const isMarked = visible.length ? !!marked[currentIndex] : false;
+  el("markBtn").textContent = isMarked ? "★" : "☆";el("markBtn").classList.toggle("active",isMarked);el("markBtn").setAttribute("aria-pressed",String(isMarked));
   el("correctCount").textContent = correctCount;
   el("wrongCount").textContent = incorrectCount;
   el("progressText").textContent = `已作答 ${correctCount + incorrectCount} 題｜正確率 ${correctCount + incorrectCount ? Math.round(correctCount/(correctCount+incorrectCount)*100) : 0}%`;
@@ -213,6 +230,8 @@ function render() {
   badge.textContent = isFlipped ? "解答" : "點擊翻面";
   badge.className = "badge" + (isFlipped ? " answer-badge" : "");
   hint.style.display = isFlipped ? "none" : "block";
+
+  if (!visible.length) { content.innerHTML = '<p class="question">暫時沒有已標記題目。</p>'; hint.style.display="none"; saveState(); return; }
 
   if (!isFlipped) {
     const q = mode === "forward"
@@ -251,12 +270,14 @@ function escapeHtml(s) {
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 function next() {
+  retainedMarkedIndex = null;
   const list = filteredIndices();
   isFlipped = false;
   if (list.length) currentPosition = (currentPosition + 1) % list.length;
   render();
 }
 function prev() {
+  retainedMarkedIndex = null;
   const list = filteredIndices();
   isFlipped = false;
   if (list.length) currentPosition = (currentPosition - 1 + list.length) % list.length;
@@ -275,6 +296,8 @@ el("card").addEventListener("click", () => {isFlipped=!isFlipped; render();});
 el("card").addEventListener("keydown", e => {if(e.key==="Enter"||e.key===" "){e.preventDefault();isFlipped=!isFlipped;render();}});
 el("nextBtn").onclick = next;
 el("prevBtn").onclick = prev;
+el("markBtn").onclick = () => {const list=filteredIndices();if(!list.length)return;const idx=list[currentPosition];marked[idx]=!marked[idx];retainedMarkedIndex=reviewFilter==="marked"&&!marked[idx]?idx:null;saveState();render()};
+setupFlashcardSwipe({element:el("card"),onSwipeLeft:next,onSwipeRight:prev});
 el("correctBtn").onclick = () => {
   const list = filteredIndices();
   if (!list.length) return;
@@ -302,7 +325,7 @@ el("wrongBtn").onclick = () => {
   next();
 };
 el("resetBtn").onclick = () => {
-  correctCount=0; incorrectCount=0; statuses={}; reviewFilter="all"; currentPosition=0; isFlipped=false;
+  correctCount=0; incorrectCount=0; statuses={}; retainedMarkedIndex=null; reviewFilter="all"; currentPosition=0; isFlipped=false;
   order = vocabList.map((_, i) => i);
   if (shuffle) reshuffle();
   render();
@@ -318,6 +341,7 @@ el("shuffleBtn").onclick = () => {
 el("forwardBtn").onclick = () => {mode="forward";isFlipped=false;el("forwardBtn").classList.add("active");el("reverseBtn").classList.remove("active");render();};
 el("reverseBtn").onclick = () => {mode="reverse";isFlipped=false;el("reverseBtn").classList.add("active");el("forwardBtn").classList.remove("active");render();};
 function jumpToVocabulary() {
+  retainedMarkedIndex = null;
   const list = filteredIndices();
   if (!list.length) return;
   const requested = Number.parseInt(el("jumpInput").value, 10);
@@ -335,9 +359,11 @@ el("jumpInput").addEventListener("keydown", e => {
   if (e.key === "Enter") { e.preventDefault(); jumpToVocabulary(); }
 });
 
-el("reviewAllBtn").onclick = () => { reviewFilter="all"; currentPosition=0; isFlipped=false; render(); };
-el("reviewCorrectBtn").onclick = () => { reviewFilter="correct"; currentPosition=0; isFlipped=false; render(); };
-el("reviewIncorrectBtn").onclick = () => { reviewFilter="incorrect"; currentPosition=0; isFlipped=false; render(); };
+function setReviewFilter(filter){reviewFilter=filter;retainedMarkedIndex=null;currentPosition=0;isFlipped=false;render()}
+el("reviewAllBtn").onclick = () => setReviewFilter("all");
+el("reviewCorrectBtn").onclick = () => setReviewFilter("correct");
+el("reviewMarkedBtn").onclick = () => setReviewFilter("marked");
+el("reviewIncorrectBtn").onclick = () => setReviewFilter("incorrect");
 
 document.addEventListener("keydown", e => {
   const tag = document.activeElement?.tagName;

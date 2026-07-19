@@ -49,12 +49,13 @@ h1{font-size:25px;margin:0;color:#374151}
 .blue{color:var(--blue);font-weight:800}
 .purple{color:var(--purple);font-weight:800}
 .tip{display:block;margin-top:18px;font-size:18px;color:#e11d48;background:#fff1f2;border:1px solid #fecdd3;padding:13px;border-radius:12px}
-.controls{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px}
+.controls{display:grid;grid-template-columns:56px minmax(64px,88px) 52px minmax(64px,88px) 56px;justify-content:center;align-items:center;gap:14px;margin-top:28px}
 .btn{border:0;background:white;cursor:pointer;box-shadow:0 2px 8px #00000010;font-weight:800}
 .circle{width:56px;height:56px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:25px}
 .score{height:56px;min-width:88px;border-radius:999px;font-size:19px;display:flex;align-items:center;justify-content:center;gap:8px}
 .bad{border:1px solid #fecaca;color:var(--red)}
 .good{border:1px solid #bbf7d0;color:var(--green)}
+.mark-btn{width:52px;height:52px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:26px;line-height:1;background:white}.mark-btn.active{background:#fff7d6;border-color:#e5b84b;color:#b7791f}.mark-btn:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
 
 .review-panel{margin-top:22px;background:white;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 2px 10px #0000000d}
 .review-title{font-weight:800;color:#374151;margin-bottom:12px;text-align:center}
@@ -63,6 +64,7 @@ h1{font-size:25px;margin:0;color:#374151}
 .review-btn.active{background:#eff6ff;color:#2563eb;border-color:#93c5fd}
 .review-btn.correct.active{background:#f0fdf4;color:#15803d;border-color:#86efac}
 .review-btn.incorrect.active{background:#fef2f2;color:#dc2626;border-color:#fca5a5}
+.review-btn.marked.active{background:#fff7d6;color:#9a6700;border-color:#e5b84b}
 .review-note{text-align:center;color:#6b7280;font-size:13px;margin-top:10px}
 
 .reset{display:block;margin:24px auto 0;border:0;background:transparent;color:#6b7280;cursor:pointer;font-size:14px}
@@ -70,8 +72,8 @@ h1{font-size:25px;margin:0;color:#374151}
   .app{padding:18px 12px 30px}
   .card,.card-inner{min-height:410px}
   .card-inner{padding:22px 20px}
-  .controls{gap:10px}
-  .score{min-width:75px}
+  .controls{gap:6px;grid-template-columns:52px minmax(58px,1fr) 48px minmax(58px,1fr) 52px}
+  .controls button{min-width:0}.score{width:100%;font-size:17px}.mark-btn{width:48px;height:48px}
 }
 
 .home-fab{position:fixed;top:16px;left:16px;z-index:999;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.94);color:#17324d;border:1px solid #dbe4ee;text-decoration:none;font-weight:800;box-shadow:0 8px 24px rgba(15,23,42,.14);backdrop-filter:blur(10px);transition:.18s}
@@ -117,6 +119,7 @@ h1{font-size:25px;margin:0;color:#374151}
   <div class="controls">
     <button class="btn circle" id="prevBtn" title="上一題">←</button>
     <button class="btn score bad" id="wrongBtn">✕ <span id="wrongCount">0</span></button>
+    <button class="btn mark-btn" id="markBtn" type="button" data-no-swipe aria-label="標記題目" aria-pressed="false">☆</button>
     <button class="btn score good" id="correctBtn"><span id="correctCount">0</span> ✓</button>
     <button class="btn circle" id="nextBtn" title="下一題">→</button>
   </div>
@@ -126,6 +129,7 @@ h1{font-size:25px;margin:0;color:#374151}
       <button id="reviewAllBtn" class="review-btn active">全部題目</button>
       <button id="reviewCorrectBtn" class="review-btn correct">✓ 答對</button>
       <button id="reviewIncorrectBtn" class="review-btn incorrect">✕ 答錯</button>
+      <button id="reviewMarkedBtn" class="review-btn marked">★ 已標記</button>
     </div>
     <div id="reviewNote" class="review-note"></div>
   </div>
@@ -145,6 +149,8 @@ let state = {
   correctCount: 0,
   incorrectCount: 0,
   statuses: {},
+  marked: {},
+  retainedMarkedIndex: null,
   reviewFilter: "all"
 };
 
@@ -159,10 +165,25 @@ const el = id => document.getElementById(id);
 function filteredIndices() {
   if (state.reviewFilter === "correct") return state.order.filter(i => state.statuses[i] === "correct");
   if (state.reviewFilter === "incorrect") return state.order.filter(i => state.statuses[i] === "incorrect");
+  if (state.reviewFilter === "marked") {
+    const list = state.order.filter(i => state.marked[i]);
+    if (state.retainedMarkedIndex != null && !list.includes(state.retainedMarkedIndex)) list.splice(Math.min(state.currentPosition, list.length), 0, state.retainedMarkedIndex);
+    return list;
+  }
   return state.order;
+}
+function ensureValidPosition(list = filteredIndices()) {
+  if (!list.length) {
+    state.currentPosition = 0;
+    return;
+  }
+  if (!Number.isInteger(state.currentPosition) || state.currentPosition < 0 || state.currentPosition >= list.length) {
+    state.currentPosition = 0;
+  }
 }
 const currentItem = () => {
   const list = filteredIndices();
+  ensureValidPosition(list);
   return originalList[list.length ? list[state.currentPosition] : 0];
 };
 
@@ -175,6 +196,7 @@ function save() {
     correctCount: state.correctCount,
     incorrectCount: state.incorrectCount,
     statuses: state.statuses,
+    marked: state.marked,
     reviewFilter: state.reviewFilter
   }));
 }
@@ -184,12 +206,12 @@ function escapeHtml(s) {
 }
 
 function render() {
-  const item = currentItem();
+  const visible = filteredIndices();
+  ensureValidPosition(visible);
+  const item = originalList[visible.length ? visible[state.currentPosition] : 0];
   const answered = state.correctCount + state.incorrectCount;
   const accuracy = answered ? Math.round(state.correctCount / answered * 100) : 0;
 
-  const visible = filteredIndices();
-  if (state.currentPosition >= visible.length && visible.length) state.currentPosition = 0;
   el("jumpInput").value = visible.length ? state.currentPosition + 1 : "";
   el("jumpInput").max = Math.max(1, visible.length);
   el("totalCount").textContent = visible.length;
@@ -203,11 +225,19 @@ function render() {
   el("reviewAllBtn").classList.toggle("active", state.reviewFilter === "all");
   el("reviewCorrectBtn").classList.toggle("active", state.reviewFilter === "correct");
   el("reviewIncorrectBtn").classList.toggle("active", state.reviewFilter === "incorrect");
+  el("reviewMarkedBtn").classList.toggle("active", state.reviewFilter === "marked");
   const correctMarked = Object.values(state.statuses).filter(v => v === "correct").length;
   const incorrectMarked = Object.values(state.statuses).filter(v => v === "incorrect").length;
+  const manuallyMarked = Object.values(state.marked).filter(Boolean).length;
   el("reviewCorrectBtn").textContent = `✓ 答對（${correctMarked}）`;
   el("reviewIncorrectBtn").textContent = `✕ 答錯（${incorrectMarked}）`;
-  el("reviewNote").textContent = visible.length ? "" : "這個分類暫時沒有已標記題目。";
+  el("reviewMarkedBtn").textContent = `★ 已標記（${manuallyMarked}）`;
+  el("reviewNote").textContent = visible.length ? "" : state.reviewFilter === "marked" ? "暫時沒有已標記題目。" : "這個分類暫時沒有題目。";
+  const currentOriginalIndex = visible.length ? visible[state.currentPosition] : null;
+  const isMarked = currentOriginalIndex != null && !!state.marked[currentOriginalIndex];
+  el("markBtn").textContent = isMarked ? "★" : "☆";
+  el("markBtn").classList.toggle("active", isMarked);
+  el("markBtn").setAttribute("aria-pressed", String(isMarked));
 
   const card = el("card");
   const content = el("content");
@@ -218,6 +248,8 @@ function render() {
   badge.textContent = state.isFlipped ? "解答" : "點擊翻面";
   badge.className = "badge" + (state.isFlipped ? " answer-badge" : "");
   hint.style.display = state.isFlipped ? "none" : "block";
+
+  if (!visible.length) { content.innerHTML = '<p class="question">暫時沒有已標記題目。</p>'; hint.style.display="none"; save(); return; }
 
   if (!state.isFlipped) {
     let q;
@@ -249,12 +281,14 @@ function render() {
 }
 
 function next() {
+  state.retainedMarkedIndex = null;
   const list = filteredIndices();
   state.isFlipped = false;
   if (list.length) state.currentPosition = (state.currentPosition + 1) % list.length;
   render();
 }
 function prev() {
+  state.retainedMarkedIndex = null;
   const list = filteredIndices();
   state.isFlipped = false;
   if (list.length) state.currentPosition = (state.currentPosition - 1 + list.length) % list.length;
@@ -278,6 +312,15 @@ el("card").onkeydown = e => {
 };
 el("nextBtn").onclick = next;
 el("prevBtn").onclick = prev;
+el("markBtn").onclick = () => {
+  const list = filteredIndices();
+  if (!list.length) return;
+  const idx = list[state.currentPosition];
+  state.marked[idx] = !state.marked[idx];
+  state.retainedMarkedIndex = state.reviewFilter === "marked" && !state.marked[idx] ? idx : null;
+  save(); render();
+};
+setupFlashcardSwipe({element:el("card"),onSwipeLeft:next,onSwipeRight:prev});
 el("correctBtn").onclick = () => {
   const list = filteredIndices();
   if (!list.length) return;
@@ -319,6 +362,7 @@ el("resetBtn").onclick = () => {
   state.correctCount = 0;
   state.incorrectCount = 0;
   state.statuses = {};
+  state.retainedMarkedIndex = null;
   state.reviewFilter = "all";
   state.currentPosition = 0;
   state.isFlipped = false;
@@ -327,6 +371,7 @@ el("resetBtn").onclick = () => {
   render();
 };
 function jumpToVocabulary() {
+  state.retainedMarkedIndex = null;
   const list = filteredIndices();
   if (!list.length) return;
   const requested = Number.parseInt(el("jumpInput").value, 10);
@@ -344,9 +389,11 @@ el("jumpInput").addEventListener("keydown", e => {
   if (e.key === "Enter") { e.preventDefault(); jumpToVocabulary(); }
 });
 
-el("reviewAllBtn").onclick = () => { state.reviewFilter="all"; state.currentPosition=0; state.isFlipped=false; render(); };
-el("reviewCorrectBtn").onclick = () => { state.reviewFilter="correct"; state.currentPosition=0; state.isFlipped=false; render(); };
-el("reviewIncorrectBtn").onclick = () => { state.reviewFilter="incorrect"; state.currentPosition=0; state.isFlipped=false; render(); };
+function setReviewFilter(filter){state.reviewFilter=filter;state.retainedMarkedIndex=null;state.currentPosition=0;state.isFlipped=false;render()}
+el("reviewAllBtn").onclick = () => setReviewFilter("all");
+el("reviewCorrectBtn").onclick = () => setReviewFilter("correct");
+el("reviewMarkedBtn").onclick = () => setReviewFilter("marked");
+el("reviewIncorrectBtn").onclick = () => setReviewFilter("incorrect");
 
 document.addEventListener("keydown", e => {
   const tag = document.activeElement?.tagName;
