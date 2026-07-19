@@ -161,8 +161,18 @@ function filteredIndices() {
   if (state.reviewFilter === "incorrect") return state.order.filter(i => state.statuses[i] === "incorrect");
   return state.order;
 }
+function ensureValidPosition(list = filteredIndices()) {
+  if (!list.length) {
+    state.currentPosition = 0;
+    return;
+  }
+  if (!Number.isInteger(state.currentPosition) || state.currentPosition < 0 || state.currentPosition >= list.length) {
+    state.currentPosition = 0;
+  }
+}
 const currentItem = () => {
   const list = filteredIndices();
+  ensureValidPosition(list);
   return originalList[list.length ? list[state.currentPosition] : 0];
 };
 
@@ -184,12 +194,12 @@ function escapeHtml(s) {
 }
 
 function render() {
-  const item = currentItem();
+  const visible = filteredIndices();
+  ensureValidPosition(visible);
+  const item = originalList[visible.length ? visible[state.currentPosition] : 0];
   const answered = state.correctCount + state.incorrectCount;
   const accuracy = answered ? Math.round(state.correctCount / answered * 100) : 0;
 
-  const visible = filteredIndices();
-  if (state.currentPosition >= visible.length && visible.length) state.currentPosition = 0;
   el("jumpInput").value = visible.length ? state.currentPosition + 1 : "";
   el("jumpInput").max = Math.max(1, visible.length);
   el("totalCount").textContent = visible.length;

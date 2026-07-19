@@ -40,7 +40,7 @@ function baseIndices(){return state.order.filter(i=>state.lesson==='all'||cards[
 function visible(){let a=baseIndices();if(state.review==='correct')a=a.filter(i=>state.statuses[i]==='correct');if(state.review==='incorrect')a=a.filter(i=>state.statuses[i]==='incorrect');return a}
 function save(){localStorage.setItem(KEY,JSON.stringify({...state,flipped:false}))}
 function currentIndex(){const a=visible();return a.length?a[Math.min(state.pos,a.length-1)]:null}
-function render(){const a=visible();if(a.length&&state.pos>=a.length)state.pos=0;const idx=currentIndex();const item=idx===null?null:cards[idx];
+function render(){const a=visible();if(!Number.isInteger(state.pos)||state.pos<0||(a.length&&state.pos>=a.length))state.pos=0;const idx=currentIndex();const item=idx===null?null:cards[idx];
 $('jumpInput').value=a.length?state.pos+1:'';$('jumpInput').max=Math.max(1,a.length);$('totalCount').textContent=a.length;
 const vals=Object.values(state.statuses),c=vals.filter(x=>x==='correct').length,w=vals.filter(x=>x==='incorrect').length;$('correctCount').textContent=c;$('wrongCount').textContent=w;const done=c+w;$('progressText').textContent=`已標記 ${done} 題｜正確率 ${done?Math.round(c/done*100):0}%｜目前 ${state.lesson==='all'?'全部課堂':'第'+state.lesson+'課'}`;
 $('sentenceBtn').classList.toggle('active',state.mode==='sentence');$('usageBtn').classList.toggle('active',state.mode==='usage');$('shuffleBtn').classList.toggle('active',state.shuffle);$('shuffleBtn').textContent=state.shuffle?'隨機模式：開':'隨機模式';document.querySelectorAll('.lesson-btn').forEach(b=>b.classList.toggle('active',b.dataset.lesson===String(state.lesson)));

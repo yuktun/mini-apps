@@ -179,7 +179,7 @@ function ensureValidPosition() {
     currentPosition = 0;
     return;
   }
-  if (currentPosition >= list.length) currentPosition = 0;
+  if (!Number.isInteger(currentPosition) || currentPosition < 0 || currentPosition >= list.length) currentPosition = 0;
 }
 
 function render() {
