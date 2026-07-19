@@ -30,6 +30,16 @@
     html[data-theme="dark"] .note,html[data-theme="dark"] .grammar-example,html[data-theme="dark"] .feedback,html[data-theme="dark"] .model,html[data-theme="dark"] .reading,html[data-theme="dark"] .answer{background:#182438!important;color:#dce7f3!important;border-color:#3b4a60!important}
     html[data-theme="dark"] input,html[data-theme="dark"] textarea,html[data-theme="dark"] select{background:#0f1a2b!important;color:#e5edf7!important;border-color:#475569!important}
     html[data-theme="dark"] button.secondary,html[data-theme="dark"] .secondary,html[data-theme="dark"] .small-btn,html[data-theme="dark"] .chip,html[data-theme="dark"] .lesson-btn{background:#1e2b3f!important;color:#dce7f3!important;border-color:#475569!important}
+    html[data-theme="dark"] .segment,html[data-theme="dark"] .mode{background:#111c2e!important;border-color:#475569!important;box-shadow:none!important}
+    html[data-theme="dark"] .segment button,html[data-theme="dark"] .mode button{background:transparent!important;color:#cbd5e1!important}
+    html[data-theme="dark"] .segment button.active,html[data-theme="dark"] .mode button.active,html[data-theme="dark"] .lesson-btn.active{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}
+    html[data-theme="dark"] .small-btn.active{background:#34255f!important;color:#ddd6fe!important;border-color:#7c5cc4!important}
+    html[data-theme="dark"] .btn.circle{background:#17243a!important;color:#60a5fa!important;border-color:#3b82f6!important;box-shadow:none!important}
+    html[data-theme="dark"] .review-btn{background:#1e2b3f!important;color:#cbd5e1!important;border-color:#475569!important}
+    html[data-theme="dark"] .review-btn.active{background:#172d50!important;color:#93c5fd!important;border-color:#3b82f6!important}
+    html[data-theme="dark"] .review-btn.correct.active{background:#12382d!important;color:#a7f3d0!important;border-color:#237a5c!important}
+    html[data-theme="dark"] .review-btn.incorrect.active{background:#451d28!important;color:#fecdd3!important;border-color:#9f3b50!important}
+    html[data-theme="dark"] .review-title,html[data-theme="dark"] .review-note,html[data-theme="dark"] .reset{color:#a9b8ca!important}
     html[data-theme="dark"] .home-fab,html[data-theme="dark"] .theme-control{background:rgba(17,28,46,.95)!important;color:#e5edf7!important;border-color:#475569!important}
     html[data-theme="dark"] .exercise h2,html[data-theme="dark"] .titlebar{background:#182438!important;color:#eef4fb!important}
     html[data-theme="dark"] .line,html[data-theme="dark"] .dialog-title,html[data-theme="dark"] .modal-head{border-color:#334155!important}
