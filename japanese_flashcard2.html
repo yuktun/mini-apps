@@ -35,20 +35,21 @@ h1{font-size:25px;margin:0;color:#374151}
 .example-title{color:#3b82f6;font-size:13px;font-weight:800;letter-spacing:.18em;margin-bottom:10px}
 .jp{font-size:20px;line-height:1.55;margin-bottom:7px}
 .zh{font-size:17px;color:#4b5563;line-height:1.5}
-.controls{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px}
+.controls{display:grid;grid-template-columns:56px minmax(64px,88px) 52px minmax(64px,88px) 56px;justify-content:center;align-items:center;gap:14px;margin-top:28px}
 .btn{border:0;background:white;cursor:pointer;box-shadow:0 2px 8px #00000010;font-weight:800}
 .circle{width:56px;height:56px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:25px}
 .score{height:56px;min-width:88px;border-radius:999px;font-size:19px;display:flex;align-items:center;justify-content:center;gap:8px}
 .bad{border:1px solid #fecaca;color:var(--red)}
 .good{border:1px solid #bbf7d0;color:var(--green)}
+.mark-btn{width:52px;height:52px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:26px;background:white}.mark-btn.active{background:#fff7d6;border-color:#e5b84b;color:#b7791f}.mark-btn:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}.review-panel{margin-top:20px;text-align:center}.review-btn{border:1px solid #d1d5db;background:#fff;color:#4b5563;padding:9px 13px;border-radius:999px;font-weight:700;cursor:pointer;margin:4px}.review-btn.active{background:#eff6ff;color:#2563eb;border-color:#93c5fd}.review-btn.marked.active{background:#fff7d6;color:#9a6700;border-color:#e5b84b}.review-note{color:#6b7280;font-size:13px;margin-top:8px}
 .reset{display:block;margin:25px auto 0;border:0;background:transparent;color:#6b7280;cursor:pointer;font-size:14px}
 .progress{margin-top:18px;text-align:center;color:#6b7280;font-size:14px}
 @media(max-width:600px){
   .app{padding:18px 12px 30px}
   .card,.card-inner{min-height:430px}
   .card-inner{padding:23px 21px}
-  .controls{gap:10px}
-  .score{min-width:75px}
+  .controls{gap:6px;grid-template-columns:52px minmax(58px,1fr) 48px minmax(58px,1fr) 52px}
+  .controls button{min-width:0}.score{width:100%;font-size:17px}.mark-btn{width:48px;height:48px}
 }
 </style>
 <script src="theme.js"></script></head>
@@ -76,10 +77,12 @@ h1{font-size:25px;margin:0;color:#374151}
   <div class="controls">
     <button class="btn circle" id="prevBtn" title="上一題">←</button>
     <button class="btn score bad" id="wrongBtn">✕ <span id="wrongCount">0</span></button>
+    <button class="btn mark-btn" id="markBtn" data-no-swipe aria-label="標記題目" aria-pressed="false">☆</button>
     <button class="btn score good" id="correctBtn"><span id="correctCount">0</span> ✓</button>
     <button class="btn circle" id="nextBtn" title="下一題">→</button>
   </div>
   <div class="progress" id="progressText"></div>
+  <div class="review-panel"><button id="reviewAllBtn" class="review-btn active">全部題目</button><button id="reviewMarkedBtn" class="review-btn marked">★ 已標記（0）</button><div id="reviewNote" class="review-note"></div></div>
   <button class="reset" id="resetBtn">↻ 重新開始計算</button>
 </div>
 
@@ -90,15 +93,23 @@ let isFlipped = false;
 let mode = "forward";
 let correctCount = 0;
 let incorrectCount = 0;
+let marked = {};
+let reviewFilter = "all";
+let retainedMarkedIndex = null;
+const STORAGE_KEY = "jp_flashcard2_v2";
+
+try { const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}");correctCount=saved.correctCount||0;incorrectCount=saved.incorrectCount||0;marked=saved.marked||{};reviewFilter=saved.reviewFilter||"all";currentIndex=Number.isInteger(saved.currentIndex)?saved.currentIndex:0;mode=saved.mode||mode } catch(_) {}
 
 const el = id => document.getElementById(id);
 
 function render() {
-  const item = vocabList[currentIndex];
-  el("counter").textContent = `${currentIndex + 1} / ${vocabList.length}`;
+  const visible=visibleIndices();if(!visible.length)currentIndex=0;else if(currentIndex<0||currentIndex>=visible.length)currentIndex=0;const sourceIndex=visible.length?visible[currentIndex]:0;
+  const item = vocabList[sourceIndex];
+  el("counter").textContent = visible.length?`${currentIndex + 1} / ${visible.length}`:`0 / 0`;
   el("correctCount").textContent = correctCount;
   el("wrongCount").textContent = incorrectCount;
   el("progressText").textContent = `已作答 ${correctCount + incorrectCount} 題｜正確率 ${correctCount + incorrectCount ? Math.round(correctCount/(correctCount+incorrectCount)*100) : 0}%`;
+  const isMarked=visible.length&&!!marked[sourceIndex];el("markBtn").textContent=isMarked?"★":"☆";el("markBtn").classList.toggle("active",isMarked);el("markBtn").setAttribute("aria-pressed",String(!!isMarked));el("reviewAllBtn").classList.toggle("active",reviewFilter==="all");el("reviewMarkedBtn").classList.toggle("active",reviewFilter==="marked");el("reviewMarkedBtn").textContent=`★ 已標記（${Object.values(marked).filter(Boolean).length}）`;el("reviewNote").textContent=visible.length?"":"暫時沒有已標記題目。";
 
   const card = el("card");
   const content = el("content");
@@ -109,6 +120,8 @@ function render() {
   badge.textContent = isFlipped ? "解答" : "點擊翻面";
   badge.className = "badge" + (isFlipped ? " answer-badge" : "");
   hint.style.display = isFlipped ? "none" : "block";
+
+  if (!visible.length) { content.innerHTML='<p class="question">暫時沒有已標記題目。</p>';hint.style.display="none";localStorage.setItem(STORAGE_KEY,JSON.stringify({currentIndex,mode,correctCount,incorrectCount,marked,reviewFilter}));return; }
 
   if (!isFlipped) {
     const q = mode === "forward"
@@ -140,24 +153,28 @@ function render() {
         </div>`;
     }
   }
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({currentIndex,mode,correctCount,incorrectCount,marked,reviewFilter}));
 }
 
 function escapeHtml(s) {
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-function next() { isFlipped=false; currentIndex=(currentIndex+1)%vocabList.length; render(); }
-function prev() { isFlipped=false; currentIndex=(currentIndex-1+vocabList.length)%vocabList.length; render(); }
+function visibleIndices(){let list=vocabList.map((_,i)=>i);if(reviewFilter==="marked"){list=list.filter(i=>marked[i]);if(retainedMarkedIndex!=null&&!list.includes(retainedMarkedIndex))list.splice(Math.min(currentIndex,list.length),0,retainedMarkedIndex)}return list}
+function next() { retainedMarkedIndex=null;const list=visibleIndices();isFlipped=false;if(list.length)currentIndex=(currentIndex+1)%list.length;render(); }
+function prev() { retainedMarkedIndex=null;const list=visibleIndices();isFlipped=false;if(list.length)currentIndex=(currentIndex-1+list.length)%list.length;render(); }
 
 el("card").addEventListener("click", () => {isFlipped=!isFlipped; render();});
 el("card").addEventListener("keydown", e => {if(e.key==="Enter"||e.key===" "){e.preventDefault();isFlipped=!isFlipped;render();}});
 el("nextBtn").onclick = next;
 el("prevBtn").onclick = prev;
+el("markBtn").onclick=()=>{const list=visibleIndices();if(!list.length)return;const idx=list[currentIndex];marked[idx]=!marked[idx];retainedMarkedIndex=reviewFilter==="marked"&&!marked[idx]?idx:null;render()};
 setupFlashcardSwipe({element:el("card"),onSwipeLeft:next,onSwipeRight:prev});
 el("correctBtn").onclick = () => {correctCount++; next();};
 el("wrongBtn").onclick = () => {incorrectCount++; next();};
-el("resetBtn").onclick = () => {correctCount=0;incorrectCount=0;currentIndex=0;isFlipped=false;render();};
+el("resetBtn").onclick = () => {correctCount=0;incorrectCount=0;currentIndex=0;retainedMarkedIndex=null;isFlipped=false;render();};
 el("forwardBtn").onclick = () => {mode="forward";isFlipped=false;el("forwardBtn").classList.add("active");el("reverseBtn").classList.remove("active");render();};
 el("reverseBtn").onclick = () => {mode="reverse";isFlipped=false;el("reverseBtn").classList.add("active");el("forwardBtn").classList.remove("active");render();};
+el("reviewAllBtn").onclick=()=>{reviewFilter="all";retainedMarkedIndex=null;currentIndex=0;isFlipped=false;render()};el("reviewMarkedBtn").onclick=()=>{reviewFilter="marked";retainedMarkedIndex=null;currentIndex=0;isFlipped=false;render()};
 document.addEventListener("keydown", e => {
   if(e.key==="ArrowRight") next();
   if(e.key==="ArrowLeft") prev();
