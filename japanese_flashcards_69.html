@@ -22,6 +22,7 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Not
 .top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
 h1{font-size:25px;margin:0;color:#374151}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mode-scroll{max-width:100%;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}.mode-scroll .segment{width:max-content}.mobile-mode-hint{display:none;color:#64748b;font-size:12px;text-align:right;margin-top:-10px;margin-bottom:10px}
 .segment{display:flex;background:white;padding:4px;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 1px 4px #00000010}
 .segment button,.small-btn{border:0;background:transparent;padding:10px 14px;border-radius:7px;font-weight:700;color:#4b5563;cursor:pointer}
 .segment button.active{background:var(--blue);color:white}
@@ -66,6 +67,8 @@ h1{font-size:25px;margin:0;color:#374151}
 .review-btn.incorrect.active{background:#fef2f2;color:#dc2626;border-color:#fca5a5}
 .review-btn.marked.active{background:#fff7d6;color:#9a6700;border-color:#e5b84b}
 .review-note{text-align:center;color:#6b7280;font-size:13px;margin-top:10px}
+.practice-panel{min-height:440px;border-radius:28px;background:white;border:1px solid #e5e7eb;box-shadow:0 10px 28px #00000018;padding:28px;display:flex;flex-direction:column;gap:18px}.practice-head{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#64748b;font-weight:750}.practice-question{text-align:center;margin:auto 0}.reading-prompt{font-size:clamp(40px,8vw,68px);font-weight:850;color:#17324d;letter-spacing:.08em}.practice-word{font-size:clamp(34px,7vw,56px);font-weight:850;color:#17324d}.practice-meaning{margin-top:8px;color:#64748b;font-size:17px}.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.reading-choice{min-height:56px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;color:#1f2937;padding:12px;font:inherit;font-size:19px;font-weight:750;cursor:pointer}.reading-choice.correct{background:#e8f8f0;border-color:#51b889;color:#126447}.reading-choice.wrong{background:#fff0f2;border-color:#db7784;color:#982534}.reading-choice:focus-visible,.kana-chip:focus-visible,.practice-btn:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}.reading-result{min-height:54px;border-radius:13px;padding:12px 14px;line-height:1.55;background:#f8fafc;color:#475569}.reading-result.ok{background:#e8f8f0;color:#126447}.reading-result.no{background:#fff0f2;color:#982534}.answer-kana{min-height:66px;border:2px dashed #94a3b8;border-radius:15px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;background:#f8fafc}.kana-bank{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}.kana-chip{min-width:48px;min-height:48px;border:1px solid #93a9c1;border-radius:12px;background:#eef4fb;color:#17324d;font-size:22px;font-weight:800;cursor:pointer}.kana-chip.used{opacity:.3;pointer-events:none}.practice-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}.practice-btn{min-height:46px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#334155;padding:9px 14px;font:inherit;font-weight:800;cursor:pointer}.practice-btn.primary{background:#2563eb;color:#fff;border-color:#2563eb}.practice-nav{display:grid;grid-template-columns:1fr auto 1fr;gap:9px;align-items:center}.practice-nav .practice-btn:last-child{justify-self:end}.practice-nav .practice-btn:first-child{justify-self:start}.practice-star{width:48px;height:48px;border-radius:50%;padding:0;font-size:24px;border:2px solid #2563eb;color:#2563eb}.practice-star.active{background:#fff7d6;border-color:#e5b84b;color:#b7791f}
+.hidden{display:none!important}
 
 .reset{display:block;margin:24px auto 0;border:0;background:transparent;color:#6b7280;cursor:pointer;font-size:14px}
 @media(max-width:600px){
@@ -74,6 +77,7 @@ h1{font-size:25px;margin:0;color:#374151}
   .card-inner{padding:22px 20px}
   .controls{gap:6px;grid-template-columns:52px minmax(58px,1fr) 48px minmax(58px,1fr) 52px}
   .controls button{min-width:0}.score{width:100%;font-size:17px}.mark-btn{width:48px;height:48px}
+  .top{align-items:flex-start}.toolbar{width:100%;display:block}.mode-scroll{width:100%}.mobile-mode-hint{display:block}.choice-grid{grid-template-columns:1fr}.practice-panel{padding:20px 14px;min-height:500px}.practice-actions{gap:7px}.practice-btn{padding:8px 10px}.kana-chip{min-width:46px;min-height:46px}
 }
 
 .home-fab{position:fixed;top:16px;left:16px;z-index:999;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.94);color:#17324d;border:1px solid #dbe4ee;text-decoration:none;font-weight:800;box-shadow:0 8px 24px rgba(15,23,42,.14);backdrop-filter:blur(10px);transition:.18s}
@@ -88,13 +92,16 @@ h1{font-size:25px;margin:0;color:#374151}
   <div class="top">
     <h1>期終考試生字（69字）</h1>
     <div class="toolbar">
-      <div class="segment">
+      <div class="mode-scroll"><div class="segment">
         <button id="forwardBtn">正向測試</button>
         <button id="reverseBtn">反向測試</button>
-      </div>
+        <button id="readingChoiceBtn">讀音選詞</button>
+        <button id="readingBuildBtn">讀音重組</button>
+      </div></div>
       <button id="shuffleBtn" class="small-btn">隨機模式</button>
     </div>
   </div>
+  <div class="mobile-mode-hint">左右滑動查看更多模式</div>
 
   <div class="status">
     <span id="progressText"></span>
@@ -116,7 +123,9 @@ h1{font-size:25px;margin:0;color:#374151}
     </div>
   </div>
 
-  <div class="controls">
+  <section id="practiceArea" class="practice-panel hidden" aria-live="polite"></section>
+
+  <div class="controls" id="flashcardControls">
     <button class="btn circle" id="prevBtn" title="上一題">←</button>
     <button class="btn score bad" id="wrongBtn">✕ <span id="wrongCount">0</span></button>
     <button class="btn mark-btn" id="markBtn" type="button" data-no-swipe aria-label="標記題目" aria-pressed="false">☆</button>
@@ -138,6 +147,7 @@ h1{font-size:25px;margin:0;color:#374151}
 
 <script>
 const originalList = [{"type": "kanji", "word": "平日", "read_src": "へいじつ", "meaning": "平日"}, {"type": "kanji", "word": "平均点", "read_src": "へいきんてん", "meaning": "平均分"}, {"type": "kata", "word": "ギター", "read_src": "guitar", "meaning": "結他"}, {"type": "kanji", "word": "演奏", "read_src": "えんそう", "meaning": "演奏"}, {"type": "kanji", "word": "留守番", "read_src": "るすばん", "meaning": "看家、留守"}, {"type": "kata", "word": "インターネット", "read_src": "internet", "meaning": "互聯網"}, {"type": "kanji", "word": "検索", "read_src": "けんさく", "meaning": "搜尋"}, {"type": "kanji", "word": "道路", "read_src": "どうろ", "meaning": "道路"}, {"type": "kanji", "word": "最後", "read_src": "さいご", "meaning": "最後"}, {"type": "kanji", "word": "機能", "read_src": "きのう", "meaning": "功能"}, {"type": "kanji", "word": "資源", "read_src": "しげん", "meaning": "資源"}, {"type": "kata", "word": "コンピューター", "read_src": "computer", "meaning": "電腦", "tip": "注意長音「ー」"}, {"type": "kata", "word": "アメリカ", "read_src": "America", "meaning": "美國"}, {"type": "kanji", "word": "誕生", "read_src": "たんじょう", "meaning": "誕生、出現"}, {"type": "kata", "word": "シンプル", "read_src": "simple", "meaning": "簡單、簡約"}, {"type": "kata", "word": "ジャンプ", "read_src": "jump", "meaning": "跳、跳轉"}, {"type": "kata", "word": "メダル", "read_src": "medal", "meaning": "獎牌"}, {"type": "kata", "word": "シルバー", "read_src": "silver", "meaning": "銀色、銀"}, {"type": "kanji", "word": "誤解", "read_src": "ごかい", "meaning": "誤會"}, {"type": "kanji", "word": "手術", "read_src": "しゅじゅつ", "meaning": "手術"}, {"type": "kanji", "word": "出来事", "read_src": "できごと", "meaning": "事件、事情"}, {"type": "kanji", "word": "奇数", "read_src": "きすう", "meaning": "奇數"}, {"type": "kanji", "word": "記憶", "read_src": "きおく", "meaning": "記憶"}, {"type": "kanji", "word": "驚く", "read_src": "おどろく", "meaning": "吃驚、驚訝"}, {"type": "kanji", "word": "沖縄", "read_src": "おきなわ", "meaning": "沖繩"}, {"type": "kanji", "word": "通じる", "read_src": "つうじる", "meaning": "溝通得到、通曉"}, {"type": "kanji", "word": "お互い", "read_src": "おたがい", "meaning": "互相、彼此"}, {"type": "kanji", "word": "親しい", "read_src": "したしい", "meaning": "親近、親密"}, {"type": "kanji", "word": "指", "read_src": "ゆび", "meaning": "手指"}, {"type": "kata", "word": "タイムマシン", "read_src": "time machine", "meaning": "時光機"}, {"type": "kata", "word": "プリンター", "read_src": "printer", "meaning": "打印機"}, {"type": "kata", "word": "マニュアル", "read_src": "manual", "meaning": "說明書、手冊"}, {"type": "kata", "word": "アンケート", "read_src": "questionnaire / survey", "meaning": "問卷調查"}, {"type": "kata", "word": "チェックリスト", "read_src": "checklist", "meaning": "檢查清單", "tip": "注意小字「ッ」"}, {"type": "kanji", "word": "価値", "read_src": "かち", "meaning": "價值"}, {"type": "kanji", "word": "伝説", "read_src": "でんせつ", "meaning": "傳說"}, {"type": "kanji", "word": "普及", "read_src": "ふきゅう", "meaning": "普及"}, {"type": "kanji", "word": "城", "read_src": "しろ", "meaning": "城堡"}, {"type": "kanji", "word": "金銀", "read_src": "きんぎん", "meaning": "金銀"}, {"type": "kanji", "word": "保管", "read_src": "ほかん", "meaning": "保管"}, {"type": "kanji", "word": "地味", "read_src": "じみ", "meaning": "樸素、不起眼"}, {"type": "kanji", "word": "自由行動", "read_src": "じゆうこうどう", "meaning": "自由活動"}, {"type": "kanji", "word": "屋根", "read_src": "やね", "meaning": "屋頂"}, {"type": "kanji", "word": "酔う", "read_src": "よう", "meaning": "醉"}, {"type": "kanji", "word": "落ち着く", "read_src": "おちつく", "meaning": "冷靜、鎮定"}, {"type": "kanji", "word": "方言", "read_src": "ほうげん", "meaning": "方言"}, {"type": "kanji", "word": "期待", "read_src": "きたい", "meaning": "期待"}, {"type": "kata", "word": "シューズ", "read_src": "shoes", "meaning": "鞋"}, {"type": "kata", "word": "パンフレット", "read_src": "pamphlet", "meaning": "小冊子", "tip": "注意小字「ッ」"}, {"type": "kata", "word": "グレー", "read_src": "gray/grey", "meaning": "灰色"}, {"type": "kata", "word": "パックツアー", "read_src": "package tour", "meaning": "套票旅行、旅行團套裝", "tip": "注意長音「ー」同小字「ッ」"}, {"type": "kata", "word": "コメント", "read_src": "comment", "meaning": "評語、留言"}, {"type": "kanji", "word": "苦情", "read_src": "くじょう", "meaning": "投訴、抱怨"}, {"type": "kanji", "word": "家事", "read_src": "かじ", "meaning": "家務"}, {"type": "kanji", "word": "都会", "read_src": "とかい", "meaning": "都市、大城市"}, {"type": "kanji", "word": "騒々しい", "read_src": "そうぞうしい", "meaning": "吵鬧、嘈雜"}, {"type": "kanji", "word": "苦労", "read_src": "くろう", "meaning": "辛苦、勞苦"}, {"type": "kanji", "word": "犯人", "read_src": "はんにん", "meaning": "犯人"}, {"type": "kanji", "word": "追いかける", "read_src": "おいかける", "meaning": "追趕、追逐"}, {"type": "kanji", "word": "夜中", "read_src": "よなか", "meaning": "半夜、深夜"}, {"type": "kanji", "word": "含む", "read_src": "ふくむ", "meaning": "包含、包括"}, {"type": "kanji", "word": "住宅地", "read_src": "じゅうたくち", "meaning": "住宅區"}, {"type": "kanji", "word": "穏やか", "read_src": "おだやか", "meaning": "平穩、溫和"}, {"type": "kanji", "word": "暮らしやすい", "read_src": "くらしやすい", "meaning": "容易生活、宜居"}, {"type": "kata", "word": "カルチャーショック", "read_src": "culture shock", "meaning": "文化衝擊", "tip": "注意小字「ッ」同長音「ー」"}, {"type": "kata", "word": "アナウンス", "read_src": "announcement", "meaning": "廣播、通知"}, {"type": "kata", "word": "コマーシャル", "read_src": "commercial", "meaning": "廣告"}, {"type": "kata", "word": "メニュー", "read_src": "menu", "meaning": "菜單、餐牌"}, {"type": "kata", "word": "サンダル", "read_src": "sandal", "meaning": "涼鞋"}];
+originalList.forEach((item,index)=>{item.id=item.id||`vocab-${String(index+1).padStart(3,"0")}`;item.reading=item.type==="kanji"?item.read_src:item.word;item.meaningZh=item.meaning});
 const STORAGE_KEY = "jp_flashcards_69_v1";
 
 let state = {
@@ -151,6 +161,13 @@ let state = {
   statuses: {},
   marked: {},
   retainedMarkedIndex: null,
+  readingChoiceStatus: {},
+  readingBuildStatus: {},
+  readingModePosition: {choice:0,build:0},
+  readingChoiceSelections: {},
+  readingBuildSelections: {},
+  readingBuildSeeds: {},
+  flashPosition: 0,
   reviewFilter: "all"
 };
 
@@ -160,18 +177,23 @@ try {
     state = {...state, ...saved, isFlipped:false};
   }
 } catch (_) {}
+state.readingChoiceStatus=state.readingChoiceStatus||{};state.readingBuildStatus=state.readingBuildStatus||{};state.readingModePosition=state.readingModePosition||{choice:0,build:0};state.readingChoiceSelections=state.readingChoiceSelections||{};state.readingBuildSelections=state.readingBuildSelections||{};state.readingBuildSeeds=state.readingBuildSeeds||{};state.flashPosition=Number.isInteger(state.flashPosition)?state.flashPosition:state.currentPosition;
 
 const el = id => document.getElementById(id);
 function filteredIndices() {
-  if (state.reviewFilter === "correct") return state.order.filter(i => state.statuses[i] === "correct");
-  if (state.reviewFilter === "incorrect") return state.order.filter(i => state.statuses[i] === "incorrect");
+  let base = state.order;
+  if (state.mode === "readingBuild") base = base.filter(i => originalList[i].type === "kanji");
+  const statuses = activeStatuses();
+  if (state.reviewFilter === "correct") return base.filter(i => statuses[i] === "correct");
+  if (state.reviewFilter === "incorrect") return base.filter(i => statuses[i] === "incorrect");
   if (state.reviewFilter === "marked") {
-    const list = state.order.filter(i => state.marked[i]);
+    const list = base.filter(i => state.marked[i]);
     if (state.retainedMarkedIndex != null && !list.includes(state.retainedMarkedIndex)) list.splice(Math.min(state.currentPosition, list.length), 0, state.retainedMarkedIndex);
     return list;
   }
-  return state.order;
+  return base;
 }
+function activeStatuses(){if(state.mode==="readingChoice")return state.readingChoiceStatus;if(state.mode==="readingBuild")return state.readingBuildStatus;return state.statuses}
 function ensureValidPosition(list = filteredIndices()) {
   if (!list.length) {
     state.currentPosition = 0;
@@ -197,6 +219,13 @@ function save() {
     incorrectCount: state.incorrectCount,
     statuses: state.statuses,
     marked: state.marked,
+    readingChoiceStatus: state.readingChoiceStatus,
+    readingBuildStatus: state.readingBuildStatus,
+    readingModePosition: state.readingModePosition,
+    readingChoiceSelections: state.readingChoiceSelections,
+    readingBuildSelections: state.readingBuildSelections,
+    readingBuildSeeds: state.readingBuildSeeds,
+    flashPosition: state.flashPosition,
     reviewFilter: state.reviewFilter
   }));
 }
@@ -209,25 +238,26 @@ function render() {
   const visible = filteredIndices();
   ensureValidPosition(visible);
   const item = originalList[visible.length ? visible[state.currentPosition] : 0];
-  const answered = state.correctCount + state.incorrectCount;
-  const accuracy = answered ? Math.round(state.correctCount / answered * 100) : 0;
+  const statusMap=activeStatuses(),correctMarked=Object.values(statusMap).filter(v=>v==="correct").length,incorrectMarked=Object.values(statusMap).filter(v=>v==="incorrect").length;
+  const answered = correctMarked + incorrectMarked;
+  const accuracy = answered ? Math.round(correctMarked / answered * 100) : 0;
 
   el("jumpInput").value = visible.length ? state.currentPosition + 1 : "";
   el("jumpInput").max = Math.max(1, visible.length);
   el("totalCount").textContent = visible.length;
-  el("correctCount").textContent = state.correctCount;
-  el("wrongCount").textContent = state.incorrectCount;
+  el("correctCount").textContent = correctMarked;
+  el("wrongCount").textContent = incorrectMarked;
   el("progressText").textContent = `已作答 ${answered} 題｜正確率 ${accuracy}%`;
   el("forwardBtn").classList.toggle("active", state.mode === "forward");
   el("reverseBtn").classList.toggle("active", state.mode === "reverse");
+  el("readingChoiceBtn").classList.toggle("active", state.mode === "readingChoice");
+  el("readingBuildBtn").classList.toggle("active", state.mode === "readingBuild");
   el("shuffleBtn").classList.toggle("active", state.shuffle);
   el("shuffleBtn").textContent = state.shuffle ? "隨機模式：開" : "隨機模式";
   el("reviewAllBtn").classList.toggle("active", state.reviewFilter === "all");
   el("reviewCorrectBtn").classList.toggle("active", state.reviewFilter === "correct");
   el("reviewIncorrectBtn").classList.toggle("active", state.reviewFilter === "incorrect");
   el("reviewMarkedBtn").classList.toggle("active", state.reviewFilter === "marked");
-  const correctMarked = Object.values(state.statuses).filter(v => v === "correct").length;
-  const incorrectMarked = Object.values(state.statuses).filter(v => v === "incorrect").length;
   const manuallyMarked = Object.values(state.marked).filter(Boolean).length;
   el("reviewCorrectBtn").textContent = `✓ 答對（${correctMarked}）`;
   el("reviewIncorrectBtn").textContent = `✕ 答錯（${incorrectMarked}）`;
@@ -240,6 +270,9 @@ function render() {
   el("markBtn").setAttribute("aria-pressed", String(isMarked));
 
   const card = el("card");
+  const practiceArea=el("practiceArea"),readingMode=state.mode==="readingChoice"||state.mode==="readingBuild";
+  card.classList.toggle("hidden",readingMode);el("flashcardControls").classList.toggle("hidden",readingMode);practiceArea.classList.toggle("hidden",!readingMode);
+  if(readingMode){renderReadingPractice(visible);save();return}
   const content = el("content");
   const badge = el("sideBadge");
   const hint = el("hint");
@@ -280,11 +313,30 @@ function render() {
   save();
 }
 
+function stableHash(text){let h=2166136261;for(const ch of String(text)){h^=ch.codePointAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function deterministicShuffle(list,seed){return [...list].sort((a,b)=>(stableHash(`${seed}|${JSON.stringify(a)}`)-stableHash(`${seed}|${JSON.stringify(b)}`)))}
+function similarityScore(a,b){let score=a.type===b.type?20:0;const aw=new Set(Array.from(a.word)),ar=new Set(Array.from(a.reading)),am=new Set(Array.from(a.meaningZh));for(const ch of b.word)if(aw.has(ch))score+=5;for(const ch of b.reading)if(ar.has(ch))score+=3;for(const ch of b.meaningZh)if(am.has(ch))score+=1;return score}
+function readingChoiceOptions(correctIndex){const correct=originalList[correctIndex],ranked=originalList.map((item,index)=>({index,item,score:index===correctIndex?-1:similarityScore(correct,item),tie:stableHash(`${correct.id}|${item.id}`)})).filter(x=>x.index!==correctIndex).sort((a,b)=>b.score-a.score||a.tie-b.tie),picked=[correctIndex],labels=new Set([choiceLabel(correct)]);for(const candidate of ranked){const label=choiceLabel(candidate.item);if(labels.has(label))continue;picked.push(candidate.index);labels.add(label);if(picked.length===6)break}return deterministicShuffle(picked,correct.id)}
+function choiceLabel(item){return item.type==="kata"?item.meaningZh:item.word}
+function confusingKana(ch){const pairs={"け":"げ","げ":"け","か":"が","が":"か","つ":"っ","っ":"つ","し":"じ","じ":"し","き":"ぎ","ぎ":"き","や":"ゃ","ゃ":"や","ゆ":"ゅ","ゅ":"ゆ","よ":"ょ","ょ":"よ","う":"お","お":"う","は":"ば","ば":"ぱ","ぱ":"は"};return pairs[ch]||null}
+function kanaBankFor(index){const item=originalList[index],chars=Array.from(item.reading),seed=state.readingBuildSeeds[item.id]||0,extras=[];for(const ch of chars){const alt=confusingKana(ch);if(alt&&!chars.includes(alt)&&!extras.includes(alt))extras.push(alt);if(extras.length>=4)break}const fallback=["あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ"];for(const ch of fallback){if(extras.length>=4)break;if(!chars.includes(ch)&&!extras.includes(ch))extras.push(ch)}return deterministicShuffle([...chars.map((char,i)=>({id:`c${i}`,char})),...extras.map((char,i)=>({id:`d${i}`,char}))],`${item.id}|${seed}`)}
+function renderReadingPractice(visible){const area=el("practiceArea");if(!visible.length){area.innerHTML='<div class="practice-question"><p>暫時沒有符合這個篩選的題目。</p></div>';return}const index=visible[state.currentPosition],item=originalList[index],marked=!!state.marked[index],head=`<div class="practice-head"><span>${state.mode==="readingChoice"?"讀音選詞":"讀音重組"}</span><span>${state.currentPosition+1} / ${visible.length}</span></div>`;if(state.mode==="readingChoice"){const options=readingChoiceOptions(index),selected=state.readingChoiceSelections[item.id],answered=selected!=null,correct=selected===index;area.innerHTML=`${head}<div class="practice-question"><div class="reading-prompt">${escapeHtml(item.type==="kata"?item.word:item.reading)}</div><div class="practice-meaning">${item.type==="kata"?"選擇正確中文意思":"選擇正確詞彙"}</div></div><div class="choice-grid">${options.map(optionIndex=>{const option=originalList[optionIndex],cls=answered?(optionIndex===index?" correct":optionIndex===selected?" wrong":""):"";return `<button class="reading-choice${cls}" data-no-swipe onclick="chooseReading(${optionIndex})" ${answered?"disabled":""}>${escapeHtml(choiceLabel(option))}</button>`}).join("")}</div><div class="reading-result ${answered?(correct?"ok":"no"):""}">${answered?`${correct?"✓ 正確":"✕ 答錯"}<br><b>${escapeHtml(item.word)}</b>｜${escapeHtml(item.reading)}｜${escapeHtml(item.meaningZh)}`:"請選擇答案。"}</div>${practiceNavigation(marked)}`;return}const bank=kanaBankFor(index),selectedIds=state.readingBuildSelections[item.id]||[],selectedChars=selectedIds.map(id=>bank.find(x=>x.id===id)).filter(Boolean),status=state.readingBuildStatus[index];area.innerHTML=`${head}<div class="practice-question"><div class="practice-word">${escapeHtml(item.word)}</div><div class="practice-meaning">${escapeHtml(item.meaningZh)}</div></div><div class="answer-kana" data-no-swipe>${selectedChars.length?selectedChars.map((x,i)=>`<button class="kana-chip" data-no-swipe onclick="removeSelectedKana(${i})">${escapeHtml(x.char)}</button>`).join(""):"點選下方假名組成讀音"}</div><div class="kana-bank" data-no-swipe>${bank.map(x=>`<button class="kana-chip ${selectedIds.includes(x.id)?"used":""}" data-no-swipe onclick="addKana('${x.id}')">${escapeHtml(x.char)}</button>`).join("")}</div><div class="practice-actions"><button class="practice-btn" data-no-swipe onclick="reshuffleKana()">重新排列</button><button class="practice-btn" data-no-swipe onclick="clearKana()">清除答案</button><button class="practice-btn primary" data-no-swipe onclick="checkKana()">檢查答案</button></div><div class="reading-result ${status?(status==="correct"?"ok":"no"):""}">${status?(status==="correct"?"✓ 正確":"✕ 答錯，正確讀音："+escapeHtml(item.reading)):"請按正確次序選擇假名。"}</div>${practiceNavigation(marked)}`}
+function practiceNavigation(marked){return `<div class="practice-nav"><button class="practice-btn" data-no-swipe onclick="prev()">← 上一題</button><button class="practice-btn practice-star ${marked?"active":""}" data-no-swipe aria-label="標記題目" aria-pressed="${marked}" onclick="togglePracticeMark()">${marked?"★":"☆"}</button><button class="practice-btn" data-no-swipe onclick="next()">下一題 →</button></div>`}
+function currentReadingContext(){const list=filteredIndices();if(!list.length)return null;const index=list[state.currentPosition];return{list,index,item:originalList[index]}}
+function chooseReading(optionIndex){const c=currentReadingContext();if(!c)return;state.readingChoiceSelections[c.item.id]=optionIndex;state.readingChoiceStatus[c.index]=optionIndex===c.index?"correct":"incorrect";save();render()}
+function addKana(id){const c=currentReadingContext();if(!c)return;const selected=state.readingBuildSelections[c.item.id]||(state.readingBuildSelections[c.item.id]=[]);if(!selected.includes(id)){selected.push(id);delete state.readingBuildStatus[c.index]}save();render()}
+function removeSelectedKana(position){const c=currentReadingContext();if(!c)return;(state.readingBuildSelections[c.item.id]||[]).splice(position,1);delete state.readingBuildStatus[c.index];save();render()}
+function clearKana(){const c=currentReadingContext();if(!c)return;state.readingBuildSelections[c.item.id]=[];delete state.readingBuildStatus[c.index];save();render()}
+function reshuffleKana(){const c=currentReadingContext();if(!c)return;state.readingBuildSeeds[c.item.id]=(state.readingBuildSeeds[c.item.id]||0)+1;state.readingBuildSelections[c.item.id]=[];delete state.readingBuildStatus[c.index];save();render()}
+function checkKana(){const c=currentReadingContext();if(!c)return;const bank=kanaBankFor(c.index),answer=(state.readingBuildSelections[c.item.id]||[]).map(id=>bank.find(x=>x.id===id)?.char||"").join("").replace(/\s/g,"");const accepted=c.item.acceptedReadings||[c.item.reading];state.readingBuildStatus[c.index]=accepted.includes(answer)?"correct":"incorrect";save();render()}
+function togglePracticeMark(){const c=currentReadingContext();if(!c)return;state.marked[c.index]=!state.marked[c.index];state.retainedMarkedIndex=state.reviewFilter==="marked"&&!state.marked[c.index]?c.index:null;save();render()}
+
 function next() {
   state.retainedMarkedIndex = null;
   const list = filteredIndices();
   state.isFlipped = false;
   if (list.length) state.currentPosition = (state.currentPosition + 1) % list.length;
+  syncModePosition();
   render();
 }
 function prev() {
@@ -292,6 +344,7 @@ function prev() {
   const list = filteredIndices();
   state.isFlipped = false;
   if (list.length) state.currentPosition = (state.currentPosition - 1 + list.length) % list.length;
+  syncModePosition();
   render();
 }
 function reshuffle() {
@@ -347,13 +400,31 @@ el("wrongBtn").onclick = () => {
   save();
   next();
 };
-el("forwardBtn").onclick = () => { state.mode = "forward"; state.isFlipped = false; render(); };
-el("reverseBtn").onclick = () => { state.mode = "reverse"; state.isFlipped = false; render(); };
+function syncModePosition(){
+  if(state.mode==="readingChoice")state.readingModePosition.choice=state.currentPosition;
+  else if(state.mode==="readingBuild")state.readingModePosition.build=state.currentPosition;
+  else state.flashPosition=state.currentPosition;
+}
+function setMode(mode){
+  syncModePosition();
+  state.mode=mode;
+  state.currentPosition=mode==="readingChoice"?state.readingModePosition.choice:mode==="readingBuild"?state.readingModePosition.build:state.flashPosition;
+  state.retainedMarkedIndex=null;
+  state.isFlipped=false;
+  ensureValidPosition();
+  render();
+}
+el("forwardBtn").onclick = () => setMode("forward");
+el("reverseBtn").onclick = () => setMode("reverse");
+el("readingChoiceBtn").onclick = () => setMode("readingChoice");
+el("readingBuildBtn").onclick = () => setMode("readingBuild");
 el("shuffleBtn").onclick = () => {
   state.shuffle = !state.shuffle;
   state.order = originalList.map((_, i) => i);
   if (state.shuffle) reshuffle();
   state.currentPosition = 0;
+  state.flashPosition = 0;
+  state.readingModePosition = {choice:0,build:0};
   state.isFlipped = false;
   render();
 };
@@ -362,9 +433,16 @@ el("resetBtn").onclick = () => {
   state.correctCount = 0;
   state.incorrectCount = 0;
   state.statuses = {};
+  state.readingChoiceStatus = {};
+  state.readingBuildStatus = {};
+  state.readingChoiceSelections = {};
+  state.readingBuildSelections = {};
+  state.readingBuildSeeds = {};
   state.retainedMarkedIndex = null;
   state.reviewFilter = "all";
   state.currentPosition = 0;
+  state.flashPosition = 0;
+  state.readingModePosition = {choice:0,build:0};
   state.isFlipped = false;
   state.order = originalList.map((_, i) => i);
   if (state.shuffle) reshuffle();
@@ -389,7 +467,7 @@ el("jumpInput").addEventListener("keydown", e => {
   if (e.key === "Enter") { e.preventDefault(); jumpToVocabulary(); }
 });
 
-function setReviewFilter(filter){state.reviewFilter=filter;state.retainedMarkedIndex=null;state.currentPosition=0;state.isFlipped=false;render()}
+function setReviewFilter(filter){state.reviewFilter=filter;state.retainedMarkedIndex=null;state.currentPosition=0;syncModePosition();state.isFlipped=false;render()}
 el("reviewAllBtn").onclick = () => setReviewFilter("all");
 el("reviewCorrectBtn").onclick = () => setReviewFilter("correct");
 el("reviewMarkedBtn").onclick = () => setReviewFilter("marked");
@@ -400,11 +478,11 @@ document.addEventListener("keydown", e => {
   const isControl = ["BUTTON","INPUT","TEXTAREA","SELECT"].includes(tag);
   if (e.key === "ArrowRight") next();
   else if (e.key === "ArrowLeft") prev();
-  else if ((e.key === " " || e.code === "Space") && !isControl) {
+  else if ((e.key === " " || e.code === "Space") && !isControl && (state.mode==="forward"||state.mode==="reverse")) {
     e.preventDefault();
     state.isFlipped = !state.isFlipped;
     render();
-  } else if (e.key.toLowerCase() === "f") {
+  } else if (e.key.toLowerCase() === "f" && (state.mode==="forward"||state.mode==="reverse")) {
     state.isFlipped = !state.isFlipped;
     render();
   }

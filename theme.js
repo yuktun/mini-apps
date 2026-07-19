@@ -46,6 +46,14 @@
     html[data-theme="dark"] .chip.active{background:#1f4c73!important;color:#dbeafe!important;border-color:#4f83ae!important}
     html[data-theme="dark"] .quiz-choice{background:#17243a!important;color:#eef4fb!important;border-color:#475569!important}
     html[data-theme="dark"] .quiz-choice:hover{background:#1e304a!important;border-color:#60a5fa!important}
+    html[data-theme="dark"] .practice-panel{background:#111c2e!important;color:#e5edf7!important;border-color:#334155!important}
+    html[data-theme="dark"] .practice-question,html[data-theme="dark"] .answer-kana,html[data-theme="dark"] .reading-result{background:#182438!important;color:#dce7f3!important;border-color:#3b4a60!important}
+    html[data-theme="dark"] .reading-prompt,html[data-theme="dark"] .practice-word{color:#f8fafc!important}
+    html[data-theme="dark"] .practice-meaning,html[data-theme="dark"] .practice-head{color:#a9b8ca!important}
+    html[data-theme="dark"] .reading-choice,html[data-theme="dark"] .practice-btn,html[data-theme="dark"] .kana-chip{background:#17243a!important;color:#eef4fb!important;border-color:#475569!important}
+    html[data-theme="dark"] .reading-choice.correct,html[data-theme="dark"] .reading-result.ok{background:#12382d!important;color:#a7f3d0!important;border-color:#237a5c!important}
+    html[data-theme="dark"] .reading-choice.wrong,html[data-theme="dark"] .reading-result.no{background:#451d28!important;color:#fecdd3!important;border-color:#9f3b50!important}
+    html[data-theme="dark"] .kana-chip.used{opacity:.35}
     html[data-theme="dark"] .phrase{color:#f1f5f9!important}html[data-theme="dark"] .reading{color:#b8c6d8!important}
     html[data-theme="dark"] .badge{background:#203a57!important;color:#dbeafe!important;border-color:#4f6f91!important}
     html[data-theme="dark"] .highlight{background:#4a3914!important;color:#fde68a!important;border-color:#d6a72f!important}
