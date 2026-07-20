@@ -84,6 +84,60 @@ h1{font-size:25px;margin:0;color:#374151}
 .home-fab:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,23,42,.2)}
 @media(max-width:600px){.home-fab{top:10px;left:10px;padding:9px 12px;font-size:14px}.app{padding-top:64px!important}}
 
+/* Multiple-choice extension */
+.module-nav{display:flex;background:#eef2f7;padding:4px;border:1px solid #dbe3ec;border-radius:12px;gap:4px}
+.module-nav button{border:0;background:transparent;padding:10px 14px;border-radius:8px;font-weight:800;color:#526174;cursor:pointer;white-space:nowrap}
+.module-nav button.active{background:#17324d;color:#fff;box-shadow:0 2px 7px #00000018}
+.quiz-panel{display:none;margin-top:6px}
+.quiz-panel.active{display:block}
+.quiz-head{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 3px 14px #0000000c}
+.quiz-head h2{margin:0 0 8px;color:#334155;font-size:25px}
+.quiz-help{margin:0;color:#64748b;line-height:1.65}
+.lesson-tabs{display:flex;gap:9px;overflow-x:auto;padding:4px 1px 10px;margin-top:16px;scrollbar-width:thin}
+.lesson-tab{flex:0 0 auto;border:1px solid #cbd5e1;background:#fff;color:#475569;border-radius:999px;padding:9px 15px;font-weight:800;cursor:pointer}
+.lesson-tab.active{background:#2563eb;color:#fff;border-color:#2563eb}
+.quiz-stats{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;color:#64748b;font-weight:700}
+.quiz-list{display:grid;gap:14px}
+.quiz-question{background:#fff;border:1px solid #e2e8f0;border-radius:19px;padding:18px 20px;box-shadow:0 2px 10px #0000000a;transition:.18s}
+.quiz-question.correct{border-color:#86efac;background:#f0fdf4}
+.quiz-question.incorrect{border-color:#fca5a5;background:#fff7f7}
+.q-meta{font-size:13px;color:#64748b;font-weight:800;margin-bottom:9px}
+.q-text{font-size:19px;line-height:1.85;color:#1f2937;white-space:pre-wrap}
+.answer-slot{display:inline-flex;align-items:center;justify-content:center;min-width:132px;min-height:44px;margin:3px 5px;padding:7px 15px;border:2px dashed #94a3b8;border-radius:12px;background:#f8fafc;color:#475569;font:inherit;font-weight:800;cursor:pointer;vertical-align:middle}
+.answer-slot.filled{border-style:solid;border-color:#60a5fa;background:#eff6ff;color:#1d4ed8}
+.answer-slot:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+.q-feedback{display:none;margin-top:10px;font-size:14px;font-weight:800}
+.quiz-question.correct .q-feedback,.quiz-question.incorrect .q-feedback{display:block}
+.quiz-question.correct .q-feedback{color:#15803d}
+.quiz-question.incorrect .q-feedback{color:#dc2626}
+.quiz-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0}
+.quiz-action{border:1px solid #cbd5e1;background:#fff;color:#475569;padding:11px 18px;border-radius:11px;font-weight:800;cursor:pointer}
+.quiz-action.primary{background:#2563eb;color:#fff;border-color:#2563eb}
+.quiz-action.danger{color:#b91c1c;border-color:#fecaca;background:#fff7f7}
+.choice-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(2,8,23,.68);z-index:3000}
+.choice-modal.open{display:flex}
+.choice-dialog{width:min(900px,100%);max-height:86vh;overflow:auto;background:#17324d;color:#fff;border:1px solid #53708f;border-radius:24px;padding:25px;box-shadow:0 24px 80px rgba(0,0,0,.42)}
+.choice-dialog h3{font-size:27px;margin:0 0 20px}
+.choice-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.choice-btn{min-height:64px;border:1px solid #6385a7;background:#23415f;color:#fff;border-radius:15px;padding:12px;font-size:18px;font-weight:800;cursor:pointer}
+.choice-btn:hover,.choice-btn:focus-visible{background:#315a7f;outline:none;box-shadow:0 0 0 3px #93c5fd}
+.choice-footer{display:grid;grid-template-columns:1fr 1fr;gap:13px;border-top:1px solid #3c5873;margin-top:21px;padding-top:20px}
+.choice-clear,.choice-cancel{min-height:58px;border-radius:14px;padding:12px;font-size:17px;font-weight:800;cursor:pointer}
+.choice-clear{background:#5d1f2f;color:#fff;border:1px solid #b6425c}
+.choice-cancel{background:#23344c;color:#fff;border:1px solid #52657c}
+html[data-theme="dark"] .module-nav,html[data-theme="dark"] .quiz-head,html[data-theme="dark"] .quiz-question{background:#111c2e;color:#e5edf7;border-color:#334155;box-shadow:none}
+html[data-theme="dark"] .quiz-head h2,html[data-theme="dark"] .q-text{color:#f1f5f9}
+html[data-theme="dark"] .quiz-help,html[data-theme="dark"] .quiz-stats,html[data-theme="dark"] .q-meta{color:#a9b8ca}
+html[data-theme="dark"] .lesson-tab,html[data-theme="dark"] .quiz-action,html[data-theme="dark"] .answer-slot{background:#17243a;color:#dce7f3;border-color:#475569}
+html[data-theme="dark"] .answer-slot.filled{background:#172d50;color:#bfdbfe;border-color:#60a5fa}
+html[data-theme="dark"] .quiz-question.correct{background:#12382d;border-color:#237a5c}
+html[data-theme="dark"] .quiz-question.incorrect{background:#451d28;border-color:#9f3b50}
+html[data-theme="dark"] .quiz-question.correct .q-feedback{color:#a7f3d0}
+html[data-theme="dark"] .quiz-question.incorrect .q-feedback{color:#fecdd3}
+@media(max-width:760px){.choice-grid{grid-template-columns:1fr 1fr}.q-text{font-size:17px}.answer-slot{min-width:118px}.quiz-question{padding:16px}.module-nav{width:100%}.module-nav button{flex:1}}
+@media(max-width:600px){.choice-modal{align-items:flex-end;padding:10px 8px 0}.choice-dialog{max-height:calc(100dvh - 18px);border-radius:22px 22px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom))}}
+@media(max-width:430px){.choice-grid{grid-template-columns:1fr}.choice-footer{grid-template-columns:1fr}.choice-dialog{padding:20px;padding-bottom:calc(18px + env(safe-area-inset-bottom))}.choice-dialog h3{font-size:23px}}
+
 </style>
 <script src="theme.js"></script></head>
 <body>
@@ -92,7 +146,11 @@ h1{font-size:25px;margin:0;color:#374151}
   <div class="top">
     <h1>擬聲詞／擬態詞（16字）</h1>
     <div class="toolbar">
-      <div class="mode">
+      <div class="module-nav" aria-label="練習模式">
+        <button id="flashcardModuleBtn" class="active" type="button">閃卡</button>
+        <button id="quizModuleBtn" type="button">選擇題</button>
+      </div>
+      <div class="mode" id="flashcardModeControl">
         <button id="forwardBtn" class="active">正向測試</button>
         <button id="reverseBtn">反向測試</button>
       </div>
@@ -135,6 +193,36 @@ h1{font-size:25px;margin:0;color:#374151}
     <div id="reviewNote" class="review-note"></div>
   </div>
   <button class="reset" id="resetBtn">↻ 重新開始計算</button>
+
+  <section id="quizPanel" class="quiz-panel" aria-label="擬聲詞擬態詞選擇題">
+    <div class="quiz-head">
+      <h2>擬聲詞／擬態詞・選擇題</h2>
+      <p class="quiz-help">點擊句子中的「選擇答案」，再從四個選項中選出最合適的詞語。每個選項均來自本模組的 16 個擬聲詞／擬態詞。</p>
+      <div class="lesson-tabs" id="lessonTabs">
+        <button class="lesson-tab active" data-lesson="9">第9課</button>
+        <button class="lesson-tab" data-lesson="10">第10課</button>
+        <button class="lesson-tab" data-lesson="11">第11課</button>
+        <button class="lesson-tab" data-lesson="12">第12課</button>
+      </div>
+      <div class="quiz-stats"><span id="quizCount"></span><span id="quizResult"></span></div>
+    </div>
+    <div id="quizList" class="quiz-list"></div>
+    <div class="quiz-actions">
+      <button id="checkQuizBtn" class="quiz-action primary" type="button">檢查全部答案</button>
+      <button id="clearQuizBtn" class="quiz-action danger" type="button">重新練習本課</button>
+    </div>
+  </section>
+
+  <div id="choiceModal" class="choice-modal" role="dialog" aria-modal="true" aria-labelledby="choiceTitle">
+    <div class="choice-dialog">
+      <h3 id="choiceTitle">選擇答案</h3>
+      <div id="choiceGrid" class="choice-grid"></div>
+      <div class="choice-footer">
+        <button id="choiceClear" class="choice-clear" type="button">清除此答案</button>
+        <button id="choiceCancel" class="choice-cancel" type="button">取消</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -377,6 +465,97 @@ document.addEventListener("keydown", e => {
   }
 });
 render();
+
+// ---- Multiple-choice quiz extension ----
+const quizQuestions = [{"lesson":9,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"さっさと","question":"佐藤さんは毎日 5 時になると、 [[BLANK]] 帰る。","id":1},{"lesson":9,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"さっさと","question":"リーさんは用事を [[BLANK]] 片づけた。","id":2},{"lesson":9,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"さっと","question":"その子どもは私を見ると、 [[BLANK]] 隠れた。","id":3},{"lesson":9,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"さっと","question":"猫が [[BLANK]] 逃げた。","id":4},{"lesson":9,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"こつこつ","question":"佐藤さんは [[BLANK]] お金をためて、車を買った。","id":5},{"lesson":9,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"こつこつ","question":"彼女は毎日 [[BLANK]] 勉強している。","id":6},{"lesson":9,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"てきぱき","question":"彼は [[BLANK]] 指示している。","id":7},{"lesson":9,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"てきぱき","question":"[[BLANK]] やったので、仕事が早く終わった。","id":8},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"さっと","question":"用事を[[BLANK]]済ませて、すぐ帰った。","id":9},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"こつこつ","question":"[[BLANK]]努力すれば、きっと成功する。","id":10},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"てきぱき","question":"[[BLANK]]やらないと、仕事は早く終わらない。","id":11},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"さっさと","question":"「[[BLANK]]朝ごはん、食べなさい！学校に遅れるわよ。」","id":12},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"さっさと","question":"「テレビを消して、[[BLANK]]寝なさい。」","id":13},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"こつこつ","question":"毎日[[BLANK]]勉強すれば、きっとうまくなる。","id":14},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"てきぱき","question":"課長は[[BLANK]]仕事の指示をした。","id":15},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"さっと","question":"野菜は[[BLANK]]ゆでてください。ゆですぎてはいけません。","id":16},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"こつこつ","question":"子どものころから[[BLANK]]貯金してお金が 10 万ドルになった。","id":17},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"てきぱき","question":"このデパートの店員はみんな[[BLANK]]していて、気持ちがいい。","id":18},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"さっさと","question":"「あれ？山田さんは？」「『今日はデートだ』と言って[[BLANK]]帰ってしまいましたよ。」「今日はみんな忙しいのに。」","id":19},{"lesson":9,"section":"2. 練習問題 (PDF Exercises)","answer":"さっと","question":"このシャツは生地が薄いですから、[[BLANK]]洗って干してください。","id":20},{"lesson":9,"section":"3. 小テスト問題 (Test Sheet)","answer":"こつこつ","question":"A: 先生、なかなか日本語が上手にならないんです。毎日勉強してるのに。 B: 大丈夫ですよ。[[BLANK]]勉強すれば、きっと上手になりますから、あきらめないで頑張ってください。","id":21},{"lesson":9,"section":"3. 小テスト問題 (Test Sheet)","answer":"さっさと","question":"母: まだ寝てるの？[[BLANK]]起きて、早く学校へ行きなさい！","id":22},{"lesson":9,"section":"3. 小テスト問題 (Test Sheet)","answer":"てきぱき","question":"A: ここのレストランはサービスがいいですね。 B: ええ、ウエイターはみんな[[BLANK]]仕事をしていますね。","id":23},{"lesson":9,"section":"3. 小テスト問題 (Test Sheet)","answer":"さっと","question":"A: 野菜は何分ぐらいゆでますか。 B: [[BLANK]]ゆでてください。長くゆでてはいけません。","id":24},{"lesson":10,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"ざっと","question":"朝、新聞を [[BLANK]] 読んだ。","id":25},{"lesson":10,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"ざっと","question":"彼には [[BLANK]] 話をしておいた。","id":26},{"lesson":10,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"こっそり","question":"書類を [[BLANK]] 盗み出した。","id":27},{"lesson":10,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"こっそり","question":"テストのとき、となりの子の答えを [[BLANK]] 見た。","id":28},{"lesson":10,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"そっと","question":"子どもが寝ているので、 [[BLANK]] 部屋を出た。","id":29},{"lesson":10,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"そっと","question":"教室でテストをしているので、廊下を [[BLANK]] 歩いた。","id":30},{"lesson":10,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"うっかり","question":"[[BLANK]] して、ドアのかぎをかけずに外出してしまった。","id":31},{"lesson":10,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"うっかり","question":"[[BLANK]] 宿題を忘れてしまった。","id":32},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"うっかり","question":"[[BLANK]]して、約束を忘れてしまった。","id":33},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"そっと","question":"病人が寝ているので、[[BLANK]]ドアを開けた。","id":34},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"こっそり","question":"どろぼうが[[BLANK]]家に入った。","id":35},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"ざっと","question":"時間がないから、[[BLANK]]片づけておこう。","id":36},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"そっと","question":"赤ちゃんを[[BLANK]]寝かせた。","id":37},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"うっかり","question":"降りる駅を、[[BLANK]]間違えてしまった。","id":38},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"こっそり","question":"子どものとき、母のさいふから[[BLANK]]お金を盗んで、まんがを買ってしまった。","id":39},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"ざっと","question":"会議が始まる前にこの書類を[[BLANK]]見ておいてください。","id":40},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"うっかり","question":"試験の解答用紙に[[BLANK]]名前を書くのを忘れてしまった。","id":41},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"ざっと","question":"来週のプレゼンテーションについて[[BLANK]]説明します。詳しくは書類を読んでください。","id":42},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"こっそり","question":"彼が寝ているあいだに、彼のメールを[[BLANK]]見てしまった。","id":43},{"lesson":10,"section":"2. 練習問題 (PDF Exercises)","answer":"そっと","question":"サンタクロースは寝ている子どものそばに[[BLANK]]プレゼントを置いた。","id":44},{"lesson":10,"section":"3. 小テスト問題 (Test Sheet)","answer":"こっそり","question":"試験のとき、[[BLANK]]教科書を見て答えを書いた。","id":45},{"lesson":10,"section":"3. 小テスト問題 (Test Sheet)","answer":"うっかり","question":"（電話で） 女性：今、どこ？今日 7 時に会う約束でしょう？ 男性：あ！ごめん！[[BLANK]]忘れてたよ！","id":46},{"lesson":10,"section":"3. 小テスト問題 (Test Sheet)","answer":"ざっと","question":"課長：会議の前にこの書類、[[BLANK]]読んでおいて。 部下：はい、分かりました。","id":47},{"lesson":10,"section":"3. 小テスト問題 (Test Sheet)","answer":"そっと","question":"妻：太郎が寝たばかりだから、[[BLANK]]歩いて！ 夫：ああ、ごめん、ごめん。","id":48},{"lesson":11,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"どんどん","question":"「お酒はたくさんありますから、 [[BLANK]] 飲んでください。」","id":49},{"lesson":11,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"どんどん","question":"不景気で会社の経営状態は [[BLANK]] 悪化した。","id":50},{"lesson":11,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"ぐんぐん","question":"この 2、3 年で、孫の背が [[BLANK]] 伸びた。","id":51},{"lesson":11,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"ぐんぐん","question":"スポーツカーは後ろの車を [[BLANK]] 引き離した。","id":52},{"lesson":11,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"めきめき","question":"林さんのピアノの腕は [[BLANK]] 上がった。","id":53},{"lesson":11,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"めきめき","question":"治療を始めてから、木下さんの病状は [[BLANK]] よくなった。","id":54},{"lesson":11,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"だんだん","question":"[[BLANK]] 勉強が難しくなってきた。","id":55},{"lesson":11,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"だんだん","question":"9 月になって、 [[BLANK]] 涼しくなってきた。","id":56},{"lesson":11,"section":"2. 練習問題 (PDF Exercises)","answer":"どんどん","question":"インフレで物価は[[BLANK]]上がった。","id":57},{"lesson":11,"section":"2. 練習問題 (PDF Exercises)","answer":"ぐんぐん","question":"庭のひまわりが[[BLANK]]大きくなった。","id":58},{"lesson":11,"section":"2. 練習問題 (PDF Exercises)","answer":"だんだん","question":"こつこつ努力すれば[[BLANK]]わかるようになります。","id":59},{"lesson":11,"section":"2. 練習問題 (PDF Exercises)","answer":"めきめき","question":"この子は塾に行き始めてから[[BLANK]]英語ができるようになった。","id":60},{"lesson":11,"section":"2. 練習問題 (PDF Exercises)","answer":"どんどん","question":"パーティーでは自分から積極的に[[BLANK]]話しかけたほうがいいですよ。","id":61},{"lesson":11,"section":"2. 練習問題 (PDF Exercises)","answer":"めきめき","question":"この選手は国内では目立たなかったが、外国のチームに入ってから[[BLANK]]実力を伸ばし、チームを代表する選手となったので、みんな驚いている。","id":62},{"lesson":11,"section":"2. 練習問題 (PDF Exercises)","answer":"ぐんぐん","question":"夏休みの間に身長が[[BLANK]]伸びた。","id":63},{"lesson":11,"section":"2. 練習問題 (PDF Exercises)","answer":"だんだん","question":"この薬はすぐには効果が出ないが、飲み続ければ[[BLANK]]肌がきれいになる。","id":64},{"lesson":11,"section":"3. 小テスト問題 (Test Sheet)","answer":"どんどん","question":"さあ、たくさん運動したんですから、遠慮しないで[[BLANK]]食べてください。","id":65},{"lesson":11,"section":"3. 小テスト問題 (Test Sheet)","answer":"だんだん","question":"A: エアコン、つけたのに全然涼しくならないね。 B: [[BLANK]]涼しくなるよ。もう少し待って。","id":66},{"lesson":11,"section":"3. 小テスト問題 (Test Sheet)","answer":"ぐんぐん","question":"A: 彼は中学を卒業したとき身長が 150cm しかなかったが、高校に入ってから[[BLANK]]背が伸びて、今は 180cm だそうですよ。 B: ええっ？2 年間で 30cm も？","id":67},{"lesson":11,"section":"3. 小テスト問題 (Test Sheet)","answer":"めきめき","question":"あの塾の先生はいいそうですよ。山田さんの息子さん、あの塾に入ってから、[[BLANK]]英語ができるようになったって。","id":68},{"lesson":12,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"ばらばら","question":"会議をしたが、意見が [[BLANK]] で、結局まとまらなかった。","id":69},{"lesson":12,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"ばらばら","question":"卒業のあと、クラスメートは [[BLANK]] になった。","id":70},{"lesson":12,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"めちゃくちゃ","question":"彼の話は [[BLANK]] で、よくわからない。","id":71},{"lesson":12,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"めちゃくちゃ","question":"おもちゃを落としたら、 [[BLANK]] に壊れてしまった。","id":72},{"lesson":12,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"ごちゃごちゃ","question":"部屋の中が [[BLANK]] で、どこに何があるかわからない。","id":73},{"lesson":12,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"ごちゃごちゃ","question":"机の上に、いろいろなものが [[BLANK]] 置いてある。","id":74},{"lesson":12,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"くしゃくしゃ","question":"ポケットから [[BLANK]] な千円札が出てきた。","id":75},{"lesson":12,"section":"1. 語彙と例文 (Vocabulary & Examples)","answer":"くしゃくしゃ","question":"そのシャツ、 [[BLANK]] だから、アイロンをかけたほうがいいよ。","id":76},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"ばらばら","question":"戦争で家族が[[BLANK]]になってしまった。","id":77},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"くしゃくしゃ","question":"洗った服はたたんでしまいなさい。ソファーの上に置いておくと、[[BLANK]]になりますよ。","id":78},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"めちゃくちゃ","question":"酒に酔った出席者が暴れて、パーティーは[[BLANK]]になった。","id":79},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"ごちゃごちゃ","question":"この辺は道がせまいのに、いろいろな店がたくさんあって、[[BLANK]]している。","id":80},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"くしゃくしゃ","question":"彼は[[BLANK]]なハンカチで顔をふいた。","id":81},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"ごちゃごちゃ","question":"彼は本当に整理が苦手なようだ。机の上も引き出しの中もいつも[[BLANK]]だ。","id":82},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"ばらばら","question":"真珠のネックレスが切れて、[[BLANK]]になってしまった。","id":83},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"めちゃくちゃ","question":"家へ帰ったら部屋が[[BLANK]]になっていた。留守中にどろぼうが入ったらしい。","id":84},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"くしゃくしゃ","question":"シーツを乾燥機に入れたら、[[BLANK]]なってしまった。","id":85},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"ごちゃごちゃ","question":"かばんの中が[[BLANK]]で、必要なものがすぐ取り出せない。","id":86},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"くしゃくしゃ","question":"彼は 0 点の試験を[[BLANK]]に丸めて、捨ててしまった。","id":87},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"めちゃくちゃ","question":"この絵は子どもが[[BLANK]]に描いたようですが、世界的な芸術作品です。","id":88},{"lesson":12,"section":"2. 練習問題 (PDF Exercises)","answer":"ばらばら","question":"壊れた時計を時計屋さんに持って行ったら、まず、[[BLANK]]にされた。心配したが、20 分後には修理が終わった。","id":89},{"lesson":12,"section":"3. 小テスト問題 (Test Sheet)","answer":"くしゃくしゃ","question":"そのシャツ、[[BLANK]]よ。アイロン、かけたら？","id":90},{"lesson":12,"section":"3. 小テスト問題 (Test Sheet)","answer":"ばらばら","question":"会議のとき、みんなの意見が[[BLANK]]で、なかなか決まらなかった。","id":91},{"lesson":12,"section":"3. 小テスト問題 (Test Sheet)","answer":"ごちゃごちゃ","question":"彼の机の上はいつも[[BLANK]]で、必要なものが見つからない。","id":92},{"lesson":12,"section":"3. 小テスト問題 (Test Sheet)","answer":"めちゃくちゃ","question":"弟におもちゃを貸したら、[[BLANK]]に壊されてしまった。","id":93}];
+const quizWords = vocabList.map(item => item.word);
+const QUIZ_STORAGE_KEY = "jp_onomatopoeia_mcq_v1";
+let activeModule = "flashcards";
+let activeLesson = 9;
+let activeQuestionId = null;
+let quizChecked = false;
+let quizAnswers = {};
+try {
+  const savedQuiz = JSON.parse(localStorage.getItem(QUIZ_STORAGE_KEY));
+  if (savedQuiz?.answers) quizAnswers = savedQuiz.answers;
+  if ([9,10,11,12].includes(savedQuiz?.lesson)) activeLesson = savedQuiz.lesson;
+} catch (_) {}
+
+function saveQuizState() {
+  localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify({answers:quizAnswers,lesson:activeLesson}));
+}
+function seededChoices(question) {
+  const pool = quizWords.filter(w => w !== question.answer);
+  let seed = question.id * 9301 + 49297;
+  const rand = () => { seed = (seed * 233280 + 12345) % 1000003; return seed / 1000003; };
+  for (let i=pool.length-1;i>0;i--) { const j=Math.floor(rand()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  const choices=[question.answer,...pool.slice(0,3)];
+  for (let i=choices.length-1;i>0;i--) { const j=Math.floor(rand()*(i+1)); [choices[i],choices[j]]=[choices[j],choices[i]]; }
+  return choices;
+}
+function switchModule(module) {
+  activeModule = module;
+  const isQuiz = module === "quiz";
+  el("flashcardModuleBtn").classList.toggle("active", !isQuiz);
+  el("quizModuleBtn").classList.toggle("active", isQuiz);
+  el("quizPanel").classList.toggle("active", isQuiz);
+  el("flashcardModeControl").style.display = isQuiz ? "none" : "flex";
+  el("shuffleBtn").style.display = isQuiz ? "none" : "inline-block";
+  ["card","wrongBtn","markBtn","correctBtn","prevBtn","nextBtn","progressText","reviewAllBtn"].forEach(()=>{});
+  document.querySelector(".card").style.display = isQuiz ? "none" : "block";
+  document.querySelector(".controls").style.display = isQuiz ? "none" : "grid";
+  document.querySelectorAll(".progress").forEach(x => x.style.display = isQuiz ? "none" : "block");
+  document.querySelector(".review-panel").style.display = isQuiz ? "none" : "block";
+  el("resetBtn").style.display = isQuiz ? "none" : "block";
+  document.querySelector("h1").textContent = isQuiz ? "擬聲詞／擬態詞（選擇題）" : "擬聲詞／擬態詞（16字）";
+  if (isQuiz) renderQuiz();
+}
+function questionHtml(q,index) {
+  const selected=quizAnswers[q.id] || "";
+  const state = quizChecked ? (selected === q.answer ? "correct" : "incorrect") : "";
+  const parts=q.question.split("[[BLANK]]");
+  const slot=`<button class="answer-slot ${selected?'filled':''}" type="button" data-question-id="${q.id}">${escapeHtml(selected || '選擇答案')}</button>`;
+  const feedback = selected === q.answer ? "✓ 正確" : `✕ 正確答案：${escapeHtml(q.answer)}`;
+  return `<article class="quiz-question ${state}" data-q-card="${q.id}">
+    <div class="q-meta">第${q.lesson}課・第${index+1}題</div>
+    <div class="q-text">${parts.map((p,i)=>escapeHtml(p)+(i<parts.length-1?slot:'')).join('')}</div>
+    <div class="q-feedback">${feedback}</div>
+  </article>`;
+}
+function renderQuiz() {
+  document.querySelectorAll(".lesson-tab").forEach(b=>b.classList.toggle("active",Number(b.dataset.lesson)===activeLesson));
+  const list=quizQuestions.filter(q=>q.lesson===activeLesson);
+  el("quizList").innerHTML=list.map(questionHtml).join("");
+  const answered=list.filter(q=>quizAnswers[q.id]).length;
+  el("quizCount").textContent=`本課共 ${list.length} 題｜已回答 ${answered} 題`;
+  if (quizChecked) {
+    const correct=list.filter(q=>quizAnswers[q.id]===q.answer).length;
+    el("quizResult").textContent=`結果：${correct} / ${list.length}`;
+  } else el("quizResult").textContent="";
+  el("quizList").querySelectorAll(".answer-slot").forEach(btn=>btn.addEventListener("click",()=>openChoiceModal(Number(btn.dataset.questionId))));
+  saveQuizState();
+}
+function openChoiceModal(id) {
+  activeQuestionId=id;
+  const q=quizQuestions.find(x=>x.id===id);
+  if(!q) return;
+  el("choiceGrid").innerHTML=seededChoices(q).map(w=>`<button class="choice-btn" type="button" data-word="${escapeHtml(w)}">${escapeHtml(w)}</button>`).join("");
+  el("choiceGrid").querySelectorAll(".choice-btn").forEach(btn=>btn.addEventListener("click",()=>{quizAnswers[id]=btn.dataset.word;quizChecked=false;closeChoiceModal();renderQuiz();}));
+  el("choiceModal").classList.add("open");
+  document.body.style.overflow="hidden";
+  setTimeout(()=>el("choiceGrid").querySelector("button")?.focus(),0);
+}
+function closeChoiceModal() { el("choiceModal").classList.remove("open");document.body.style.overflow="";activeQuestionId=null; }
+el("flashcardModuleBtn").addEventListener("click",()=>switchModule("flashcards"));
+el("quizModuleBtn").addEventListener("click",()=>switchModule("quiz"));
+document.querySelectorAll(".lesson-tab").forEach(btn=>btn.addEventListener("click",()=>{activeLesson=Number(btn.dataset.lesson);quizChecked=false;renderQuiz();window.scrollTo({top:0,behavior:'smooth'});}));
+el("choiceCancel").addEventListener("click",closeChoiceModal);
+el("choiceClear").addEventListener("click",()=>{if(activeQuestionId!=null) delete quizAnswers[activeQuestionId];quizChecked=false;closeChoiceModal();renderQuiz();});
+el("choiceModal").addEventListener("click",e=>{if(e.target===el("choiceModal")) closeChoiceModal();});
+el("checkQuizBtn").addEventListener("click",()=>{quizChecked=true;renderQuiz();const first=document.querySelector('.quiz-question.incorrect');if(first) first.scrollIntoView({behavior:'smooth',block:'center'});});
+el("clearQuizBtn").addEventListener("click",()=>{quizQuestions.filter(q=>q.lesson===activeLesson).forEach(q=>delete quizAnswers[q.id]);quizChecked=false;renderQuiz();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&el("choiceModal").classList.contains("open")) closeChoiceModal();});
+
 </script>
 </body>
 </html>
