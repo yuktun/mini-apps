@@ -210,6 +210,7 @@ html[data-theme="dark"] .quiz-style-toggle,html[data-theme="dark"] .instant-card
         <button id="instantRandomBtn" class="quiz-action instant-random-btn" type="button" aria-pressed="false">隨機次序：關</button>
       </div>
       <div class="lesson-tabs" id="lessonTabs">
+        <button class="lesson-tab" data-lesson="all">全部混合</button>
         <button class="lesson-tab active" data-lesson="9">第9課</button>
         <button class="lesson-tab" data-lesson="10">第10課</button>
         <button class="lesson-tab" data-lesson="11">第11課</button>
@@ -487,13 +488,13 @@ let activeQuestionId = null;
 let quizChecked = false;
 let quizAnswers = {};
 let quizStyle = "batch";
-let instantPositions = {9:0,10:0,11:0,12:0};
+let instantPositions = {all:0,9:0,10:0,11:0,12:0};
 let instantRandom = false;
 let instantOrders = {};
 try {
   const savedQuiz = JSON.parse(localStorage.getItem(QUIZ_STORAGE_KEY));
   if (savedQuiz?.answers) quizAnswers = savedQuiz.answers;
-  if ([9,10,11,12].includes(savedQuiz?.lesson)) activeLesson = savedQuiz.lesson;
+  if (savedQuiz?.lesson==="all" || [9,10,11,12].includes(savedQuiz?.lesson)) activeLesson = savedQuiz.lesson;
   if (["batch","instant"].includes(savedQuiz?.style)) quizStyle = savedQuiz.style;
   if (savedQuiz?.instantPositions) instantPositions = {...instantPositions,...savedQuiz.instantPositions};
   if (typeof savedQuiz?.instantRandom === "boolean") instantRandom = savedQuiz.instantRandom;
@@ -543,6 +544,9 @@ function questionHtml(q,index) {
 }
 function instantExplanation(word) {
   return vocabList.find(item=>item.word===word) || null;
+}
+function currentQuizQuestions() {
+  return activeLesson==="all" ? quizQuestions : quizQuestions.filter(q=>q.lesson===activeLesson);
 }
 function shuffledQuestionIds(list) {
   const ids=list.map(q=>q.id);
@@ -610,7 +614,7 @@ function moveInstant(delta,length) {
   el("quizPanel").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function renderQuiz() {
-  document.querySelectorAll(".lesson-tab").forEach(b=>b.classList.toggle("active",Number(b.dataset.lesson)===activeLesson));
+  document.querySelectorAll(".lesson-tab").forEach(b=>b.classList.toggle("active",String(b.dataset.lesson)===String(activeLesson)));
   el("batchQuizBtn").classList.toggle("active",quizStyle==="batch");
   el("instantQuizBtn").classList.toggle("active",quizStyle==="instant");
   el("instantRandomBtn").style.display=quizStyle==="instant"?"":"none";
@@ -618,10 +622,10 @@ function renderQuiz() {
   el("instantRandomBtn").setAttribute("aria-pressed",String(instantRandom));
   el("instantRandomBtn").textContent=`隨機次序：${instantRandom?'開':'關'}`;
   el("checkQuizBtn").style.display=quizStyle==="batch"?"":"none";
-  el("clearQuizBtn").textContent=quizStyle==="batch"?"重新練習本課":"清除本課進度";
-  const list=quizQuestions.filter(q=>q.lesson===activeLesson);
+  el("clearQuizBtn").textContent=quizStyle==="batch"?(activeLesson==="all"?"重新練習全部課次":"重新練習本課"):(activeLesson==="all"?"清除全部課次進度":"清除本課進度");
+  const list=currentQuizQuestions();
   const answered=list.filter(q=>quizAnswers[q.id]).length;
-  el("quizCount").textContent=`本課共 ${list.length} 題｜已回答 ${answered} 題`;
+  el("quizCount").textContent=`${activeLesson==="all"?'全部課次':'本課'}共 ${list.length} 題｜已回答 ${answered} 題`;
   if (quizStyle==="instant") {
     renderInstantQuiz(instantQuestionList(list));
     const correct=list.filter(q=>quizAnswers[q.id]===q.answer).length;
@@ -655,15 +659,15 @@ el("instantQuizBtn").addEventListener("click",()=>{quizStyle="instant";quizCheck
 el("instantRandomBtn").addEventListener("click",()=>{
   instantRandom=!instantRandom;
   instantPositions[activeLesson]=0;
-  if (instantRandom) instantOrders[activeLesson]=shuffledQuestionIds(quizQuestions.filter(q=>q.lesson===activeLesson));
+  if (instantRandom) instantOrders[activeLesson]=shuffledQuestionIds(currentQuizQuestions());
   renderQuiz();
 });
-document.querySelectorAll(".lesson-tab").forEach(btn=>btn.addEventListener("click",()=>{activeLesson=Number(btn.dataset.lesson);quizChecked=false;renderQuiz();window.scrollTo({top:0,behavior:'smooth'});}));
+document.querySelectorAll(".lesson-tab").forEach(btn=>btn.addEventListener("click",()=>{activeLesson=btn.dataset.lesson==="all"?"all":Number(btn.dataset.lesson);quizChecked=false;renderQuiz();window.scrollTo({top:0,behavior:'smooth'});}));
 el("choiceCancel").addEventListener("click",closeChoiceModal);
 el("choiceClear").addEventListener("click",()=>{if(activeQuestionId!=null) delete quizAnswers[activeQuestionId];quizChecked=false;closeChoiceModal();renderQuiz();});
 el("choiceModal").addEventListener("click",e=>{if(e.target===el("choiceModal")) closeChoiceModal();});
 el("checkQuizBtn").addEventListener("click",()=>{quizChecked=true;renderQuiz();const first=document.querySelector('.quiz-question.incorrect');if(first) first.scrollIntoView({behavior:'smooth',block:'center'});});
-el("clearQuizBtn").addEventListener("click",()=>{quizQuestions.filter(q=>q.lesson===activeLesson).forEach(q=>delete quizAnswers[q.id]);quizChecked=false;renderQuiz();});
+el("clearQuizBtn").addEventListener("click",()=>{currentQuizQuestions().forEach(q=>delete quizAnswers[q.id]);quizChecked=false;renderQuiz();});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&el("choiceModal").classList.contains("open")) closeChoiceModal();});
 
 </script>
