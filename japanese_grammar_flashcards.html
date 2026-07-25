@@ -14,11 +14,11 @@
 .status{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#6b7280;font-size:14px;margin:12px 2px 14px} .card{min-height:510px;border-radius:28px;box-shadow:0 10px 28px #00000018;cursor:pointer;position:relative;overflow:hidden;transition:.2s} .card.front{background:#30343b;color:white} .card.back{background:white;border:1px solid #e5e7eb} .card-inner{min-height:510px;padding:26px 34px;display:flex;flex-direction:column}
 .meta{display:flex;justify-content:space-between;gap:12px;color:#9ca3af;font-weight:700} .jump-box{display:flex;align-items:center;gap:6px} .jump-input{width:64px;padding:5px 7px;border:1px solid #cbd5e1;border-radius:8px;text-align:center;font:inherit} .jump-go{border:0;background:#2563eb;color:white;border-radius:8px;padding:6px 10px;font-weight:800;cursor:pointer} .badge{font-size:12px;border:1px solid #6b7280;border-radius:999px;padding:5px 9px;white-space:nowrap} .answer-badge{background:#eff6ff;color:var(--blue);border-color:#bfdbfe}
 .center{flex:1;display:flex;align-items:center;justify-content:center;text-align:center} .question-wrap{width:100%;max-width:720px} .lesson-tag{display:inline-block;font-size:13px;font-weight:800;background:#ffffff1f;border:1px solid #ffffff42;border-radius:999px;padding:5px 10px;margin-bottom:18px} .question{font-size:clamp(25px,4vw,39px);line-height:1.5;font-weight:750;margin:0} .question-sub{margin-top:18px;color:#cbd5e1;font-size:16px;line-height:1.6} .hint{text-align:center;color:#9ca3af;letter-spacing:.16em;font-size:14px}
-.answer{width:100%;max-width:740px;text-align:left;line-height:1.65} .grammar{font-size:clamp(29px,5vw,44px);font-weight:850;color:var(--blue);text-align:center;margin:4px 0 18px} .section{margin-top:15px} .label{font-size:13px;letter-spacing:.12em;font-weight:850;color:#64748b;margin-bottom:5px} .value{font-size:18px} .example{background:#eff6ff;border:1px solid #dbeafe;border-radius:14px;padding:15px;margin-top:14px} .jp{font-size:20px;font-weight:700;line-height:1.55} .jp-reading{color:#2563eb;margin-top:6px;font-size:16px;line-height:1.55}.jp-reading span{font-weight:850}.zh{margin-top:6px;color:#4b5563} .note{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:11px 13px;color:#9a3412}
+.answer{width:100%;max-width:740px;text-align:left;line-height:1.65} .grammar{font-size:clamp(29px,5vw,44px);font-weight:850;color:var(--blue);text-align:center;margin:4px 0 18px} .section{margin-top:15px} .label{font-size:13px;letter-spacing:.12em;font-weight:850;color:#64748b;margin-bottom:5px} .value{font-size:18px} .example{background:#eff6ff;border:1px solid #dbeafe;border-radius:14px;padding:15px;margin-top:14px} .jp{font-size:20px;font-weight:700;line-height:1.55}.grammar-focus{background:#fef08a;color:#713f12;border-radius:4px;padding:0 .08em;box-shadow:inset 0 -2px #eab308}.jp-reading{color:#2563eb;margin-top:6px;font-size:16px;line-height:1.55}.jp-reading span{font-weight:850}.zh{margin-top:6px;color:#4b5563} .note{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:11px 13px;color:#9a3412}
 .controls{display:grid;grid-template-columns:56px minmax(64px,88px) 52px minmax(64px,88px) 56px;justify-content:center;align-items:center;gap:14px;margin-top:24px} .btn{border:0;background:white;cursor:pointer;box-shadow:0 2px 8px #00000010;font-weight:800} .circle{width:56px;height:56px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:25px} .score{height:56px;min-width:88px;border-radius:999px;font-size:19px;display:flex;align-items:center;justify-content:center;gap:8px} .bad{border:1px solid #fecaca;color:var(--red)} .good{border:1px solid #bbf7d0;color:var(--green)} .mark-btn{width:52px;height:52px;border-radius:50%;border:2px solid var(--blue);color:var(--blue);font-size:26px;background:white}.mark-btn.active{background:#fff7d6;border-color:#e5b84b;color:#b7791f}.mark-btn:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
 .review-panel{margin-top:20px;background:white;border:1px solid #e5e7eb;border-radius:16px;padding:15px;box-shadow:0 2px 10px #0000000d} .review-title{font-weight:800;color:#374151;margin-bottom:11px;text-align:center} .review-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap} .review-btn{border:1px solid #d1d5db;background:white;color:#4b5563;padding:8px 12px;border-radius:999px;font-weight:700;cursor:pointer} .review-btn.active{background:#eff6ff;color:#2563eb;border-color:#93c5fd} .review-btn.correct.active{background:#f0fdf4;color:#15803d;border-color:#86efac} .review-btn.incorrect.active{background:#fef2f2;color:#dc2626;border-color:#fca5a5}.review-btn.marked.active{background:#fff7d6;color:#9a6700;border-color:#e5b84b} .review-note{text-align:center;color:#6b7280;font-size:13px;margin-top:9px} .reset{display:block;margin:22px auto 0;border:0;background:transparent;color:#6b7280;cursor:pointer;font-size:14px}
 @media(max-width:600px){.app{padding:16px 11px 28px} .card,.card-inner{min-height:540px} .card-inner{padding:20px 18px} .controls{gap:6px;grid-template-columns:52px minmax(58px,1fr) 48px minmax(58px,1fr) 52px}.controls button{min-width:0}.score{width:100%;font-size:17px}.mark-btn{width:48px;height:48px} .value{font-size:16px} .jp{font-size:18px}.jp-reading{font-size:15px}}
-[data-theme="dark"] .example{background:#142238;border-color:#334155}[data-theme="dark"] .jp-reading{color:#93c5fd}[data-theme="dark"] .zh{color:#cbd5e1}
+[data-theme="dark"] .example{background:#142238;border-color:#334155}[data-theme="dark"] .grammar-focus{background:#854d0e;color:#fef3c7;box-shadow:inset 0 -2px #facc15}[data-theme="dark"] .jp-reading{color:#93c5fd}[data-theme="dark"] .zh{color:#cbd5e1}
 
 .home-fab{position:fixed;top:16px;left:16px;z-index:999;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.94);color:#17324d;border:1px solid #dbe4ee;text-decoration:none;font-weight:800;box-shadow:0 8px 24px rgba(15,23,42,.14);backdrop-filter:blur(10px);transition:.18s}
 .home-fab:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,23,42,.2)}
@@ -76,9 +76,53 @@ const exampleReadings=new Map([
 ["この店はどちらかといえば、安いほうです。","この みせは どちらかと いえば、やすい ほうです。"],
 ["どうか大きな地震が起きませんように。","どうか おおきな じしんが おきません ように。"]
 ]);
+const grammarHighlights=new Map([
+["何をお読みですか。",["お読みです"]],
+["先生はもうお見えですか。",["お見えです"]],
+["ここに座ってもかまいませんか。",["てもかまいません"]],
+["中国は日本より広いが、ロシアほど広くはない。",["ほど","広くはない"]],
+["料理は思ったほどおいしくなかった。",["思ったほど","なかった"]],
+["まだコートを着るほどではない。",["ほどではない"]],
+["田中さんほど仕事がよくできる人はいません。",["ほど","いません"]],
+["大雪が降ったために、空港が使えなくなりました。",["ために"]],
+["お金があれば、このパソコンが買えたのに。",["あれば","買えた"]],
+["2時に大阪を出発すれば、3時には着くはずだ。",["はずだ"]],
+["今日の試合は負けるはずがない。",["はずがない"]],
+["旅行に行くはずだった。しかし、病気で行けなくなった。",["はずだった"]],
+["このエレベーターは、たまに止まることがある。",["ことがある"]],
+["調査した結果、この町の人口が減っていることがわかりました。",["結果"]],
+["急に雨が降り出した。",["降り出した"]],
+["5分間走り続けてください。",["走り続けて"]],
+["塩を入れ忘れたので、おいしくない。",["入れ忘れた"]],
+["困ったときこそ助け合うことが大切だ。",["助け合う"]],
+["電車からバスに乗り換えた。",["乗り換えた"]],
+["今夜カレーを食べれば、3日続けて食べたということになる。",["食べたということになる"]],
+["だんだん春らしくなってきました。",["なってきました"]],
+["薬を飲んで、今日は早く寝たら？",["たら"]],
+["漢字は見て覚えるより、書いて覚えるほうが忘れにくい。",["より","ほうが"]],
+["春らしい色のバッグですね。",["らしい"]],
+["新聞によると、中国で大きな地震があったらしい。",["らしい"]],
+["会社の代表として、新しい商品の説明をした。",["として"]],
+["辞書を使わずに新聞を読めるようになりたい。",["ずに"]],
+["子どもの熱が下がらず、心配しました。",["ず"]],
+["この寺はいままで2回、火事で焼けている。",["ている"]],
+["田中さんなんかいいと思うよ。",["なんか"]],
+["急いでいたものですから、かぎをかけるのを忘れました。",["ものですから"]],
+["わたしは雨に降られて、ぬれてしまった。",["降られて"]],
+["私は隣の人に家の前にごみを捨てられて困っています。",["捨てられて"]],
+["映画を見て、笑ったり泣いたりしました。",["笑ったり","泣いたり"]],
+["ドアが開けっぱなしだよ。早く閉めなさい。",["開けっぱなし"]],
+["先生のおかげで、研修を受けられることになった。",["おかげで"]],
+["事故のせいで、授業に遅れてしまった。",["せいで"]],
+["田中さんはお酒を飲んだみたいです。顔が赤いです。",["みたいです"]],
+["この店はどちらかといえば、安いほうです。",["どちらかといえば","ほうです"]],
+["どうか大きな地震が起きませんように。",["ませんように"]]
+]);
 let state={order:cards.map((_,i)=>i),pos:0,flipped:false,mode:'sentence',shuffle:false,lesson:'all',statuses:{},marked:{},retainedMarkedIndex:null,review:'all'};
 try{const s=JSON.parse(localStorage.getItem(KEY));if(s)state={...state,...s,flipped:false}}catch(_e){}
 const $=id=>document.getElementById(id); const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const escapeRegExp=s=>String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function highlightedExample(item){const text=String(item.example),terms=[...new Set(grammarHighlights.get(item.example)||[])].filter(Boolean).sort((a,b)=>b.length-a.length);if(!terms.length)return esc(text);const pattern=new RegExp(terms.map(escapeRegExp).join('|'),'g');let output='',last=0;text.replace(pattern,(match,offset)=>{output+=esc(text.slice(last,offset))+`<mark class="grammar-focus">${esc(match)}</mark>`;last=offset+match.length;return match});return output+esc(text.slice(last))}
 function baseIndices(){return state.order.filter(i=>state.lesson==='all'||cards[i].lesson===Number(state.lesson))}
 function visible(){let a=baseIndices();if(state.review==='correct')a=a.filter(i=>state.statuses[i]==='correct');if(state.review==='incorrect')a=a.filter(i=>state.statuses[i]==='incorrect');if(state.review==='marked'){a=a.filter(i=>state.marked[i]);if(state.retainedMarkedIndex!=null&&!a.includes(state.retainedMarkedIndex))a.splice(Math.min(state.pos,a.length),0,state.retainedMarkedIndex)}return a}
 function save(){localStorage.setItem(KEY,JSON.stringify({...state,flipped:false}))}
@@ -91,7 +135,7 @@ $('reviewAllBtn').classList.toggle('active',state.review==='all');$('reviewCorre
 const card=$('card'),content=$('content'),badge=$('sideBadge'),hint=$('hint');card.className='card '+(state.flipped?'back':'front');badge.textContent=state.flipped?'詳細解釋':'點擊翻面';badge.className='badge'+(state.flipped?' answer-badge':'');hint.style.display=state.flipped?'none':'block';
 if(!item){content.innerHTML='<div class="question-wrap"><p class="question">這個分類暫時沒有題目。</p></div>';save();return}
 if(!state.flipped){if(state.mode==='sentence')content.innerHTML=`<div class="question-wrap"><div class="lesson-tag">第${item.lesson}課</div><p class="question">${esc(item.example)}</p><div class="question-sub">這句使用甚麼文法？意思、接續和注意點是甚麼？</div></div>`;else content.innerHTML=`<div class="question-wrap"><div class="lesson-tag">第${item.lesson}課</div><p class="question">${esc(item.usage)}</p><div class="question-sub">應該使用哪個日文文法？請想出一個例句。</div></div>`}
-else{content.innerHTML=`<div class="answer"><div class="grammar">${esc(item.grammar)}</div><div class="section"><div class="label">中文用法</div><div class="value">${esc(item.usage)}</div></div><div class="section"><div class="label">接續</div><div class="value">${esc(item.connection)}</div></div><div class="example"><div class="jp">${esc(item.example)}</div><div class="jp-reading"><span>ひらがな：</span>${esc(exampleReadings.get(item.example)||"")}</div><div class="zh">${esc(item.translation)}</div></div><div class="section"><div class="label">詳細解釋</div><div class="value">${esc(item.detail)}</div></div><div class="section note">💡 ${esc(item.note)}</div></div>`} save()}
+else{content.innerHTML=`<div class="answer"><div class="grammar">${esc(item.grammar)}</div><div class="section"><div class="label">中文用法</div><div class="value">${esc(item.usage)}</div></div><div class="section"><div class="label">接續</div><div class="value">${esc(item.connection)}</div></div><div class="example"><div class="jp">${highlightedExample(item)}</div><div class="jp-reading"><span>ひらがな：</span>${esc(exampleReadings.get(item.example)||"")}</div><div class="zh">${esc(item.translation)}</div></div><div class="section"><div class="label">詳細解釋</div><div class="value">${esc(item.detail)}</div></div><div class="section note">💡 ${esc(item.note)}</div></div>`} save()}
 function move(n){state.retainedMarkedIndex=null;const a=visible();state.flipped=false;if(a.length)state.pos=(state.pos+n+a.length)%a.length;render()}
 function reshuffle(){state.order=cards.map((_,i)=>i);for(let i=state.order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[state.order[i],state.order[j]]=[state.order[j],state.order[i]]}state.pos=0}
 function mark(v){const idx=currentIndex();if(idx===null)return;state.statuses[idx]=v;save();move(1)}
