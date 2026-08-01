@@ -91,7 +91,7 @@ html[data-theme="dark"] .vocab-picker{background:rgba(2,6,23,.78)}html[data-them
   }
 }
 
-</style><script src="quiz_history.js"></script><script src="theme.js"></script></head><body>
+</style><script src="quiz_history.js"></script><script src="furigana.js"></script><script src="theme.js"></script></head><body>
 <a class="home-fab" href="index.html" aria-label="返回首頁">⌂ <span>首頁</span></a><main class="app">
 <section class="hero"><h1>📖 期終考試閱讀理解</h1><p>第9–12課課文原文、繁體中文翻譯、閱讀理解、原文找答案、完整課本單字拖放練習、模擬考試及錯題重溫。</p></section>
 <nav class="tabs" id="tabs"></nav><section class="toolbar"><div class="chips" id="lessonChips"></div><span id="saveText">進度已自動保存</span></section><section id="content"></section>
@@ -171,10 +171,10 @@ function setLesson(n){
   if(s.tab==="exam" && s.examLesson!==n) startExam();
   render();
 }
-function render(){nav();const c=$("content");if(s.tab==="original")c.innerHTML=essayHTML(false);if(s.tab==="translation")c.innerHTML=essayHTML(true);if(s.tab==="questions")c.innerHTML=questionHTML(lesson().questions,"q");if(s.tab==="evidence")c.innerHTML=evidenceHTML();if(s.tab==="vocab")c.innerHTML=vocabHTML();if(s.tab==="exam")c.innerHTML=examHTML();if(s.tab==="wrong")c.innerHTML=wrongHTML();save()}
-function essayHTML(zh){const x=lesson(),arr=zh?x.zh:x.jp;return `<section class="panel"><div class="titlebar"><div><span class="badge">第${x.lesson}課</span><h2>${x.title}</h2></div><div class="control"><button class="btn secondary" onclick="changeFont(-1)">A−</button><button class="btn secondary" onclick="changeFont(1)">A＋</button></div></div><article class="essay" style="font-size:${s.font}px">${arr.map(p=>`<p class="para">${p.replace(/^([^：]{1,8})：/,'<span class="speaker">$1：</span>')}</p>`).join("")}</article></section>`}
+function render(){nav();const c=$("content");if(s.tab==="original")c.innerHTML=essayHTML(false);if(s.tab==="translation")c.innerHTML=essayHTML(true);if(s.tab==="questions")c.innerHTML=questionHTML(lesson().questions,"q");if(s.tab==="evidence")c.innerHTML=evidenceHTML();if(s.tab==="vocab")c.innerHTML=vocabHTML();if(s.tab==="exam")c.innerHTML=examHTML();if(s.tab==="wrong")c.innerHTML=wrongHTML();Furigana.apply(c);save()}
+function essayHTML(zh){const x=lesson(),arr=zh?x.zh:x.jp;return `<section class="panel"><div class="titlebar"><div><span class="badge">第${x.lesson}課</span><h2>${x.title}</h2></div><div class="control"><button class="btn secondary" onclick="changeFont(-1)">A−</button><button class="btn secondary" onclick="changeFont(1)">A＋</button></div></div><article class="essay" ${zh?'':'lang="ja"'} style="font-size:${s.font}px">${arr.map(p=>`<p class="para">${p.replace(/^([^：]{1,8})：/,'<span class="speaker">$1：</span>')}</p>`).join("")}</article></section>`}
 function changeFont(n){s.font=Math.max(15,Math.min(24,s.font+n));render()}
-function questionHTML(list,type){let i=s.qIndex%list.length,q=list[i];return `<section class="panel qa"><div class="progress"><span>第${s.lesson}課 · 閱讀理解</span><span>${i+1} / ${list.length}</span></div><div class="question"><h3>${q.q}</h3><div>${q.choices.map((x,j)=>`<button class="choice" onclick="answer(this,${j},${q.a},'${type}',${i})">${x}</button>`).join("")}</div><div id="fb"></div></div><div class="control"><button class="btn secondary" onclick="moveQ(-1)">← 上一題</button><button class="btn primary" onclick="moveQ(1)">下一題 →</button></div></section>`}
+function questionHTML(list,type){let i=s.qIndex%list.length,q=list[i];return `<section class="panel qa"><div class="progress"><span>第${s.lesson}課 · 閱讀理解</span><span>${i+1} / ${list.length}</span></div><div class="question"><h3 lang="ja">${q.q}</h3><div>${q.choices.map((x,j)=>`<button class="choice" lang="ja" onclick="answer(this,${j},${q.a},'${type}',${i})">${x}</button>`).join("")}</div><div id="fb"></div></div><div class="control"><button class="btn secondary" onclick="moveQ(-1)">← 上一題</button><button class="btn primary" onclick="moveQ(1)">下一題 →</button></div></section>`}
 function answer(btn,pick,ans,type,idx){if(s.answered)return;s.answered=true;document.querySelectorAll(".choice").forEach((b,j)=>{if(j===ans)b.classList.add("correct")});let ok=pick===ans;if(!ok)btn.classList.add("wrong");let q=type==="v"?lesson().vocab[idx]:lesson().questions[idx];let why=type==="v"?"完整句子中的正確詞語如綠色選項所示。":q.why;$("fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}">${ok?"✓ 正確":"✕ 答錯"}<br>${why}</div>`;let key=`${s.lesson}-${type}-${idx}`;if(ok)s.wrong=s.wrong.filter(x=>x!==key);else if(!s.wrong.includes(key))s.wrong.push(key);save()}
 function moveQ(n){s.qIndex=(s.qIndex+n+lesson().questions.length)%lesson().questions.length;s.answered=false;render()}
 function vocabHTML(){
@@ -186,11 +186,11 @@ function vocabHTML(){
   let rows=vocab.map((v,i)=>{
     const answerIndexes=Array.isArray(v[2])?v[2]:[v[2]];
     let blankNo=0;
-    const sentence=v[0].replace(/（　）/g,()=>{
+    const sentence=Furigana.render(v[0]).replace(/（　）/g,()=>{
       const slotKey=`${i}-${blankNo}`;
       const val=s.vocabSlots[key][slotKey]||"";
       const slotId=`vocab-slot-${d.lesson}-${i}-${blankNo}`;
-      const html=`<button type="button" id="${slotId}" class="drop-slot ${val?"filled":""}" data-slot="${slotKey}" aria-label="第 ${i+1} 題第 ${blankNo+1} 個空格，${val||'放入答案'}" onclick="handleVocabSlotTap('${slotKey}')" ondragover="event.preventDefault()" ondrop="dropWord(event,'${slotKey}')">${val||"放入答案"}</button>`;
+      const html=`<button type="button" id="${slotId}" class="drop-slot ${val?"filled":""}" data-slot="${slotKey}" aria-label="第 ${i+1} 題第 ${blankNo+1} 個空格，${val||'放入答案'}" onclick="handleVocabSlotTap('${slotKey}')" ondragover="event.preventDefault()" ondrop="dropWord(event,'${slotKey}')">${val?Furigana.render(val):"放入答案"}</button>`;
       blankNo++;
       return html;
     });
@@ -199,7 +199,7 @@ function vocabHTML(){
   return `<section class="panel">
     <div class="titlebar"><div><span class="badge">第${d.lesson}課</span><h2>單字拖放練習</h2></div><span class="badge">拖放或點擊填入</span></div>
     <div class="note">電腦可直接拖動；iPhone 可先點選字詞，再點空格。同一個詞可以重複使用。</div>
-    <div class="word-bank">${words.map(w=>`<button class="word-chip" draggable="true" ondragstart="dragWord(event,'${encodeURIComponent(w)}')" onclick="selectWord(this,'${encodeURIComponent(w)}')">${w}</button>`).join("")}</div>
+    <div class="word-bank">${words.map(w=>`<button class="word-chip" draggable="true" ondragstart="dragWord(event,'${encodeURIComponent(w)}')" onclick="selectWord(this,'${encodeURIComponent(w)}')">${Furigana.render(w)}</button>`).join("")}</div>
     <div class="vocab-list">${rows}</div>
     <div id="vocabResult"></div>
     <div class="control" style="margin-top:16px">
@@ -279,7 +279,7 @@ function evidenceHTML(){
     <div class="titlebar"><div><span class="badge">第${d.lesson}課</span><h2>原文找答案</h2></div><span class="badge">${s.evidenceIndex+1} / ${list.length}</span></div>
     <div class="evidence-question">${q.q}</div>
     <div class="note">點擊一至三句作為答案證據，再按「提交證據」。</div>
-    <div class="sentence-list">${sentences.map(x=>`<button class="sentence-item ${selected.has(x.id)?"selected":""}" onclick="toggleEvidence('${x.id}')">${x.text}</button>`).join("")}</div>
+    <div class="sentence-list">${sentences.map(x=>`<button class="sentence-item ${selected.has(x.id)?"selected":""}" lang="ja" onclick="toggleEvidence('${x.id}')">${x.text}</button>`).join("")}</div>
     <div id="evidenceFeedback"></div>
     <div class="control" style="margin-top:16px">
       <button class="btn secondary" onclick="moveEvidence(-1)">← 上一題</button>
@@ -357,7 +357,7 @@ function examHTML(){
       if(j===q.a) cls+=" correct";
       else if(j===saved) cls+=" wrong";
     }
-    return `<button class="${cls}" ${answered?"disabled":""} onclick="answerExam(this,${j})">${x}</button>`;
+    return `<button class="${cls}" lang="ja" ${answered?"disabled":""} onclick="answerExam(this,${j})">${x}</button>`;
   }).join("");
   let feedback=answered
     ? `<div class="feedback ${saved===q.a?"ok":"no"}">${saved===q.a?"✓ 正確":"✕ 答錯"}<br>${q.why||"請重新查看課文內容。"}</div>`
@@ -365,7 +365,7 @@ function examHTML(){
   return `<section class="panel qa">
     <div class="progress"><span>模擬考試 · 第${q.lesson}課</span><span>${s.examIndex+1} / ${s.exam.length}</span></div>
     <div class="question">
-      <h3>${q.q}</h3>
+      <h3 lang="ja">${q.q}</h3>
       ${choices}
       <div id="fb">${feedback}</div>
     </div>
@@ -412,7 +412,7 @@ function closeEssayModal(){$("essayModal").classList.add("hidden");document.body
 $('essayModal').addEventListener('click',e=>{if(e.target===$('essayModal'))closeEssayModal()});
 $('vocabPicker').addEventListener('click',e=>{if(e.target===$('vocabPicker'))closeVocabPicker()});
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('vocabPicker').classList.contains('hidden'))closeVocabPicker();else if(!$('essayModal').classList.contains('hidden'))closeEssayModal()});
-function wrongHTML(){let qs=[];s.wrong.forEach(key=>{let parts=key.split("-");if(parts.length>3)return;let [l,t,i]=parts,d=DATA.find(x=>x.lesson===Number(l));if(!d)return;if(t==="q"){let q=d.questions[Number(i)];qs.push({lesson:l,key,q:q.q,choices:q.choices,a:q.a,why:q.why})}else{let v=d.vocab[Number(i)];qs.push({lesson:l,key,q:v[0],choices:v[1],a:v[2],why:"請留意正確詞語和整句搭配。"})}});if(!qs.length)return `<section class="panel"><div class="note">目前沒有錯題。閱讀問題、單字練習或模擬考試中答錯的題目會自動加入這裡。</div></section>`;let q=qs[s.qIndex%qs.length];return `<section class="panel qa"><div class="progress"><span>錯題重溫 · 第${q.lesson}課</span><span>${s.qIndex%qs.length+1} / ${qs.length}</span></div><div class="question"><h3>${q.q}</h3>${q.choices.map((x,j)=>`<button class="choice" onclick="answerWrong(this,${j},${q.a},'${q.key}')">${x}</button>`).join("")}<div id="fb"></div></div><div class="control"><button class="btn primary" onclick="s.qIndex++;s.answered=false;render()">下一題 →</button></div></section>`}
+function wrongHTML(){let qs=[];s.wrong.forEach(key=>{let parts=key.split("-");if(parts.length>3)return;let [l,t,i]=parts,d=DATA.find(x=>x.lesson===Number(l));if(!d)return;if(t==="q"){let q=d.questions[Number(i)];qs.push({lesson:l,key,q:q.q,choices:q.choices,a:q.a,why:q.why})}else{let v=d.vocab[Number(i)];qs.push({lesson:l,key,q:v[0],choices:v[1],a:v[2],why:"請留意正確詞語和整句搭配。"})}});if(!qs.length)return `<section class="panel"><div class="note">目前沒有錯題。閱讀問題、單字練習或模擬考試中答錯的題目會自動加入這裡。</div></section>`;let q=qs[s.qIndex%qs.length];return `<section class="panel qa"><div class="progress"><span>錯題重溫 · 第${q.lesson}課</span><span>${s.qIndex%qs.length+1} / ${qs.length}</span></div><div class="question"><h3 lang="ja">${q.q}</h3>${q.choices.map((x,j)=>`<button class="choice" lang="ja" onclick="answerWrong(this,${j},${q.a},'${q.key}')">${x}</button>`).join("")}<div id="fb"></div></div><div class="control"><button class="btn primary" onclick="s.qIndex++;s.answered=false;render()">下一題 →</button></div></section>`}
 function answerWrong(btn,pick,ans,key){if(s.answered)return;s.answered=true;document.querySelectorAll(".choice").forEach((b,j)=>{if(j===ans)b.classList.add("correct")});let ok=pick===ans;if(!ok)btn.classList.add("wrong");if(ok)s.wrong=s.wrong.filter(x=>x!==key);$("fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}">${ok?"✓ 已從錯題移除":"✕ 再看一次正確選項"}</div>`;save()}
 render();
 </script></body></html>
