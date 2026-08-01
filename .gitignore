@@ -1,0 +1,8 @@
+*.zip
+archive/
+backup/
+backups/
+old/
+previous/
+temp/
+temporary/
