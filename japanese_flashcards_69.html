@@ -106,7 +106,7 @@ html[data-theme="dark"] .quiz-navigator{border-top-color:#334155}html[data-theme
 @media(max-width:600px){.home-fab{top:10px;left:10px;padding:9px 12px;font-size:14px}.app{padding-top:64px!important}}
 
 </style>
-<script src="quiz_history.js"></script><script src="theme.js"></script></head>
+<script src="quiz_history.js"></script><script src="theme.js"></script><script src="furigana.js"></script></head>
 <body>
 <a class="home-fab" href="index.html" aria-label="返回首頁">⌂ <span>首頁</span></a>
 <div class="app">
@@ -356,11 +356,12 @@ function render() {
         : `片假名：<span class="purple">${escapeHtml(item.word)}</span><br>來源：${escapeHtml(item.read_src)}<br>意思：${escapeHtml(item.meaning)}`;
     } else {
       html = item.type === "kanji"
-        ? `漢字：<span class="blue">${escapeHtml(item.word)}</span><br>意思：${escapeHtml(item.meaning)}`
+        ? `漢字：<span class="blue" lang="ja">${escapeHtml(item.word)}</span><br>意思：${escapeHtml(item.meaning)}`
         : `來源：<span class="purple">${escapeHtml(item.read_src)}</span><br>意思：${escapeHtml(item.meaning)}`;
     }
     if (item.tip) html += `<span class="tip">💡 ${escapeHtml(item.tip)}</span>`;
     content.innerHTML = `<div class="answer">${html}</div>`;
+    Furigana.apply(content);
   }
   save();
 }

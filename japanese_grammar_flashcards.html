@@ -26,7 +26,7 @@
 .home-fab:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,23,42,.2)}
 @media(max-width:600px){.home-fab{top:10px;left:10px;padding:9px 12px;font-size:14px}.app{padding-top:64px!important}}
 
-</style><script src="theme.js"></script></head><body>
+</style><script src="theme.js"></script><script src="furigana.js"></script></head><body>
 <a class="home-fab" href="index.html" aria-label="返回首頁">⌂ <span>首頁</span></a><div class="app">
 <div class="top"><h1>期終考試文法（第9–12課）</h1></div>
 <div id="flashcardMode"><div class="top"><div class="toolbar"><div class="segment"><button id="sentenceBtn">例句 → 解釋</button><button id="usageBtn">中文用法 → 文法</button></div><button id="shuffleBtn" class="small-btn">隨機模式</button></div></div>
@@ -138,7 +138,7 @@ $('reviewAllBtn').classList.toggle('active',state.review==='all');$('reviewCorre
 const card=$('card'),content=$('content'),badge=$('sideBadge'),hint=$('hint');card.className='card '+(state.flipped?'back':'front');badge.textContent=state.flipped?'詳細解釋':'點擊翻面';badge.className='badge'+(state.flipped?' answer-badge':'');hint.style.display=state.flipped?'none':'block';
 if(!item){content.innerHTML='<div class="question-wrap"><p class="question">這個分類暫時沒有題目。</p></div>';save();return}
 if(!state.flipped){if(state.mode==='sentence')content.innerHTML=`<div class="question-wrap"><div class="lesson-tag">第${item.lesson}課</div><p class="question">${esc(item.example)}</p><div class="question-sub">這句使用甚麼文法？意思、接續和注意點是甚麼？</div></div>`;else content.innerHTML=`<div class="question-wrap"><div class="lesson-tag">第${item.lesson}課</div><p class="question">${esc(item.usage)}</p><div class="question-sub">應該使用哪個日文文法？請想出一個例句。</div></div>`}
-else{content.innerHTML=`<div class="answer"><div class="grammar">${esc(item.grammar)}</div><div class="section"><div class="label">中文用法</div><div class="value">${esc(item.usage)}</div></div><div class="section"><div class="label">接續</div><div class="value">${esc(item.connection)}</div></div><div class="example"><div class="jp">${highlightedExample(item)}</div><div class="jp-reading"><span>ひらがな：</span>${esc(exampleReadings.get(item.example)||"")}</div><div class="zh">${esc(item.translation)}</div></div><div class="section"><div class="label">詳細解釋</div><div class="value">${esc(item.detail)}</div></div><div class="section note">💡 ${esc(item.note)}</div></div>`} save()}
+else{content.innerHTML=`<div class="answer"><div class="grammar" lang="ja">${esc(item.grammar)}</div><div class="section"><div class="label">中文用法</div><div class="value">${esc(item.usage)}</div></div><div class="section"><div class="label">接續</div><div class="value" lang="ja">${esc(item.connection)}</div></div><div class="example"><div class="jp" lang="ja">${highlightedExample(item)}</div><div class="jp-reading"><span>ひらがな：</span>${esc(exampleReadings.get(item.example)||"")}</div><div class="zh">${esc(item.translation)}</div></div><div class="section"><div class="label">詳細解釋</div><div class="value">${esc(item.detail)}</div></div><div class="section note">💡 ${esc(item.note)}</div></div>`;Furigana.apply(content)} save()}
 function move(n){state.retainedMarkedIndex=null;const a=visible();state.flipped=false;if(a.length)state.pos=(state.pos+n+a.length)%a.length;render()}
 function reshuffle(){state.order=cards.map((_,i)=>i);for(let i=state.order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[state.order[i],state.order[j]]=[state.order[j],state.order[i]]}state.pos=0}
 function mark(v){const idx=currentIndex();if(idx===null)return;state.statuses[idx]=v;save();move(1)}

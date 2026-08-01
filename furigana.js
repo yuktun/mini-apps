@@ -66,7 +66,7 @@
       const walker=document.createTreeWalker(element,NodeFilter.SHOW_TEXT);
       while(walker.nextNode()){
         const node=walker.currentNode;
-        if(node.parentElement?.closest('ruby,rt,script,style,textarea,input'))continue;
+        if(node.parentElement?.closest('ruby,rt,script,style,textarea,input,[data-no-furigana]'))continue;
         if(hasKanji.test(node.nodeValue||""))nodes.push(node);
       }
     });
