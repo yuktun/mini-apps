@@ -5,7 +5,7 @@ const rows={
 ['敬語','「何をお探しですか」を普通体にすると？',['何を探しましたか','何を探していますか','何を探しましょうか','何を探させますか'],1,'「お探しです」は「探しています」の尊敬表現。','第9課練習 p.1'],
 ['許可','このパソコンは少し高くても（　）。',['かまいません','はずです','ものです','らしいです'],0,'「～てもかまわない」は許可・容認を表す。','第9課練習 p.1'],
 ['比較','香港の夜景ほど美しい夜景は（　）。',['あります','ありません','ありました','あるでしょう'],1,'「Nほど～はない」は最高程度を表す比較。','第9課練習 p.1–2'],
-['比較','日本料理は、値段が高いほど（　）とは限りません。',['おいしい','おいしくない','おいしかった','おいしければ'],0,'「～ば～ほど」に近い比例関係の形。文末の「とは限らない」に注意。','第9課練習 p.2'],
+['比較','このレストランは、思ったほど（　）。',['安くありませんでした','安かったです','安くなります','安ければ'],0,'「思ったほど～ない」で、実際の程度が予想より低かったことを表す。','第9課練習 p.2'],
 ['比較','この町は前ほど（　）。',['にぎやかです','にぎやかではありません','にぎやかでした','にぎやかになります'],1,'「前ほど～ない」で、以前との程度差を表す。','第9課練習 p.2'],
 ['ため','日本で働く（　）、日本語を勉強しています。',['せいで','ために','ほど','ものだから'],1,'意志動詞の辞書形＋ために は目的を表す。','第9課練習 p.2'],
 ['ため','大雪の（　）、電車が止まりました。',['おかげで','ため','ほど','として'],1,'名詞＋のため は改まった原因・理由。','第9課練習 p.2'],
@@ -19,7 +19,7 @@ const rows={
 10:[
 ['はず','田中さんは今、会社にいる（　）です。',['こと','はず','ため','せい'],1,'根拠のある推量は「はずだ」。','第10課練習 p.1'],
 ['はず','鍵をかけたから、ドアが開く（　）。',['はずがありません','ことがあります','結果です','ものです'],0,'強い否定的推量は「はずがない」。','第10課練習 p.1'],
-['はず','昨日届く（　）の荷物が、まだ来ません。',['はずだった','はずがない','ことがある','結果だった'],0,'実現しなかった予定・予想は「はずだった」。','第10課練習 p.1'],
+['はず','昨日届く（　）荷物が、まだ来ません。',['はずだった','はずがない','ことがある','結果だった'],0,'実現しなかった予定・予想は「はずだった」。空格後直接接名詞，不加「の」。','第10課練習 p.1'],
 ['ことがある','忙しくて、朝ご飯を食べない（　）。',['結果がある','ことがあります','はずでした','ためです'],1,'時々起こることは辞書形／ない形＋ことがある。','第10課練習 p.2'],
 ['複合動詞','雨が急に（　）。',['降り終わりました','降り出しました','降り合いました','降り換えました'],1,'ます形「降り」＋出すで、急な開始を表す。','第10課練習 p.2'],
 ['複合動詞','この本は昨日（　）。',['読み終わりました','読み出しました','読み忘れました','読み合いました'],0,'「読み終わる」は読む動作の完了。','第10課練習 p.2'],
@@ -84,7 +84,22 @@ conv.forEach(x=>{x.dataset='課堂練習';x.session=x.lesson-8;x.tokens=x.answer
 const prompts=[
 {id:'class-write-9',lesson:9,title:'カラオケについて',prompt:'あなたの国のカラオケと日本式のカラオケについて、経験や意見を書いてください。',instructionZh:'比較兩地的卡拉OK，寫出你的經驗或看法。',hints:['～ほど～ない','～てもかまわない','～ために'],model:'私の国にも日本式のカラオケがあります。友達と歌うために、時々個室を利用します。'},
 {id:'class-write-10',lesson:10,title:'最近の失敗',prompt:'最近失敗したことと、その結果について書いてください。',instructionZh:'寫出最近一次失敗，以及事情的結果。',hints:['～はずだった','Vた結果','～忘れる'],model:'早く起きるはずでしたが、目覚まし時計をかけ忘れました。その結果、授業に遅れました。'},
-{id:'class-write-11',lesson:11,title:'国の伝説',prompt:'あなたの国や町の伝説を一つ選び、五行以内で紹介してください。',instructionZh:'選一個你國家或城市的傳說，在五行內介紹。',hints:['～らしい','～として','～ている'],model:'この岩には昔から伝説があります。村を守った人の石として知られています。今も多くの人が見に来ています。'},
-{id:'class-write-12',lesson:12,title:'文化の驚き',prompt:'映画やドラマを見て、驚いたり理解できなかったりした日本の習慣について書いてください。',instructionZh:'寫出你從電影或電視劇看到、令你驚訝或難以理解的日本習慣。',hints:['～たり～たり','～みたいだ／ようだ','～ものだから'],model:'日本のドラマでは、家に入る前に必ず靴を脱ぐようです。私の町と習慣が違うものだから、最初は驚きました。'}];
-g.CLASSROOM_QUIZ_QUESTIONS=qs;g.CLASSROOM_CONVERSATION_ITEMS=conv;g.CLASSROOM_WRITING_PROMPTS=prompts;
+{id:'class-write-11',lesson:11,title:'国の伝説',prompt:'あなたの国や町の伝説を一つ選び、五行以内で紹介してください。',instructionZh:'選一個你國家或城市的傳說，在五行內介紹。',hints:['～らしい','～として','～ている'],model:'この石碑には昔から伝説があります。村を守った英雄を祭る石碑として知られています。今も多くの人が見に来ています。'},
+{id:'class-write-12',lesson:12,title:'文化の驚き',prompt:'映画やドラマを見て、驚いたり理解できなかったりした日本の習慣について書いてください。',instructionZh:'寫出你從電影或電視劇看到、令你驚訝或難以理解的日本習慣。',hints:['～たり～たり','～みたいだ／ようだ','～ものだから'],model:'日本のドラマでは、家に入る前に必ず靴を脱ぐようです。私の国にはない習慣なものだから、最初は驚きました。'}];
+const quizIds=new Set(['class-l9-04','class-l9-05','class-l9-06','class-l9-07','class-l9-08','class-l9-15','class-l10-01','class-l10-02','class-l10-03','class-l10-04','class-l10-11','class-l10-12','class-l11-01','class-l11-02','class-l11-05','class-l11-06','class-l11-10','class-l11-12','class-l12-01','class-l12-05','class-l12-06','class-l12-10','class-l12-14','class-l12-15']);
+const conversationIds=new Set(['class-conv-9-1','class-conv-9-2','class-conv-9-3','class-conv-10-1','class-conv-10-2','class-conv-11-1','class-conv-11-2','class-conv-12-1']);
+const vocab=[
+ {id:'class-vocab-9-01',lesson:9,type:'kanji',word:'身長',read_src:'しんちょう',meaning:'身高',source:'課堂練習',sourceNote:'第9課練習 p.5'},
+ {id:'class-vocab-9-02',lesson:9,type:'kanji',word:'値段',read_src:'ねだん',meaning:'價錢',source:'課堂練習',sourceNote:'第9課練習 p.5'},
+ {id:'class-vocab-9-03',lesson:9,type:'kanji',word:'特許',read_src:'とっきょ',meaning:'專利',source:'課堂練習',sourceNote:'第9課練習 p.5'},
+ {id:'class-vocab-10-01',lesson:10,type:'kanji',word:'操作',read_src:'そうさ',meaning:'操作',source:'課堂練習',sourceNote:'第10課練習 p.5'},
+ {id:'class-vocab-10-02',lesson:10,type:'kanji',word:'発見',read_src:'はっけん',meaning:'發現',source:'課堂練習',sourceNote:'第10課練習 p.5'},
+ {id:'class-vocab-10-03',lesson:10,type:'kanji',word:'呼吸',read_src:'こきゅう',meaning:'呼吸',source:'課堂練習',sourceNote:'第10課練習 p.5'},
+ {id:'class-vocab-11-01',lesson:11,type:'kanji',word:'職業',read_src:'しょくぎょう',meaning:'職業',source:'課堂練習',sourceNote:'第11課練習 p.5'},
+ {id:'class-vocab-11-02',lesson:11,type:'kanji',word:'石碑',read_src:'せきひ',meaning:'石碑',source:'課堂練習',sourceNote:'第11課練習 p.5'},
+ {id:'class-vocab-11-03',lesson:11,type:'kanji',word:'豊か',read_src:'ゆたか',meaning:'富裕；豐富',source:'課堂練習',sourceNote:'第11課練習 p.5'},
+ {id:'class-vocab-11-04',lesson:11,type:'kanji',word:'発展',read_src:'はってん',meaning:'發展',source:'課堂練習',sourceNote:'第11課練習 p.5'},
+ {id:'class-vocab-12-01',lesson:12,type:'kanji',word:'代表',read_src:'だいひょう',meaning:'代表',source:'課堂練習',sourceNote:'第12課練習 p.5'}
+];
+g.CLASSROOM_QUIZ_QUESTIONS=qs.filter(q=>quizIds.has(q.id));g.CLASSROOM_CONVERSATION_ITEMS=conv.filter(x=>conversationIds.has(x.id));g.CLASSROOM_WRITING_PROMPTS=prompts;g.CLASSROOM_VOCABULARY_ITEMS=vocab;
 })(window);

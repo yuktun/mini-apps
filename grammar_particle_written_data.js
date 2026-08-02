@@ -70,5 +70,13 @@ particleQuestion("l12-particle-011",12,["ドア","開けっぱなしにしない
 particleQuestion("l12-particle-012",12,["先生","おかげで、研修を受けられました。"],["の"],"名詞接「おかげで」使用「Nのおかげで」。","Nのおかげで","grammar-note","L12 Note 5(1)","名詞與正面原因的接續。"),
 particleQuestion("l12-particle-013",12,["事故","せいで、授業に遅れました。"],["の"],"名詞接負面原因「せいで」使用「Nのせいで」。","Nのせいで","grammar-note","L12 Note 5(2)","名詞與負面原因的接續。"),
 particleQuestion("l12-particle-014",12,["隣の部屋","だれかいるみたいです。"],["に"],"存在場所使用「に」。","場所にNがいる","grammar-note","L12 Speaking","人存在的場所。"),
-particleQuestion("l12-particle-015",12,["どうか大きな地震","起きませんように。"],["が"],"自動詞「起きる」的主語用「が」。","Nが起きませんように","grammar-note","L12 Reading/Writing","祈願句中事件的主語。")
+particleQuestion("l12-particle-015",12,["どうか大きな地震","起きませんように。"],["が"],"自動詞「起きる」的主語用「が」。","Nが起きませんように","grammar-note","L12 Reading/Writing","祈願句中事件的主語。"),
+particleQuestion("class-l09-particle-01",9,["日本で働く","、日本語を勉強しています。"],["ために"],"有意志的目的使用「V辭書形＋ために」。","Vるために","classroom-exercise","第9課練習 p.2","後句是為達成目的而進行的行動。"),
+particleQuestion("class-l09-particle-02",9,["大雪","ため、電車が止まりました。"],["の"],"名詞接正式原因「ため」時使用「Nのため」。","Nのため","classroom-exercise","第9課練習 p.2","名詞和「ため」之間需要甚麼？"),
+particleQuestion("class-l10-particle-01",10,["何度も話し合った結果、計画を変更すること","なりました。"],["に"],"非個人直接決定的結果使用「ことになる」。","ことになる","classroom-exercise","第10課練習 p.1","固定句型「こと＿なる」。"),
+particleQuestion("class-l10-particle-02",10,["忙しくて、朝ご飯を食べないこと","あります。"],["が"],"偶爾發生的情況使用「ことがある」。","ことがある","classroom-exercise","第10課練習 p.2","固定句型「こと＿ある」。"),
+particleQuestion("class-l11-particle-01",11,["車で行く","、電車で行くほうが速いです。"],["より"],"比較兩種行動時使用「VるよりVるほうが」。","VるよりVるほうが","classroom-exercise","第11課練習 p.1","前項是比較基準。"),
+particleQuestion("class-l11-particle-02",11,["山田さんは通訳","働いています。"],["として"],"身分或角色使用「Nとして」。","Nとして","classroom-exercise","第11課練習 p.2","以甚麼身分工作？"),
+particleQuestion("class-l12-particle-01",12,["先生に教えていただいた","、合格できました。"],["おかげで"],"正面結果的原因使用「おかげで」。","普通形＋おかげで","classroom-exercise","第12課練習 p.2","後句是正面結果。"),
+particleQuestion("class-l12-particle-02",12,["工事の音","、眠れませんでした。"],["のせいで"],"負面結果的名詞原因使用「Nのせいで」。","Nのせいで","classroom-exercise","第12課練習 p.2","後句是不理想的結果。")
 ];

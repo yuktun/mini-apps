@@ -5,8 +5,9 @@ vm.runInContext(fs.readFileSync('classroom_exercise_data.js','utf8'),context);
 const questions=context.window.CLASSROOM_QUIZ_QUESTIONS;
 const conversations=context.window.CLASSROOM_CONVERSATION_ITEMS;
 const prompts=context.window.CLASSROOM_WRITING_PROMPTS;
+const vocabulary=context.window.CLASSROOM_VOCABULARY_ITEMS;
 const errors=[];
-const all=[...questions,...conversations,...prompts];
+const all=[...questions,...conversations,...prompts,...vocabulary];
 const ids=all.map(x=>x.id);
 if(new Set(ids).size!==ids.length)errors.push('duplicate IDs');
 for(const q of questions){
@@ -18,7 +19,16 @@ for(const q of questions){
 }
 for(const x of conversations){if(!x.cue||!x.answer||!x.zh||!x.note||!x.tokens?.length)errors.push(`${x.id}: incomplete conversation`)}
 for(const p of prompts){if(!p.prompt||!p.instructionZh||!p.hints?.length||!p.model)errors.push(`${p.id}: incomplete writing prompt`)}
+for(const v of vocabulary){if(!v.word||!v.read_src||!v.meaning||!v.sourceNote)errors.push(`${v.id}: incomplete vocabulary item`)}
+const existingVocabText=fs.readFileSync('japanese_flashcards_69.html','utf8');
+const existingWords=[...existingVocabText.matchAll(/"word":\s*"([^"]+)"/g)].map(m=>m[1]);
+const vocabularyDuplicates=vocabulary.filter(v=>existingWords.includes(v.word)).map(v=>v.word);
+if(vocabularyDuplicates.length)errors.push(`vocabulary duplicates: ${vocabularyDuplicates.join(', ')}`);
+function loadDataset(file,name){const sandbox={};vm.createContext(sandbox);vm.runInContext(`${fs.readFileSync(file,'utf8')};globalThis.RESULT=${name}`,sandbox);return sandbox.RESULT}
+const particles=loadDataset('grammar_particle_written_data.js','PARTICLE_WRITTEN_QUESTIONS');
+const verbs=loadDataset('grammar_verb_written_data.js','VERB_CONJUGATION_WRITTEN_QUESTIONS');
+for(const [label,list] of [['particle',particles],['verb',verbs]]){const itemIds=list.map(x=>x.id);if(new Set(itemIds).size!==itemIds.length)errors.push(`${label}: duplicate IDs`)}
 const byLesson=list=>Object.fromEntries([9,10,11,12].map(l=>[l,list.filter(x=>x.lesson===l).length]));
-const report={questions:questions.length,questionsByLesson:byLesson(questions),answerPositions:[0,1,2,3].map(i=>questions.filter(q=>q.answer===i).length),conversations:conversations.length,conversationsByLesson:byLesson(conversations),writingPrompts:prompts.length,writingPromptsByLesson:byLesson(prompts),errors};
+const report={questions:questions.length,questionsByLesson:byLesson(questions),answerPositions:[0,1,2,3].map(i=>questions.filter(q=>q.answer===i).length),conversations:conversations.length,conversationsByLesson:byLesson(conversations),writingPrompts:prompts.length,writingPromptsByLesson:byLesson(prompts),vocabulary:vocabulary.length,vocabularyByLesson:byLesson(vocabulary),vocabularyDuplicates,particleQuestions:particles.length,particleClassroom:particles.filter(x=>x.sourceType==='classroom-exercise').length,verbQuestions:verbs.length,verbClassroom:verbs.filter(x=>x.sourceType==='classroom-exercise').length,errors};
 console.log(JSON.stringify(report,null,2));
 if(errors.length)process.exitCode=1;
