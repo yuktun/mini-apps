@@ -123,6 +123,7 @@ const grammarHighlights=new Map([
 ]);
 let state={order:cards.map((_,i)=>i),pos:0,flipped:false,mode:'sentence',shuffle:false,lesson:'all',statuses:{},marked:{},retainedMarkedIndex:null,review:'all'};
 try{const s=JSON.parse(localStorage.getItem(KEY));if(s)state={...state,...s,flipped:false}}catch(_e){}
+const deepLinkParams=new URLSearchParams(location.search),deepLinkCard=Number(deepLinkParams.get('card'));if(Number.isInteger(deepLinkCard)&&deepLinkCard>=0&&deepLinkCard<cards.length){state.order=cards.map((_,i)=>i);state.pos=deepLinkCard;state.lesson='all';state.review='all';state.shuffle=false;state.flipped=deepLinkParams.get('side')==='back'}
 const $=id=>document.getElementById(id); const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const escapeRegExp=s=>String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 function highlightedExample(item){const text=String(item.example),terms=[...new Set(grammarHighlights.get(item.example)||[])].filter(Boolean).sort((a,b)=>b.length-a.length);if(!terms.length)return esc(text);const pattern=new RegExp(terms.map(escapeRegExp).join('|'),'g');let output='',last=0;text.replace(pattern,(match,offset)=>{output+=esc(text.slice(last,offset))+`<mark class="grammar-focus">${esc(match)}</mark>`;last=offset+match.length;return match});return output+esc(text.slice(last))}

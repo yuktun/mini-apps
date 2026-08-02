@@ -135,3 +135,13 @@ const VERB_SENTENCE_ZH=[
 "我讓窗戶一直開著便出門了。"
 ];
 VERB_CONJUGATION_WRITTEN_QUESTIONS.forEach((q,i)=>WRITTEN_SENTENCE_ZH[q.id]=VERB_SENTENCE_ZH[i]);
+const WRITTEN_GRAMMAR_CARD={
+"l09-particle-005":3,"l09-particle-006":3,"l09-particle-007":6,"l09-particle-008":6,"l09-particle-009":7,"l09-particle-010":7,"l09-particle-011":2,"l09-particle-012":0,"l09-particle-013":0,"l09-particle-014":6,"l09-particle-015":8,
+"l10-particle-004":12,"l10-particle-005":13,"l10-particle-006":9,"l10-particle-007":10,"l10-particle-008":12,"l10-particle-009":12,"l10-particle-010":13,"l10-particle-011":15,"l10-particle-012":16,"l10-particle-013":17,"l10-particle-014":18,"l10-particle-015":19,
+"l11-particle-003":25,"l11-particle-004":25,"l11-particle-005":22,"l11-particle-006":20,"l11-particle-007":21,"l11-particle-008":22,"l11-particle-009":24,"l11-particle-010":25,"l11-particle-011":26,"l11-particle-012":27,"l11-particle-013":28,"l11-particle-014":25,"l11-particle-015":21,
+"l12-particle-001":32,"l12-particle-002":32,"l12-particle-004":31,"l12-particle-006":30,"l12-particle-008":32,"l12-particle-009":32,"l12-particle-010":33,"l12-particle-011":34,"l12-particle-012":35,"l12-particle-013":36,"l12-particle-014":37,"l12-particle-015":39,
+"l09-verb-001":0,"l09-verb-002":0,"l09-verb-003":0,"l09-verb-004":0,"l09-verb-005":0,"l09-verb-006":0,"l09-verb-007":1,"l09-verb-008":1,"l09-verb-009":0,"l09-verb-010":0,"l09-verb-011":0,"l09-verb-012":2,"l09-verb-013":2,"l09-verb-014":8,"l09-verb-015":8,
+"l10-verb-001":14,"l10-verb-002":14,"l10-verb-003":15,"l10-verb-004":15,"l10-verb-005":16,"l10-verb-006":17,"l10-verb-007":18,"l10-verb-008":11,"l10-verb-010":12,"l10-verb-014":12,"l10-verb-015":14,"l10-verb-016":15,"l10-verb-017":15,"l10-verb-018":15,"l10-verb-019":15,"l10-verb-020":18,
+"l11-verb-001":20,"l11-verb-002":20,"l11-verb-003":21,"l11-verb-004":21,"l11-verb-005":22,"l11-verb-006":26,"l11-verb-007":27,"l11-verb-008":22,"l11-verb-009":26,"l11-verb-010":21,"l11-verb-011":27,"l11-verb-012":21,"l11-verb-013":21,"l11-verb-014":21,"l11-verb-015":21,
+"l12-verb-001":31,"l12-verb-002":31,"l12-verb-003":31,"l12-verb-004":32,"l12-verb-005":34,"l12-verb-006":33,"l12-verb-007":37,"l12-verb-008":32,"l12-verb-009":32,"l12-verb-011":33,"l12-verb-014":31,"l12-verb-015":31,"l12-verb-016":31,"l12-verb-017":32,"l12-verb-018":32,"l12-verb-019":32,"l12-verb-020":34
+};
