@@ -28,7 +28,14 @@ function loadDataset(file,name){const sandbox={};vm.createContext(sandbox);vm.ru
 const particles=loadDataset('grammar_particle_written_data.js','PARTICLE_WRITTEN_QUESTIONS');
 const verbs=loadDataset('grammar_verb_written_data.js','VERB_CONJUGATION_WRITTEN_QUESTIONS');
 for(const [label,list] of [['particle',particles],['verb',verbs]]){const itemIds=list.map(x=>x.id);if(new Set(itemIds).size!==itemIds.length)errors.push(`${label}: duplicate IDs`)}
+const writtenSandbox={};vm.createContext(writtenSandbox);vm.runInContext(`${fs.readFileSync('grammar_particle_written_data.js','utf8')}\n${fs.readFileSync('grammar_verb_written_data.js','utf8')}\n${fs.readFileSync('grammar_written_translations.js','utf8')}\nglobalThis.RESULT=WRITTEN_SENTENCE_ZH`,writtenSandbox);
+const writtenTranslations=writtenSandbox.RESULT;
+for(const q of [...particles,...verbs])if(!writtenTranslations[q.id]?.trim())errors.push(`${q.id}: missing Chinese meaning`);
+const quizHtml=fs.readFileSync('japanese_final_quiz.html','utf8');
+const quizMeaningMatch=quizHtml.match(/const CORE_QUIZ_MEANINGS_ZH=(\[[\s\S]*?\]);/);
+const coreQuizMeanings=quizMeaningMatch?JSON.parse(quizMeaningMatch[1]):[];
+if(coreQuizMeanings.length!==88||coreQuizMeanings.some(x=>!x.trim()))errors.push(`grammar quiz: expected 88 Chinese meanings, found ${coreQuizMeanings.filter(Boolean).length}`);
 const byLesson=list=>Object.fromEntries([9,10,11,12].map(l=>[l,list.filter(x=>x.lesson===l).length]));
-const report={questions:questions.length,questionsByLesson:byLesson(questions),answerPositions:[0,1,2,3].map(i=>questions.filter(q=>q.answer===i).length),conversations:conversations.length,conversationsByLesson:byLesson(conversations),writingPrompts:prompts.length,writingPromptsByLesson:byLesson(prompts),vocabulary:vocabulary.length,vocabularyByLesson:byLesson(vocabulary),vocabularyDuplicates,particleQuestions:particles.length,particleClassroom:particles.filter(x=>x.sourceType==='classroom-exercise').length,verbQuestions:verbs.length,verbClassroom:verbs.filter(x=>x.sourceType==='classroom-exercise').length,errors};
+const report={questions:questions.length,questionsByLesson:byLesson(questions),grammarQuizCoreMeanings:coreQuizMeanings.length,answerPositions:[0,1,2,3].map(i=>questions.filter(q=>q.answer===i).length),conversations:conversations.length,conversationsByLesson:byLesson(conversations),writingPrompts:prompts.length,writingPromptsByLesson:byLesson(prompts),vocabulary:vocabulary.length,vocabularyByLesson:byLesson(vocabulary),vocabularyDuplicates,particleQuestions:particles.length,particleMeanings:particles.filter(x=>writtenTranslations[x.id]).length,particleClassroom:particles.filter(x=>x.sourceType==='classroom-exercise').length,verbQuestions:verbs.length,verbMeanings:verbs.filter(x=>writtenTranslations[x.id]).length,verbClassroom:verbs.filter(x=>x.sourceType==='classroom-exercise').length,errors};
 console.log(JSON.stringify(report,null,2));
 if(errors.length)process.exitCode=1;

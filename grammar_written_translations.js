@@ -1,4 +1,14 @@
 const WRITTEN_SENTENCE_ZH={};
+Object.assign(WRITTEN_SENTENCE_ZH,{
+"class-l09-particle-01":"為了在日本工作，我正在學習日語。","class-l09-particle-02":"由於下大雪，電車停駛了。",
+"class-l10-particle-01":"經過多次商討，結果決定更改計劃。","class-l10-particle-02":"忙碌時，有時候會不吃早餐。",
+"class-l11-particle-01":"比起開車，乘電車更快。","class-l11-particle-02":"山田先生以傳譯員的身分工作。",
+"class-l12-particle-01":"多虧老師教導，我才能考試合格。","class-l12-particle-02":"因為工程噪音，我沒能睡覺。",
+"class-l09-verb-01":"老師已經回去了。普通體：老師已經回去了。","class-l09-verb-02":"如果有時間，我想去旅行。",
+"class-l10-verb-01":"嬰兒突然哭了起來。","class-l10-verb-02":"我把舊電腦換成了新的。",
+"class-l11-verb-01":"我沒有帶傘便出門了。","class-l11-verb-02":"把蔬菜切小一點如何？",
+"class-l12-verb-01":"我開著電視便睡著了。","class-l12-verb-02":"鄰居吵鬧至深夜，令我睡不著。"
+});
 const PARTICLE_SENTENCE_ZH=[
 "有沒有和這個相同顏色的L碼商品？",
 "村上春樹是日本引以為傲、享譽世界的現代作家。",
@@ -61,7 +71,7 @@ const PARTICLE_SENTENCE_ZH=[
 "隔壁房間好像有人。",
 "但願不要發生大地震。"
 ];
-PARTICLE_WRITTEN_QUESTIONS.forEach((q,i)=>WRITTEN_SENTENCE_ZH[q.id]=PARTICLE_SENTENCE_ZH[i]);
+PARTICLE_WRITTEN_QUESTIONS.forEach((q,i)=>{if(PARTICLE_SENTENCE_ZH[i])WRITTEN_SENTENCE_ZH[q.id]=PARTICLE_SENTENCE_ZH[i]});
 const VERB_SENTENCE_ZH=[
 "課長，客人正在大堂等候。",
 "您已經用完餐了嗎？",
@@ -134,7 +144,7 @@ const VERB_SENTENCE_ZH=[
 "老師指出了我的日語錯誤。",
 "我讓窗戶一直開著便出門了。"
 ];
-VERB_CONJUGATION_WRITTEN_QUESTIONS.forEach((q,i)=>WRITTEN_SENTENCE_ZH[q.id]=VERB_SENTENCE_ZH[i]);
+VERB_CONJUGATION_WRITTEN_QUESTIONS.forEach((q,i)=>{if(VERB_SENTENCE_ZH[i])WRITTEN_SENTENCE_ZH[q.id]=VERB_SENTENCE_ZH[i]});
 const WRITTEN_GRAMMAR_CARD={
 "l09-particle-005":3,"l09-particle-006":3,"l09-particle-007":6,"l09-particle-008":6,"l09-particle-009":7,"l09-particle-010":7,"l09-particle-011":2,"l09-particle-012":0,"l09-particle-013":0,"l09-particle-014":6,"l09-particle-015":8,
 "l10-particle-004":12,"l10-particle-005":13,"l10-particle-006":9,"l10-particle-007":10,"l10-particle-008":12,"l10-particle-009":12,"l10-particle-010":13,"l10-particle-011":15,"l10-particle-012":16,"l10-particle-013":17,"l10-particle-014":18,"l10-particle-015":19,
