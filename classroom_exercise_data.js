@@ -87,6 +87,12 @@ const prompts=[
 {id:'class-write-11',lesson:11,title:'国の伝説',prompt:'あなたの国や町の伝説を一つ選び、五行以内で紹介してください。',instructionZh:'選一個你國家或城市的傳說，在五行內介紹。',hints:['～らしい','～として','～ている'],model:'この石碑には昔から伝説があります。村を守った英雄を祭る石碑として知られています。今も多くの人が見に来ています。'},
 {id:'class-write-12',lesson:12,title:'文化の驚き',prompt:'映画やドラマを見て、驚いたり理解できなかったりした日本の習慣について書いてください。',instructionZh:'寫出你從電影或電視劇看到、令你驚訝或難以理解的日本習慣。',hints:['～たり～たり','～みたいだ／ようだ','～ものだから'],model:'日本のドラマでは、家に入る前に必ず靴を脱ぐようです。私の国にはない習慣なものだから、最初は驚きました。'}];
 const quizIds=new Set(['class-l9-04','class-l9-05','class-l9-06','class-l9-07','class-l9-08','class-l9-15','class-l10-01','class-l10-02','class-l10-03','class-l10-04','class-l10-11','class-l10-12','class-l11-01','class-l11-02','class-l11-05','class-l11-06','class-l11-10','class-l11-12','class-l12-01','class-l12-05','class-l12-06','class-l12-10','class-l12-14','class-l12-15']);
+const quizMeaningsZh={
+ 'class-l9-04':'沒有比香港夜景更美麗的夜景。','class-l9-05':'這間餐廳沒有想像中那麼便宜。','class-l9-06':'這個城鎮沒有以前那麼熱鬧。','class-l9-07':'為了在日本工作，我正在學習日語。','class-l9-08':'由於下大雪，電車停駛了。','class-l9-15':'不但要輕，而且口袋多的比較好。',
+ 'class-l10-01':'田中先生現在應該在公司。','class-l10-02':'因為已經鎖了門，門不可能會打開。','class-l10-03':'本來應該昨天送到的包裹還沒有來。','class-l10-04':'忙碌時，有時候會不吃早餐。','class-l10-11':'我一直以為對方是日本人。','class-l10-12':'這是甚麼意思呢？',
+ 'class-l11-01':'最近外國遊客逐漸增加了。','class-l11-02':'今後人口將會逐漸減少。','class-l11-05':'比起開車，乘電車更快。','class-l11-06':'那個人的說話方式真的很有老師的風範。','class-l11-10':'鈕扣脫落後，現在仍維持脫落的狀態。','class-l11-12':'這部小說以前也曾經被改編成電影。',
+ 'class-l12-01':'我是因為電車誤點才遲到。','class-l12-05':'多虧老師教導，我才能考試合格。','class-l12-06':'因為工程噪音，我沒能睡覺。','class-l12-10':'無論如何也不能缺席會議。','class-l12-14':'即使聽了解釋，我還是完全不明白。','class-l12-15':'昂貴的東西不一定就是好的。'
+};
 const conversationIds=new Set(['class-conv-9-1','class-conv-9-2','class-conv-9-3','class-conv-10-1','class-conv-10-2','class-conv-11-1','class-conv-11-2','class-conv-12-1']);
 const vocab=[
  {id:'class-vocab-9-01',lesson:9,type:'kanji',word:'身長',read_src:'しんちょう',meaning:'身高',source:'課堂練習',sourceNote:'第9課練習 p.5'},
@@ -101,5 +107,5 @@ const vocab=[
  {id:'class-vocab-11-04',lesson:11,type:'kanji',word:'発展',read_src:'はってん',meaning:'發展',source:'課堂練習',sourceNote:'第11課練習 p.5'},
  {id:'class-vocab-12-01',lesson:12,type:'kanji',word:'代表',read_src:'だいひょう',meaning:'代表',source:'課堂練習',sourceNote:'第12課練習 p.5'}
 ];
-g.CLASSROOM_QUIZ_QUESTIONS=qs.filter(q=>quizIds.has(q.id));g.CLASSROOM_CONVERSATION_ITEMS=conv.filter(x=>conversationIds.has(x.id));g.CLASSROOM_WRITING_PROMPTS=prompts;g.CLASSROOM_VOCABULARY_ITEMS=vocab;
+g.CLASSROOM_QUIZ_QUESTIONS=qs.filter(q=>quizIds.has(q.id)).map(q=>({...q,meaningZh:quizMeaningsZh[q.id]}));g.CLASSROOM_CONVERSATION_ITEMS=conv.filter(x=>conversationIds.has(x.id));g.CLASSROOM_WRITING_PROMPTS=prompts;g.CLASSROOM_VOCABULARY_ITEMS=vocab;
 })(window);

@@ -13,7 +13,7 @@ if(new Set(ids).size!==ids.length)errors.push('duplicate IDs');
 for(const q of questions){
   if(![9,10,11,12].includes(q.lesson))errors.push(`${q.id}: invalid lesson`);
   if(q.source!=='課堂練習')errors.push(`${q.id}: invalid source`);
-  if(!q.category||!q.question||!q.explanation||!q.sourceNote)errors.push(`${q.id}: missing required field`);
+  if(!q.category||!q.question||!q.explanation||!q.sourceNote||!q.meaningZh)errors.push(`${q.id}: missing required field`);
   if(!Array.isArray(q.choices)||q.choices.length!==4||new Set(q.choices).size!==4)errors.push(`${q.id}: choices must be four unique values`);
   if(!Number.isInteger(q.answer)||q.answer<0||q.answer>3)errors.push(`${q.id}: invalid answer index`);
 }
