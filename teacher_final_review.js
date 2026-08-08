@@ -1,9 +1,10 @@
 (function(){
   "use strict";
-  const STORAGE_KEY="japaneseMiniApps_teacherFinalReview_v1",questions=window.TEACHER_FINAL_REVIEW_QUESTIONS||[],byId=new Map(questions.map(q=>[q.id,q]));
+  const STORAGE_KEY="japaneseMiniApps_teacherFinalReview_v1",CONTENT_VERSION=2,questions=window.TEACHER_FINAL_REVIEW_QUESTIONS||[],byId=new Map(questions.map(q=>[q.id,q]));
+  const revisedQuestionIds=["teacher-review-g02","teacher-review-g03","teacher-review-g04","teacher-review-g05","teacher-review-g07","teacher-review-g10","teacher-review-g12"];
   const $=id=>document.getElementById(id),escapeHtml=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const fresh=()=>({version:1,results:{},drafts:{},marked:{},quick:{},settings:{section:"all",mode:"quick",count:"all",random:false}});
-  function load(){try{const parsed=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");return parsed&&parsed.version===1?{...fresh(),...parsed,results:parsed.results||{},drafts:parsed.drafts||{},marked:parsed.marked||{},quick:parsed.quick||{},settings:{...fresh().settings,...(parsed.settings||{})}}:fresh()}catch(_){return fresh()}}
+  const fresh=()=>({version:1,contentVersion:CONTENT_VERSION,results:{},drafts:{},marked:{},quick:{},settings:{section:"all",mode:"quick",count:"all",random:false}});
+  function load(){try{const parsed=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!parsed||parsed.version!==1)return fresh();const loaded={...fresh(),...parsed,results:parsed.results||{},drafts:parsed.drafts||{},marked:parsed.marked||{},quick:parsed.quick||{},settings:{...fresh().settings,...(parsed.settings||{})}};if((parsed.contentVersion||1)<CONTENT_VERSION){revisedQuestionIds.forEach(id=>{delete loaded.results[id];delete loaded.drafts[id];delete loaded.quick[id]});loaded.contentVersion=CONTENT_VERSION;localStorage.setItem(STORAGE_KEY,JSON.stringify(loaded))}return loaded}catch(_){return fresh()}}
   let state=load(),session=[],position=0,mode="quick",examStartedAt=null,examFinished=false,quickRevealed=false;const hiddenFeedback=new Set();
   const normalize=value=>String(value??"").normalize("NFKC").replace(/[\s\u3000]+/g,"").replace(/[。．.、，,！!？?]+$/g,"").trim();
   const save=()=>localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
@@ -35,7 +36,7 @@
   }
   function feedbackHtml(q,result,quick=false){
     const status=quick?"reviewed":result?.status||"reviewed",cls=status==="correct"?"good":status==="incorrect"?"bad":"reviewed",title=quick?"快速答案":status==="correct"?"〇 答對了。":status==="incorrect"?"✕ 答錯了。":"已查看答案；本題不計作答對。";
-    const modelNote=q.sourceCertainty==="model-answer"?`<p class="adapted-note">原本的老師題目是開放式造句／會話。本題採用受控示範答案，其他符合文法及情境的答案也可能正確。</p>`:"";
+    const modelNote=["model-answer","model-answer-reference"].includes(q.sourceCertainty)?`<p class="adapted-note">原本的老師題目是開放式造句／會話；此處採用參考答案中的安全示範。考試時請先準確掌握文法接續，其他符合文法及情境的內容也可能成立。</p>`:"";
     return `<div class="feedback ${cls}"><h3>${title}</h3>${!quick&&result?.status==="incorrect"?`<p><strong>你的答案：</strong><span lang="ja">${escapeHtml(selectedLabel(q))}</span></p>`:""}<p><strong>正確答案：</strong><span lang="ja">${escapeHtml(answerLabel(q))}</span></p><p class="complete"><strong>完整句子：</strong><span lang="ja">${escapeHtml(fullSentence(q))}</span></p><p><strong>文法重點：</strong>${escapeHtml(q.grammarPoint)}</p><p><strong>解釋：</strong>${escapeHtml(q.explanationZh)}</p><p><strong>中文意思：</strong>${escapeHtml(q.meaningZh)}</p>${modelNote}<p class="source-note">老師複習紙第 ${q.page} 頁・${sectionLabel(q.section)}第 ${q.printedNo} 題</p></div>`;
   }
   function renderActions(q){
