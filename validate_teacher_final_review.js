@@ -2,6 +2,7 @@
 const fs=require("fs"),vm=require("vm"),errors=[];
 const sandbox={window:{}};vm.createContext(sandbox);vm.runInContext(fs.readFileSync("teacher_final_review_data.js","utf8"),sandbox);
 const questions=sandbox.window.TEACHER_FINAL_REVIEW_QUESTIONS||[],ids=questions.map(q=>q.id);
+const flashcardHtml=fs.readFileSync("japanese_grammar_flashcards.html","utf8"),linkedGrammarIds=["teacher-review-g02","teacher-review-g03","teacher-review-g04","teacher-review-g05","teacher-review-g06","teacher-review-g08","teacher-review-g09","teacher-review-g10","teacher-review-g11","teacher-review-g12"];
 const expectedModelAnswers={
   "teacher-review-p01":["が"],"teacher-review-p02":["に"],"teacher-review-p03":["を"],"teacher-review-p04":["に"],"teacher-review-p05":["を"],
   "teacher-review-p06":["が","に"],"teacher-review-p07":["を"],"teacher-review-p08":["に"],"teacher-review-p09":["と"],"teacher-review-p10":["で"],
@@ -38,6 +39,10 @@ for(const q of questions){
   if(q.sourceCertainty==="model-answer-reference"&&q.adaptation!=="exact-model-answer")errors.push(`${q.id}: model-answer reference is not exact`);
   if(expectedModelAnswers[q.id]&&JSON.stringify(q.displayAnswer)!==JSON.stringify(expectedModelAnswers[q.id]))errors.push(`${q.id}: does not match model-answer reference`);
   if(expectedCompletedSentences[q.id]&&q.sentenceParts.map((part,index)=>part+(index<q.displayAnswer.length?q.displayAnswer[index]:"")).join("")!==expectedCompletedSentences[q.id])errors.push(`${q.id}: completed sentence does not match model-answer reference`);
+  if(q.grammarCard&&!flashcardHtml.includes(`"grammar": "${q.grammarCard}"`))errors.push(`${q.id}: linked grammar card does not exist`);
 }
-const report={total:questions.length,particle:questions.filter(q=>q.section==="particle").length,grammar:questions.filter(q=>q.section==="grammar").length,written:questions.filter(q=>q.type==="written").length,choice:questions.filter(q=>q.type==="choice").length,modelAnswers:questions.filter(q=>q.sourceCertainty==="model-answer"||q.sourceCertainty==="model-answer-reference").length,verifiedModelAnswers:Object.keys(expectedModelAnswers).length,missingChinese:questions.filter(q=>!q.meaningZh).length,errors};
+for(const id of linkedGrammarIds){if(!byId(questions,id)?.grammarCard)errors.push(`${id}: missing required grammar-card link`)}
+function byId(list,id){return list.find(q=>q.id===id)}
+if(!flashcardHtml.includes("deepLinkGrammar=deepLinkParams.get('grammar')"))errors.push("grammar flashcards: grammar deep link is missing");
+const report={total:questions.length,particle:questions.filter(q=>q.section==="particle").length,grammar:questions.filter(q=>q.section==="grammar").length,written:questions.filter(q=>q.type==="written").length,choice:questions.filter(q=>q.type==="choice").length,modelAnswers:questions.filter(q=>q.sourceCertainty==="model-answer"||q.sourceCertainty==="model-answer-reference").length,verifiedModelAnswers:Object.keys(expectedModelAnswers).length,linkedGrammarCards:questions.filter(q=>q.grammarCard).length,missingChinese:questions.filter(q=>!q.meaningZh).length,errors};
 console.log(JSON.stringify(report,null,2));if(errors.length)process.exitCode=1;
