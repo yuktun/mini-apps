@@ -26,8 +26,22 @@ const vocabularyDuplicates=vocabulary.filter(v=>existingWords.includes(v.word)).
 if(vocabularyDuplicates.length)errors.push(`vocabulary duplicates: ${vocabularyDuplicates.join(', ')}`);
 function loadDataset(file,name){const sandbox={};vm.createContext(sandbox);vm.runInContext(`${fs.readFileSync(file,'utf8')};globalThis.RESULT=${name}`,sandbox);return sandbox.RESULT}
 const particles=loadDataset('grammar_particle_written_data.js','PARTICLE_WRITTEN_QUESTIONS');
-const verbs=loadDataset('grammar_verb_written_data.js','VERB_CONJUGATION_WRITTEN_QUESTIONS');
+const verbData=loadDataset('grammar_verb_written_data.js','({questions:VERB_CONJUGATION_WRITTEN_QUESTIONS,groups:VERB_BANK_GROUPS})');
+const verbs=verbData.questions;
 for(const [label,list] of [['particle',particles],['verb',verbs]]){const itemIds=list.map(x=>x.id);if(new Set(itemIds).size!==itemIds.length)errors.push(`${label}: duplicate IDs`)}
+for(const q of particles){
+  if(q.sentenceParts.length!==q.answers.length+1)errors.push(`${q.id}: sentence parts and blanks do not match`);
+  if(q.answers.some(a=>!a.displayAnswer||!a.accepted?.length))errors.push(`${q.id}: incomplete particle answer`);
+  if(q.answers.some(a=>!a.accepted.includes(a.displayAnswer)))errors.push(`${q.id}: displayed particle answer is not accepted`);
+  if(q.sourceLesson!==q.lesson||!q.sourceType||!q.sourceReference||!q.explanationZh)errors.push(`${q.id}: incomplete particle source or explanation`);
+}
+for(const q of verbs){
+  if(!q.baseVerb||!q.displayAnswer||!q.sentenceBefore||q.sentenceAfter==null||!q.acceptedAnswers?.length)errors.push(`${q.id}: incomplete verb question`);
+  if(q.subtype==='exam'&&(!q.verbBankGroup||!verbData.groups[q.verbBankGroup]?.verbs?.includes(q.baseVerb)))errors.push(`${q.id}: base verb is missing from its verb bank`);
+  if(!q.acceptedAnswers.includes(q.displayAnswer)||q.sourceLesson!==q.lesson||!q.sourceType||!q.sourceReference||!q.explanationZh)errors.push(`${q.id}: inconsistent verb answer, source, or explanation`);
+  const completed=`${q.sentenceBefore}${q.displayAnswer}${q.sentenceAfter}`;
+  if(/たたり|てて|らら|にに|でで/.test(completed))errors.push(`${q.id}: duplicated visible suffix in completed sentence`);
+}
 const writtenSandbox={};vm.createContext(writtenSandbox);vm.runInContext(`${fs.readFileSync('grammar_particle_written_data.js','utf8')}\n${fs.readFileSync('grammar_verb_written_data.js','utf8')}\n${fs.readFileSync('grammar_written_translations.js','utf8')}\nglobalThis.RESULT=WRITTEN_SENTENCE_ZH`,writtenSandbox);
 const writtenTranslations=writtenSandbox.RESULT;
 for(const q of [...particles,...verbs])if(!writtenTranslations[q.id]?.trim())errors.push(`${q.id}: missing Chinese meaning`);

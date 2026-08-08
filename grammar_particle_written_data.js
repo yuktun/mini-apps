@@ -7,7 +7,7 @@ const PARTICLE_WRITTEN_QUESTIONS=[
 // Lesson 9 - Quiz 5 Section V and grammar-note comparison/cause structures.
 particleQuestion("l09-particle-001",9,["これと同じ色","、Lサイズの物はありませんか。"],["で"],"「同じ色で」使用「で」連接後面的商品條件。","Nで","school-quiz","Quiz 5 Section V-1","連接兩個商品條件。"),
 particleQuestion("l09-particle-002",9,["村上春樹は日本","世界","誇る現代作家です。"],["が","に"],"「日本が世界に誇る」表示日本向世界引以為傲。","NがNに誇る","school-quiz","Quiz 5 Section V-2","誰引以為傲、向哪個範圍展示？"),
-particleQuestion("l09-particle-003",9,["青空社は他社","","技術競争","負けました。"],["と","の","に"],"教材把「との」分成兩格：「他社との技術競争」；「競争に負ける」用「に」。","Nとの競争に負ける","school-quiz","Quiz 5 Section V-3","教材把「との」分成兩個空格。"),
+particleQuestion("l09-particle-003",9,["青空社は他社","技術競争","負けました。"],["との","に"],"「他社との技術競争」中的「との」是一個複合助詞；「競争に負ける」使用「に」。","Nとの競争に負ける","school-quiz","Quiz 5 Section V-3","第一格填「との」，第二格填「に」。"),
 particleQuestion("l09-particle-004",9,["オンライン学習は学生の勉強法","大きな影響","与えました。"],["に","を"],"「Nに影響を与える」是固定搭配。","Nに影響を与える","school-quiz","Quiz 5 Section V-4","「影響」前後的固定搭配。"),
 particleQuestion("l09-particle-005",9,["香道は茶道","有名ではありませんが、私は香道","茶道に興味があります。"],["ほど","より"],"否定比較用「ほど」，肯定比較基準用「より」。","ほど～ない／より～","school-quiz","Quiz 5 Section VI-1","否定比較和肯定比較使用不同助詞。"),
 particleQuestion("l09-particle-006",9,["この町は東京","にぎやかではありません。"],["ほど"],"「AはBほど～ない」表示 A 不如 B。","ほど～ない","grammar-note","L9 Note 3","後面是否定比較。"),
